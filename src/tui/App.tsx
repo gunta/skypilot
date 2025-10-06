@@ -3,6 +3,7 @@ import { Box, Text, useApp, useInput } from 'ink';
 import Spinner from 'ink-spinner';
 import TextInput from 'ink-text-input';
 import Table from 'ink-table';
+import chalk from 'chalk';
 
 import {
   createVideo,
@@ -44,19 +45,20 @@ const cycleValue = <T,>(options: readonly T[], current: T): T => {
   return options[nextIndex]!;
 };
 
-const formatStatusLabel = (status: SoraVideo['status']) => translate(`status.${status}` as keyof typeof m);
+const STATUS_META: Record<
+  SoraVideo['status'],
+  { emoji: string; hex: string; accentHex: string }
+> = {
+  completed: { emoji: '✨', hex: '#7CFC00', accentHex: '#2E8B57' },
+  in_progress: { emoji: '🔄', hex: '#FFD700', accentHex: '#FF8C00' },
+  queued: { emoji: '⏳', hex: '#00BFFF', accentHex: '#1E90FF' },
+  failed: { emoji: '⚠️', hex: '#FF5252', accentHex: '#C62828' },
+};
 
-const statusColor = (status: SoraVideo['status']): 'green' | 'red' | 'yellow' | undefined => {
-  switch (status) {
-    case 'completed':
-      return 'green';
-    case 'failed':
-      return 'red';
-    case 'in_progress':
-      return 'yellow';
-    default:
-      return undefined;
-  }
+const formatStatusLabel = (status: SoraVideo['status']) => {
+  const meta = STATUS_META[status] ?? { emoji: '🎬', hex: '#9C27B0', accentHex: '#7B1FA2' };
+  const label = translate(`status.${status}` as keyof typeof m);
+  return chalk.hex(meta.hex).bold(`${meta.emoji} ${label}`);
 };
 
 const formatTimestamp = (seconds: number) => new Date(seconds * 1000).toLocaleString();
@@ -243,19 +245,21 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
       const row: Record<string, string> = {};
       const columns = tableColumns;
 
-      row[columns[0]] = index === selectedIndex ? '›' : ' ';
+      row[columns[0]] = index === selectedIndex ? chalk.cyanBright('➤') : chalk.dim('∙');
       row[columns[1]] = formatStatusLabel(video.status);
-      row[columns[2]] = `${video.progress.toFixed(0)}%`;
-      row[columns[3]] = video.model;
-      row[columns[4]] = `${video.seconds}s`;
-      row[columns[5]] = video.size;
-      row[columns[6]] = video.id;
-      row[columns[7]] = formatTimestamp(video.created_at);
+      row[columns[2]] = chalk.hex('#FFD700')(`${video.progress.toFixed(0)}%`);
+      row[columns[3]] = chalk.hex('#7C4DFF')(video.model);
+      row[columns[4]] = chalk.hex('#64FFDA')(`${video.seconds}s`);
+      row[columns[5]] = chalk.hex('#40C4FF')(video.size);
+      row[columns[6]] = chalk.hex('#B388FF')(video.id);
+      row[columns[7]] = chalk.hex('#90A4AE')(formatTimestamp(video.created_at));
       row[columns[8]] = primaryEstimate
-        ? translate('app.rowCost', {
-            value: primaryEstimate,
-          })
-        : translate('app.rowCostPending');
+        ? chalk.hex('#00E676')(
+            translate('app.rowCost', {
+              value: primaryEstimate,
+            }),
+          )
+        : chalk.hex('#FFB74D')(translate('app.rowCostPending'));
 
       return row;
     });
@@ -688,12 +692,13 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
 
   return (
     <Box flexDirection="column" paddingX={1} paddingY={1} gap={1}>
-      <Box flexDirection="column">
-        <Text color="cyanBright">{translate('app.title')}</Text>
-        <Text dimColor>{translate('app.disclaimer')}</Text>
-        <Text dimColor>{translate('app.instructions')}</Text>
-        <Text dimColor>{translate('app.currency', { code: currencyLabel })}</Text>
-        <Text dimColor>
+      <Box flexDirection="column" borderStyle="round" borderColor="magentaBright" paddingX={1} paddingY={1}>
+        <Text color="magentaBright">{translate('app.title')}</Text>
+        <Text color="cyanBright">{translate('app.tagline')}</Text>
+        <Text color="gray">{translate('app.disclaimer')}</Text>
+        <Text color="yellowBright">{translate('app.instructions')}</Text>
+        <Text color="greenBright">{translate('app.currency', { code: currencyLabel })}</Text>
+        <Text color="blueBright">
           {translate('app.controls', {
             model,
             duration,
@@ -701,16 +706,25 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
             asset: translateVariantLabel(downloadVariant),
           })}
         </Text>
+        <Text color="magentaBright">{translate('app.mood')}</Text>
         <Text dimColor>{translate('cli.message.languageCurrent', { language: activeLocale })}</Text>
       </Box>
 
-      {currencyError ? <Text color="red">{translate('app.currencyError', { message: currencyError })}</Text> : null}
+      {currencyError ? (
+        <Box borderStyle="round" borderColor="red" paddingX={1} paddingY={0}>
+          <Text color="redBright">{translate('app.currencyError', { message: currencyError })}</Text>
+        </Box>
+      ) : null}
 
-      {activity ? <Text>{activity}</Text> : null}
+      {activity ? (
+        <Box borderStyle="round" borderColor="cyanBright" paddingX={1} paddingY={0}>
+          <Text color="cyanBright">{activity}</Text>
+        </Box>
+      ) : null}
 
       {mode === 'prompt' ? (
-        <Box flexDirection="column">
-          <Text>{translate('app.promptLabel')}</Text>
+        <Box flexDirection="column" borderStyle="round" borderColor="yellowBright" paddingX={1} paddingY={1}>
+          <Text color="yellowBright">{translate('app.promptLabel')}</Text>
           <TextInput
             value={promptValue}
             onChange={setPromptValue}
@@ -723,8 +737,8 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
       ) : null}
 
       {mode === 'remix' ? (
-        <Box flexDirection="column">
-          <Text>
+        <Box flexDirection="column" borderStyle="round" borderColor="magentaBright" paddingX={1} paddingY={1}>
+          <Text color="magentaBright">
             {translate('app.remixPromptLabel', {
               id: remixTarget?.id ?? translate('app.remixUnknown'),
             })}
@@ -752,21 +766,24 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
         <Text dimColor>{translate('app.noVideos')}</Text>
       ) : (
         <Box flexDirection="column" gap={1}>
-          <Text>{translate('tui.table.heading')}</Text>
+          <Text color="magentaBright">{translate('tui.table.heading')}</Text>
           <Table data={tableData} columns={tableColumns} />
-          <Box flexDirection="column" marginTop={1}>
-            <Text>
-              {formatStatusLabel('completed')}: {statusCounts.completed ?? 0} · {formatStatusLabel('in_progress')}:
-              {statusCounts.in_progress ?? 0} · {formatStatusLabel('queued')}: {statusCounts.queued ?? 0} ·
-              {formatStatusLabel('failed')}: {statusCounts.failed ?? 0}
-            </Text>
+          <Box flexDirection="row" flexWrap="wrap" gap={1}>
+            {(Object.keys(STATUS_META) as SoraVideo['status'][]).map((status) => {
+              const meta = STATUS_META[status];
+              const count = statusCounts[status] ?? 0;
+              const label = translate(`status.${status}` as keyof typeof m);
+              const badge = chalk.hex(meta.hex).bold(` ${meta.emoji} ${label} `);
+              const countText = chalk.hex(meta.accentHex)(`×${count}`);
+              return <Text key={status}>{`${badge}${countText}`}</Text>;
+            })}
           </Box>
         </Box>
       )}
 
       {trackedVideo ? (
-        <Box flexDirection="column" borderStyle="round" borderColor="cyan" paddingX={1} paddingY={0}>
-          <Text>
+        <Box flexDirection="column" borderStyle="round" borderColor="magentaBright" paddingX={1} paddingY={0}>
+          <Text color="magentaBright">
             {translate('app.trackingHeader', {
               id: trackedVideo.id,
               status: formatStatusLabel(trackedVideo.status),
@@ -778,7 +795,7 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
           ) : null}
           {trackedCostSummary ? (
             <>
-              <Text dimColor>
+              <Text color="greenBright">
                 {translate('app.trackingCost', {
                   value:
                     currencyFormatter && trackedCostSummary.estimatedDisplay.preferred

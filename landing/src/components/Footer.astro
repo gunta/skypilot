@@ -1,0 +1,139 @@
+---
+import { getTranslation, type Language } from '../i18n/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const t = (key: any) => getTranslation(lang, key);
+---
+
+<footer class="bg-bg-secondary border-t border-border-color">
+  <div class="section-container py-12">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <!-- Branding -->
+      <div>
+        <div class="flex items-center space-x-2 mb-4">
+          <span class="text-2xl">🚁</span>
+          <span class="text-xl font-bold gradient-text">Sky Pilot</span>
+        </div>
+        <p class="text-text-secondary text-sm mb-4">
+          {t('footer.disclaimer')}
+        </p>
+      </div>
+      
+      <!-- Links -->
+      <div>
+        <h3 class="font-semibold mb-4">Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a
+              href="https://github.com/gunta/skypilot#readme"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              {t('footer.docs')}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/gunta/skypilot"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              {t('footer.github')}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.npmjs.com/package/sky-pilot"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              {t('footer.npm')}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/gunta/skypilot/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              {t('footer.license')}
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/gunta/skypilot/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              {t('footer.issues')}
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Community -->
+      <div>
+        <h3 class="font-semibold mb-4">Community</h3>
+        <ul class="space-y-2 text-sm">
+          <li>
+            <a
+              href="https://github.com/gunta/skypilot/discussions"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors"
+            >
+              GitHub Discussions
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/sponsors/gunta"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-text-secondary hover:text-accent-primary transition-colors inline-flex items-center space-x-1"
+            >
+              <span>GitHub Sponsors</span>
+              <svg class="w-4 h-4 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="text-text-secondary">
+            {t('footer.contributors')}
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="pt-8 border-t border-border-color">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-text-muted">
+        <p>
+          {t('footer.credits')}
+        </p>
+        <div class="flex items-center space-x-4">
+          <a
+            href="https://github.com/gunta"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-accent-primary transition-colors"
+          >
+            @gunta
+          </a>
+          <span>•</span>
+          <span>© 2025</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+

@@ -1,0 +1,128 @@
+---
+import { getTranslation, type Language } from '../i18n/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const t = (key: any) => getTranslation(lang, key);
+---
+
+<section class="section-container">
+  <div class="text-center mb-16">
+    <span class="inline-block px-4 py-2 bg-accent-primary/10 text-accent-primary rounded-full text-sm font-semibold mb-4">
+      {t('features.available')}
+    </span>
+    <h2 class="text-4xl sm:text-5xl font-bold mb-4">
+      {t('features.title')}
+    </h2>
+  </div>
+  
+  <div class="grid md:grid-cols-2 gap-8">
+    <!-- One Command, Infinite Videos -->
+    <div class="card">
+      <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 bg-accent-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold mb-3">{t('features.command.title')}</h3>
+          <p class="text-text-secondary mb-2">{t('features.command.desc1')}</p>
+          <p class="text-text-secondary">{t('features.command.desc2')}</p>
+          <div class="mt-4 code-block">
+            <code class="text-accent-primary">$ npx sky-pilot</code>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Beautiful Terminal Dashboard -->
+    <div class="card">
+      <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold mb-3">{t('features.dashboard.title')}</h3>
+          <ul class="space-y-2 text-text-secondary">
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.dashboard.desc1')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.dashboard.desc2')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.dashboard.desc3')}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Never Get Bill-Shocked -->
+    <div class="card">
+      <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold mb-3">{t('features.cost.title')}</h3>
+          <ul class="space-y-2 text-text-secondary">
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.cost.desc1')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.cost.desc2')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.cost.desc3')}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Privacy First -->
+    <div class="card">
+      <div class="flex items-start space-x-4">
+        <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold mb-3">{t('features.privacy.title')}</h3>
+          <ul class="space-y-2 text-text-secondary">
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.privacy.desc1')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.privacy.desc2')}</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-success mr-2">✓</span>
+              <span>{t('features.privacy.desc3')}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

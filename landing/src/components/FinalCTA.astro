@@ -1,0 +1,119 @@
+---
+import { getTranslation, type Language } from '../i18n/translations';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const t = (key: any) => getTranslation(lang, key);
+---
+
+<section class="section-container text-center">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl sm:text-6xl font-bold mb-6">
+      {t('cta.title')}
+    </h2>
+    
+    <p class="text-xl text-text-secondary mb-12">
+      {t('cta.subtitle')}
+    </p>
+    
+    <div class="max-w-2xl mx-auto mb-8 code-block bg-code-bg/80 backdrop-blur-sm border-2 border-accent-primary/30">
+      <div class="flex items-center justify-between">
+        <code class="text-accent-primary font-mono text-lg flex-1 text-left">
+          $ npx sky-pilot
+        </code>
+        <button
+          id="final-copy-btn"
+          class="px-4 py-2 bg-accent-primary/10 hover:bg-accent-primary hover:text-bg-primary rounded-md transition-all text-accent-primary font-semibold ml-4"
+        >
+          Copy
+        </button>
+      </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-4 justify-center mb-8">
+      <a
+        href="https://github.com/gunta/skypilot"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary inline-flex items-center space-x-2"
+      >
+        <span>{t('cta.star')}</span>
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+        </svg>
+      </a>
+      
+      <a
+        href="https://github.com/sponsors/gunta"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-secondary inline-flex items-center space-x-2"
+      >
+        <span>{t('cta.donate')}</span>
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+    
+    <div class="flex flex-wrap gap-4 justify-center text-sm">
+      <a
+        href="https://www.npmjs.com/package/sky-pilot"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-text-secondary hover:text-accent-primary transition-colors inline-flex items-center space-x-1"
+      >
+        <span>{t('cta.npm')}</span>
+      </a>
+      <span class="text-border-color">•</span>
+      <a
+        href="https://github.com/gunta/skypilot#readme"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-text-secondary hover:text-accent-primary transition-colors inline-flex items-center space-x-1"
+      >
+        <span>{t('cta.docs')}</span>
+      </a>
+    </div>
+    
+    <!-- GitHub Stars Badge -->
+    <div class="mt-12 flex justify-center">
+      <a
+        href="https://github.com/gunta/skypilot"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="https://img.shields.io/github/stars/gunta/skypilot?style=social"
+          alt="GitHub stars"
+          class="h-6"
+        />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  const finalCopyBtn = document.getElementById('final-copy-btn');
+  if (finalCopyBtn) {
+    finalCopyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText('npx sky-pilot');
+        const originalText = finalCopyBtn.textContent;
+        finalCopyBtn.textContent = '✓ Copied!';
+        setTimeout(() => {
+          if (finalCopyBtn.textContent === '✓ Copied!') {
+            finalCopyBtn.textContent = originalText;
+          }
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    });
+  }
+</script>
+
