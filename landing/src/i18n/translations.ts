@@ -3,19 +3,20 @@ export const translations = {
     // Hero Section
     'hero.title': 'Your Sora 2 Co-pilot 🚁',
     'hero.subtitle': 'The most secure way to use OpenAI\'s video API. Free, open source, runs entirely on your machine.',
-    'hero.badge1': 'No server costs',
-    'hero.badge2': 'Your API key stays local',
+    'hero.badge1': 'No watermarks',
+    'hero.badge2': 'Sora 2 Pro at cost',
     'hero.badge3': '100% private',
     'hero.cta.try': 'Try Now',
     'hero.cta.github': 'View on GitHub',
+    'hero.sponsor': 'Sponsor this project',
     
     // Value Props
     'valueprops.title': 'Why Sky Pilot is Different',
-    'valueprops.zero.title': 'Zero Server Infrastructure',
-    'valueprops.zero.desc1': 'Everything runs on your machine. No data leaves your control.',
-    'valueprops.zero.desc2': 'Your OpenAI API key never touches our servers—because we don\'t have any.',
-    'valueprops.cheap.title': 'As Cheap As It Gets',
-    'valueprops.cheap.desc1': 'No markup, no subscription, no hidden fees.',
+    'valueprops.zero.title': 'No Watermarks, Ever',
+    'valueprops.zero.desc1': 'Your videos are clean—no Sora watermarks.',
+    'valueprops.zero.desc2': 'Full API access means professional-quality output.',
+    'valueprops.cheap.title': 'Sora 2 Pro at Cost',
+    'valueprops.cheap.desc1': 'Access premium Sora 2 Pro without markup.',
     'valueprops.cheap.desc2': 'You pay OpenAI directly. We take nothing.',
     'valueprops.transparent.title': 'Transparent & Open Source',
     'valueprops.transparent.desc1': 'MIT licensed. Audit every line of code.',
@@ -60,7 +61,7 @@ export const translations = {
     'calc.quantity': 'Quantity',
     'calc.total': 'Total Cost',
     'calc.perVideo': 'per video',
-    'calc.noMarkup': 'No markup. You pay OpenAI directly.',
+    'calc.noMarkup': 'No markup. You pay OpenAI directly in USD.',
     'calc.cta': 'Start generating →',
     
     // Installation
@@ -137,19 +138,20 @@ export const translations = {
     // Hero Section
     'hero.title': 'あなたの Sora 2 副操縦士 🚁',
     'hero.subtitle': 'OpenAI の動画 API を使用する最も安全な方法。無料、オープンソース、完全にあなたのマシン上で実行。',
-    'hero.badge1': 'サーバーコスト不要',
-    'hero.badge2': 'API キーはローカルに保存',
+    'hero.badge1': 'ウォーターマークなし',
+    'hero.badge2': 'Sora 2 Pro も原価で',
     'hero.badge3': '100% プライベート',
     'hero.cta.try': '今すぐ試す',
     'hero.cta.github': 'GitHub で見る',
+    'hero.sponsor': 'このプロジェクトをスポンサー',
     
     // Value Props
     'valueprops.title': 'Sky Pilot が違う理由',
-    'valueprops.zero.title': 'サーバーインフラ不要',
-    'valueprops.zero.desc1': 'すべてあなたのマシン上で実行。データは外部に出ません。',
-    'valueprops.zero.desc2': 'OpenAI API キーは私たちのサーバーに触れることはありません。サーバーがないからです。',
-    'valueprops.cheap.title': '最安値',
-    'valueprops.cheap.desc1': 'マークアップなし、サブスクリプションなし、隠れた料金なし。',
+    'valueprops.zero.title': 'ウォーターマーク一切なし',
+    'valueprops.zero.desc1': 'あなたの動画はクリーン—Sora のウォーターマークなし。',
+    'valueprops.zero.desc2': 'フル API アクセスでプロ品質の出力。',
+    'valueprops.cheap.title': 'Sora 2 Pro も原価で提供',
+    'valueprops.cheap.desc1': 'プレミアム Sora 2 Pro をマークアップなしでアクセス。',
     'valueprops.cheap.desc2': 'OpenAI に直接支払います。私たちは何も取りません。',
     'valueprops.transparent.title': '透明でオープンソース',
     'valueprops.transparent.desc1': 'MIT ライセンス。すべてのコードを監査できます。',
@@ -194,7 +196,7 @@ export const translations = {
     'calc.quantity': '数量',
     'calc.total': '合計コスト',
     'calc.perVideo': '動画あたり',
-    'calc.noMarkup': 'マークアップなし。OpenAI に直接支払います。',
+    'calc.noMarkup': 'マークアップなし。OpenAI への支払いは米ドル建てです（参考価格：1ドル=150円）。',
     'calc.cta': '生成を開始 →',
     
     // Installation

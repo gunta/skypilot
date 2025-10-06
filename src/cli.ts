@@ -6,7 +6,10 @@ import { pathToFileURL } from 'node:url';
 
 import { Command, Option } from 'commander';
 import chalk from 'chalk';
+import { spawn } from 'node:child_process';
 import { toFile } from 'openai/uploads';
+
+import { playSuccessSound } from './notify';
 
 import {
   createVideo,
@@ -31,6 +34,73 @@ await initializeI18n();
 
 const translate = <K extends keyof typeof m>(key: K, params?: Parameters<(typeof m)[K]>[0]) =>
   (m[key] as (args?: Record<string, unknown>) => string)(params ?? {});
+
+const API_KEY_URL = 'https://platform.openai.com/account/api-keys';
+
+const openInBrowser = async (url: string) =>
+  new Promise<void>((resolve, reject) => {
+    const platform = process.platform;
+    let command: string;
+    let args: string[];
+
+    if (platform === 'darwin') {
+      command = 'open';
+      args = [url];
+    } else if (platform === 'win32') {
+      command = 'cmd';
+      args = ['/c', 'start', '', url];
+    } else {
+      command = 'xdg-open';
+      args = [url];
+    }
+
+    const child = spawn(command, args, { stdio: 'ignore', detached: true });
+
+    let settled = false;
+
+    child.on('error', (error) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      reject(error);
+    });
+
+    child.on('spawn', () => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      child.unref();
+      resolve();
+    });
+  });
+
+const ensureApiKey = async () => {
+  if (process.env.OPENAI_API_KEY) {
+    return;
+  }
+
+  console.error(chalk.red(translate('cli.message.apiKeyMissing')));
+  console.log(chalk.yellow(translate('cli.message.openingApiKeys')));
+
+  try {
+    await openInBrowser(API_KEY_URL);
+  } catch (error) {
+    console.error(
+      chalk.red(
+        translate('cli.message.openBrowserFailed', {
+          url: API_KEY_URL,
+          message: (error as Error).message,
+        }),
+      ),
+    );
+  }
+
+  process.exit(1);
+};
+
+await ensureApiKey();
 
 const VALID_STATUSES: SoraVideo['status'][] = ['queued', 'in_progress', 'completed', 'failed'];
 const ASSET_CHOICES = [...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
@@ -187,6 +257,8 @@ program
       .choices([...ASSET_CHOICES])
       .default('video'),
   )
+  .option('--no-auto-download', translate('cli.option.autoDownload'))
+  .option('--no-sound', translate('cli.option.sound'))
   .option('--json', translate('cli.option.jsonCreate'), false)
   .action(
     async (
@@ -201,6 +273,8 @@ program
         download?: string | boolean;
         downloadAsset: AssetChoice;
         json?: boolean;
+        autoDownload?: boolean;
+        sound?: boolean;
       },
     ) => {
       const {
@@ -214,6 +288,8 @@ program
         download,
         downloadAsset,
         json,
+        autoDownload = true,
+        sound = true,
       } = options;
 
       let inputReferenceUpload: Awaited<ReturnType<typeof toFile>> | undefined;
@@ -302,6 +378,20 @@ program
         } else {
           console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
         }
+      } else if (autoDownload) {
+        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video', undefined);
+        console.log(
+          chalk.green(
+            translate('cli.message.assetSaved', {
+              path: downloads[0]!.path,
+              variant: translateAssetVariant('video'),
+            }),
+          ),
+        );
+      }
+
+      if (sound) {
+        await playSuccessSound(true);
       }
     },
   );
@@ -319,6 +409,8 @@ program
       .choices([...ASSET_CHOICES])
       .default('video'),
   )
+  .option('--no-auto-download', translate('cli.option.autoDownload'))
+  .option('--no-sound', translate('cli.option.sound'))
   .option('--json', translate('cli.option.jsonRemix'), false)
   .action(
     async (
@@ -330,9 +422,20 @@ program
         download?: string | boolean;
         downloadAsset: AssetChoice;
         json?: boolean;
+        autoDownload?: boolean;
+        sound?: boolean;
       },
     ) => {
-      const { prompt, watch, pollInterval = 3000, download, downloadAsset, json } = options;
+      const {
+        prompt,
+        watch,
+        pollInterval = 3000,
+        download,
+        downloadAsset,
+        json,
+        autoDownload = true,
+        sound = true,
+      } = options;
 
       const remixJob = await remixVideo(videoId, { prompt });
       const formatter = await getCurrencyFormatter();
@@ -417,6 +520,20 @@ program
         } else {
           console.log(chalk.green(translate('cli.message.assetsSaved', { paths: downloadSummary })));
         }
+      } else if (autoDownload) {
+        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video', undefined);
+        console.log(
+          chalk.green(
+            translate('cli.message.assetSaved', {
+              path: downloads[0]!.path,
+              variant: translateAssetVariant('video'),
+            }),
+          ),
+        );
+      }
+
+      if (sound) {
+        await playSuccessSound(true);
       }
     },
   );
@@ -462,12 +579,14 @@ program
   .command('tui')
   .description(translate('cli.command.tui.description'))
   .option('--interval <ms>', translate('cli.option.pollIntervalTui'), parseInteger, 5000)
-  .action(async ({ interval }: { interval: number }) => {
+  .option('--no-auto-download', translate('cli.option.autoDownload'))
+  .option('--no-sound', translate('cli.option.sound'))
+  .action(async ({ interval, autoDownload = true, sound = true }: { interval: number; autoDownload?: boolean; sound?: boolean }) => {
     const { render } = await import('ink');
     const React = await import('react');
     const { default: App } = await import('./tui/App.js');
 
-    render(React.createElement(App, { pollInterval: interval }));
+    render(React.createElement(App, { pollInterval: interval, autoDownload, playSound: sound }));
   });
 
 program
@@ -564,7 +683,15 @@ program
     console.log(translate('cli.message.languageSet', { language: finalLocale }));
   });
 
-export const runCli = (argv: string[] = process.argv) => program.parseAsync(argv);
+export const runCli = (argv: string[] = process.argv) => {
+  const args = [...argv];
+
+  if (args.length <= 2) {
+    args.push('tui');
+  }
+
+  return program.parseAsync(args);
+};
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   void runCli(process.argv);

@@ -5,6 +5,8 @@ import TextInput from 'ink-text-input';
 import Table from 'ink-table';
 import chalk from 'chalk';
 
+import { playSuccessSound } from '../notify';
+
 import {
   createVideo,
   downloadVideoAsset,
@@ -45,26 +47,26 @@ const cycleValue = <T,>(options: readonly T[], current: T): T => {
   return options[nextIndex]!;
 };
 
-const STATUS_META: Record<
-  SoraVideo['status'],
-  { emoji: string; hex: string; accentHex: string }
-> = {
-  completed: { emoji: '✨', hex: '#7CFC00', accentHex: '#2E8B57' },
-  in_progress: { emoji: '🔄', hex: '#FFD700', accentHex: '#FF8C00' },
-  queued: { emoji: '⏳', hex: '#00BFFF', accentHex: '#1E90FF' },
-  failed: { emoji: '⚠️', hex: '#FF5252', accentHex: '#C62828' },
+const STATUS_ORDER: readonly SoraVideo['status'][] = ['completed', 'in_progress', 'queued', 'failed'];
+
+const STATUS_COLORS: Record<SoraVideo['status'], string> = {
+  completed: '#4CAF50',
+  in_progress: '#FFC107',
+  queued: '#29B6F6',
+  failed: '#FF5252',
 };
 
-const formatStatusLabel = (status: SoraVideo['status']) => {
-  const meta = STATUS_META[status] ?? { emoji: '🎬', hex: '#9C27B0', accentHex: '#7B1FA2' };
-  const label = translate(`status.${status}` as keyof typeof m);
-  return chalk.hex(meta.hex).bold(`${meta.emoji} ${label}`);
-};
+const getStatusLabel = (status: SoraVideo['status']) =>
+  translate(`status.${status}` as keyof typeof m);
+
+const formatStatusLabel = (status: SoraVideo['status']) => getStatusLabel(status);
 
 const formatTimestamp = (seconds: number) => new Date(seconds * 1000).toLocaleString();
 
 export interface AppProps {
   pollInterval?: number;
+  autoDownload?: boolean;
+  playSound?: boolean;
 }
 
 type Mode = 'list' | 'prompt' | 'remix';
@@ -72,7 +74,7 @@ type Mode = 'list' | 'prompt' | 'remix';
 const ASSET_VARIANTS = [...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
 type AssetVariant = (typeof ASSET_VARIANTS)[number];
 
-const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
+const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, playSound = true }) => {
   const [videos, setVideos] = useState<SoraVideo[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -245,21 +247,17 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
       const row: Record<string, string> = {};
       const columns = tableColumns;
 
-      row[columns[0]] = index === selectedIndex ? chalk.cyanBright('➤') : chalk.dim('∙');
-      row[columns[1]] = formatStatusLabel(video.status);
-      row[columns[2]] = chalk.hex('#FFD700')(`${video.progress.toFixed(0)}%`);
-      row[columns[3]] = chalk.hex('#7C4DFF')(video.model);
-      row[columns[4]] = chalk.hex('#64FFDA')(`${video.seconds}s`);
-      row[columns[5]] = chalk.hex('#40C4FF')(video.size);
-      row[columns[6]] = chalk.hex('#B388FF')(video.id);
-      row[columns[7]] = chalk.hex('#90A4AE')(formatTimestamp(video.created_at));
+      row[columns[0]] = index === selectedIndex ? '>' : '';
+      row[columns[1]] = getStatusLabel(video.status);
+      row[columns[2]] = `${video.progress.toFixed(0)}%`;
+      row[columns[3]] = video.model;
+      row[columns[4]] = `${video.seconds}s`;
+      row[columns[5]] = video.size;
+      row[columns[6]] = video.id;
+      row[columns[7]] = formatTimestamp(video.created_at);
       row[columns[8]] = primaryEstimate
-        ? chalk.hex('#00E676')(
-            translate('app.rowCost', {
-              value: primaryEstimate,
-            }),
-          )
-        : chalk.hex('#FFB74D')(translate('app.rowCostPending'));
+        ? translate('app.rowCost', { value: primaryEstimate })
+        : translate('app.rowCostPending');
 
       return row;
     });
@@ -431,6 +429,27 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
         } else {
           setActivity(translate('activity.completed', { id: finalVideo.id }));
         }
+
+        if (autoDownload) {
+          const variantLabel = translateVariantLabel('video');
+          setActivity(translate('activity.downloadStart', { id: finalVideo.id, variant: variantLabel }));
+          try {
+            const path = await downloadVideoAsset(finalVideo.id, { variant: 'video' });
+            if (!isMounted.current) {
+              return;
+            }
+            setActivity(translate('activity.downloadSuccess', { path, variant: variantLabel }));
+          } catch (err) {
+            if (!isMounted.current) {
+              return;
+            }
+            setActivity(translate('activity.downloadError', { message: (err as Error).message }));
+          }
+        }
+
+        if (playSound) {
+          await playSuccessSound(true);
+        }
       }
 
       setTrackedVideo(finalVideo);
@@ -444,7 +463,7 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
     } finally {
       abortControllerRef.current = null;
     }
-  }, [currencyFormatter, duration, model, pollInterval, promptValue, refresh, resolution]);
+  }, [autoDownload, currencyFormatter, duration, model, playSound, pollInterval, promptValue, refresh, resolution, translateVariantLabel]);
 
   const handleRemix = useCallback(async () => {
     const target = remixTarget;
@@ -555,6 +574,27 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
         } else {
           setActivity(translate('activity.remixCompleted', { id: finalVideo.id }));
         }
+
+        if (autoDownload) {
+          const variantLabel = translateVariantLabel('video');
+          setActivity(translate('activity.downloadStart', { id: finalVideo.id, variant: variantLabel }));
+          try {
+            const path = await downloadVideoAsset(finalVideo.id, { variant: 'video' });
+            if (!isMounted.current) {
+              return;
+            }
+            setActivity(translate('activity.downloadSuccess', { path, variant: variantLabel }));
+          } catch (err) {
+            if (!isMounted.current) {
+              return;
+            }
+            setActivity(translate('activity.downloadError', { message: (err as Error).message }));
+          }
+        }
+
+        if (playSound) {
+          await playSuccessSound(true);
+        }
       }
 
       setTrackedVideo(finalVideo);
@@ -568,7 +608,7 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
     } finally {
       abortControllerRef.current = null;
     }
-  }, [currencyFormatter, pollInterval, refresh, remixPromptValue, remixTarget]);
+  }, [autoDownload, currencyFormatter, playSound, pollInterval, refresh, remixPromptValue, remixTarget, translateVariantLabel]);
 
   useInput((input, key) => {
     if (mode === 'prompt') {
@@ -693,9 +733,6 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
   return (
     <Box flexDirection="column" paddingX={1} paddingY={1} gap={1}>
       <Box flexDirection="column" borderStyle="round" borderColor="magentaBright" paddingX={1} paddingY={1}>
-        <Text color="magentaBright">{translate('app.title')}</Text>
-        <Text color="cyanBright">{translate('app.tagline')}</Text>
-        <Text color="gray">{translate('app.disclaimer')}</Text>
         <Text color="yellowBright">{translate('app.instructions')}</Text>
         <Text color="greenBright">{translate('app.currency', { code: currencyLabel })}</Text>
         <Text color="blueBright">
@@ -768,14 +805,12 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000 }) => {
         <Box flexDirection="column" gap={1}>
           <Text color="magentaBright">{translate('tui.table.heading')}</Text>
           <Table data={tableData} columns={tableColumns} />
-          <Box flexDirection="row" flexWrap="wrap" gap={1}>
-            {(Object.keys(STATUS_META) as SoraVideo['status'][]).map((status) => {
-              const meta = STATUS_META[status];
+          <Box flexDirection="row" flexWrap="wrap" gap={2}>
+            {STATUS_ORDER.map((status) => {
               const count = statusCounts[status] ?? 0;
               const label = translate(`status.${status}` as keyof typeof m);
-              const badge = chalk.hex(meta.hex).bold(` ${meta.emoji} ${label} `);
-              const countText = chalk.hex(meta.accentHex)(`×${count}`);
-              return <Text key={status}>{`${badge}${countText}`}</Text>;
+              const color = STATUS_COLORS[status] ?? '#BDBDBD';
+              return <Text key={status}>{chalk.hex(color)(`${label} ×${count}`)}</Text>;
             })}
           </Box>
         </Box>

@@ -10,7 +10,7 @@ const { lang } = Astro.props;
 const t = (key: any) => getTranslation(lang, key);
 ---
 
-<section class="section-container bg-bg-secondary">
+<section class="section-container bg-bg-secondary/80 backdrop-blur-sm">
   <div class="text-center mb-16">
     <h2 class="text-4xl sm:text-5xl font-bold gradient-text mb-4">
       {t('valueprops.title')}

@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/sky-pilot.svg)](https://www.npmjs.com/package/sky-pilot)
 [![GitHub stars](https://img.shields.io/github/stars/gunta/skypilot?style=social)](https://github.com/gunta/skypilot)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/gunta?style=social)](https://github.com/sponsors/gunta)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Sky Pilot is an unofficial CLI and TUI for OpenAI's Sora 2 video generation API. It helps you launch jobs, monitor progress, download outputs, and automate your release workflow with AI-authored changelog entries.

@@ -10,22 +10,28 @@ import ComingSoon from '../components/ComingSoon.astro';
 import FAQ from '../components/FAQ.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import Footer from '../components/Footer.astro';
+import DitherBackground from '../components/DitherBackground';
 import { detectLanguage, type Language } from '../i18n/translations';
 
-// Detect language from URL query param or browser
-const url = new URL(Astro.request.url);
-const langParam = url.searchParams.get('lang') as Language | null;
+// For static GitHub Pages deployment, we default to English
+// The client-side script will handle language detection and switching
 
-// Fallback to English if lang param is invalid
-let lang: Language = 'en';
-if (langParam === 'ja' || langParam === 'en') {
-  lang = langParam;
-} else if (Astro.request.headers.get('accept-language')) {
-  const acceptLang = Astro.request.headers.get('accept-language') || '';
-  if (acceptLang.toLowerCase().includes('ja')) {
-    lang = 'ja';
-  }
-}
+// Get the language from URL parameter
+const urlSearchParams = new URLSearchParams(Astro.url.search);
+const langParam = urlSearchParams.get('lang') as Language | null;
+
+// Debug logging
+console.log('[index.astro] Full URL:', Astro.url.toString());
+console.log('[index.astro] URL search:', Astro.url.search);
+console.log('[index.astro] URL pathname:', Astro.url.pathname);
+console.log('[index.astro] Language param from URL:', langParam);
+console.log('[index.astro] All search params:', Array.from(urlSearchParams.entries()));
+
+// Use URL parameter if provided, otherwise default to English
+// Client-side script will handle auto-detection and redirect
+const lang: Language = (langParam === 'ja' || langParam === 'en') ? langParam : 'en';
+
+console.log('[index.astro] Final language used:', lang);
 
 const title = lang === 'ja' 
   ? 'Sky Pilot - 安全な Sora 2 CLI & ダッシュボード | オープンソース動画生成ツール'
@@ -37,12 +43,13 @@ const description = lang === 'ja'
 ---
 
 <BaseLayout title={title} description={description} lang={lang}>
+  <DitherBackground client:load />
   <Navigation lang={lang} />
   <Hero lang={lang} />
   <ValueProps lang={lang} />
   <Features lang={lang} />
   
-  <section class="section-container bg-bg-secondary">
+  <section class="section-container bg-bg-secondary/80 backdrop-blur-sm">
     <CostCalculator client:load lang={lang} />
   </section>
   
@@ -52,33 +59,36 @@ const description = lang === 'ja'
   <FinalCTA lang={lang} />
   <Footer lang={lang} />
   
-  <!-- Language detection script -->
-  <script>
-    // Store user's language preference
-    const urlParams = new URLSearchParams(window.location.search);
-    const langParam = urlParams.get('lang');
-    
-    if (!langParam) {
-      // Auto-detect language
-      const browserLang = navigator.language.toLowerCase();
-      const preferredLang = localStorage.getItem('preferred-language');
+  <!-- Language detection and switching for static GitHub Pages -->
+  <script is:inline>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang');
       
-      if (preferredLang) {
-        // Use stored preference
-        if (window.location.search !== `?lang=${preferredLang}`) {
-          window.location.href = `?lang=${preferredLang}`;
-        }
-      } else if (browserLang.startsWith('ja')) {
-        // Auto-redirect to Japanese
-        window.location.href = '?lang=ja';
+      if (langParam && (langParam === 'en' || langParam === 'ja')) {
+        // Valid language parameter exists - store it
+        localStorage.setItem('preferred-language', langParam);
       } else {
-        // Default to English
-        localStorage.setItem('preferred-language', 'en');
+        // No language parameter in URL - check for stored preference or detect
+        const storedLang = localStorage.getItem('preferred-language');
+        
+        if (storedLang && (storedLang === 'en' || storedLang === 'ja')) {
+          // Use stored preference
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set('lang', storedLang);
+          window.location.replace(newUrl.toString());
+        } else {
+          // First visit - detect from browser
+          const browserLang = navigator.language.toLowerCase();
+          const detectedLang = browserLang.startsWith('ja') ? 'ja' : 'en';
+          localStorage.setItem('preferred-language', detectedLang);
+          
+          const newUrl = new URL(window.location.href);
+          newUrl.searchParams.set('lang', detectedLang);
+          window.location.replace(newUrl.toString());
+        }
       }
-    } else {
-      // Store the language preference
-      localStorage.setItem('preferred-language', langParam);
-    }
+    })();
   </script>
 </BaseLayout>
 

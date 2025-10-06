@@ -1,24 +1,19 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@astrojs/react';
 
 export default defineConfig({
   site: 'https://gunta.github.io',
   base: '/skypilot',
   integrations: [
-    tailwind(),
     react(),
   ],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   output: 'static',
   build: {
     assets: '_assets'
-  },
-  i18n: {
-    defaultLocale: 'en',
-    locales: ['en', 'ja'],
-    routing: {
-      prefixDefaultLocale: false
-    }
   }
 });
 

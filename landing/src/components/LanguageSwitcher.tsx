@@ -10,16 +10,18 @@ export default function LanguageSwitcher({ initialLang }: Props) {
 
   const toggleLanguage = () => {
     const newLang = lang === 'en' ? 'ja' : 'en';
-    setLang(newLang);
     
     // Store preference
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('preferred-language', newLang);
     }
     
-    // Trigger page reload or update
+    // Trigger page reload with new language
     if (typeof window !== 'undefined') {
-      window.location.href = `?lang=${newLang}`;
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', newLang);
+      // Use replace to avoid back button issues
+      window.location.replace(url.toString());
     }
   };
 

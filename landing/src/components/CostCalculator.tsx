@@ -6,7 +6,7 @@ interface Props {
   lang: Language;
 }
 
-// Sora 2 pricing from OpenAI
+// Sora 2 pricing from OpenAI (in USD)
 const PRICING = {
   'sora-2': {
     '4': { '720x1280': 0.12, '1280x720': 0.12, '1024x1792': 0.16, '1792x1024': 0.16 },
@@ -20,6 +20,9 @@ const PRICING = {
   },
 };
 
+// USD to JPY conversion rate (approximate)
+const USD_TO_JPY = 150;
+
 export default function CostCalculator({ lang }: Props) {
   const [model, setModel] = useState<'sora-2' | 'sora-2-pro'>('sora-2');
   const [duration, setDuration] = useState<'4' | '8' | '12'>('4');
@@ -27,13 +30,22 @@ export default function CostCalculator({ lang }: Props) {
   const [quantity, setQuantity] = useState(1);
 
   const t = (key: any) => getTranslation(lang, key);
+  const isJapanese = lang === 'ja';
 
   const calculateCost = () => {
-    const pricePerVideo = PRICING[model][duration][resolution];
+    const pricePerVideoUSD = PRICING[model][duration][resolution];
+    const pricePerVideo = isJapanese ? pricePerVideoUSD * USD_TO_JPY : pricePerVideoUSD;
     return {
       perVideo: pricePerVideo,
       total: pricePerVideo * quantity,
     };
+  };
+
+  const formatPrice = (price: number) => {
+    if (isJapanese) {
+      return `¥${Math.round(price).toLocaleString('ja-JP')}`;
+    }
+    return `$${price.toFixed(2)}`;
   };
 
   const cost = calculateCost();
@@ -129,11 +141,11 @@ export default function CostCalculator({ lang }: Props) {
         <div className="bg-gradient-to-r from-accent-primary/10 to-accent-secondary/10 rounded-lg p-6 border border-accent-primary/20">
           <div className="flex justify-between items-center mb-2">
             <span className="text-text-secondary">{t('calc.perVideo')}</span>
-            <span className="text-2xl font-bold">${cost.perVideo.toFixed(2)}</span>
+            <span className="text-2xl font-bold">{formatPrice(cost.perVideo)}</span>
           </div>
           <div className="flex justify-between items-center pt-4 border-t border-border-color">
             <span className="text-lg font-semibold">{t('calc.total')}</span>
-            <span className="text-3xl font-bold gradient-text">${cost.total.toFixed(2)}</span>
+            <span className="text-3xl font-bold gradient-text">{formatPrice(cost.total)}</span>
           </div>
         </div>
 
