@@ -1,18 +1,18 @@
 {
-  "name": "sky-pilot",
+  "name": "skypilot",
   "version": "0.1.0",
-  "description": "Unofficial CLI and Ink dashboard for OpenAI's Sora 2 video generation API.",
+  "description": "CLI and TUI for OpenAI's Sora 2 video generation API.",
   "license": "MIT",
   "type": "module",
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-org/sky-pilot.git"
+    "url": "git+https://github.com/gunta/sky-pilot.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/sky-pilot/issues"
+    "url": "https://github.com/gunta/sky-pilot/issues"
   },
-  "homepage": "https://github.com/your-org/sky-pilot#readme",
+  "homepage": "https://github.com/gunta/sky-pilot#readme",
   "engines": {
     "node": ">=18"
   },
