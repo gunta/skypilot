@@ -74,7 +74,7 @@ Diff summary:
 ${diffStat || 'No aggregated diff available.'}`;
 
 const response = await client.responses.create({
-  model: 'gpt-5.1-mini',
+  model: 'gpt-5-mini',
   input: [
     {
       role: 'system',
@@ -84,8 +84,7 @@ const response = await client.responses.create({
       role: 'user',
       content: prompt,
     },
-  ],
-  temperature: 0.2,
+  ]
 });
 
 const changelogBody = response.output_text.trim();
