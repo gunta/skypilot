@@ -2,25 +2,24 @@
   "name": "skypilot",
   "version": "0.1.1",
   "description": "CLI and TUI for OpenAI's Sora 2 video generation API.",
-  "license": "MIT",
-  "type": "module",
-  "author": "",
+  "keywords": [
+    "openai",
+    "sora",
+    "video",
+    "cli",
+    "ink"
+  ],
+  "homepage": "https://github.com/gunta/sky-pilot#readme",
+  "bugs": {
+    "url": "https://github.com/gunta/sky-pilot/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gunta/sky-pilot.git"
   },
-  "bugs": {
-    "url": "https://github.com/gunta/sky-pilot/issues"
-  },
-  "homepage": "https://github.com/gunta/sky-pilot#readme",
-  "engines": {
-    "node": ">=18"
-  },
-  "bin": {
-    "sky-pilot": "./dist/cli.js"
-  },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "author": "gunta",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -29,6 +28,11 @@
     "./cli": "./dist/cli.js",
     "./tui/app": "./dist/tui/App.js"
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "sky-pilot": "dist/cli.js"
+  },
   "files": [
     "dist",
     "README.md",
@@ -36,7 +40,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "paraglide-js compile --project ./project.inlang --outdir ./src/paraglide && tsc -p tsconfig.build.json",
+    "build": "tsc",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
     "generate:changelog": "tsx scripts/generate-changelog.ts",
@@ -46,13 +50,6 @@
     "tui": "bun run src/cli.ts tui",
     "list": "bun run src/cli.ts list"
   },
-  "keywords": [
-    "openai",
-    "sora",
-    "video",
-    "cli",
-    "ink"
-  ],
   "dependencies": {
     "@inkjs/ui": "^2.0.0",
     "@inlang/paraglide-js": "^2.4.0",
@@ -77,5 +74,8 @@
     "semver": "^7.6.3",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
