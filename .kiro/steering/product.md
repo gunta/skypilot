@@ -38,7 +38,7 @@ _Last updated: 2025-10-07_
 ## Current Roadmap Signals
 - `FUTURE_PLANS.md` documents a separate “SkyPilot Composer” desktop concept. Treat it as exploratory; nothing in the repository implements that Mac app yet.
 - Landing page messaging teases forthcoming GUI/native experiences. Use the steering docs to flag when those plans become real code.
-- ✅ **Planned application suite (in design):**
+- ✅ **Planned application suite (scaffolding underway in `apps/web/`):**
   - **Web App (localhost dev build):** React + TanStack Router front end running locally against the SkyPilot API layer; XState orchestrates flows similar to the CLI/TUI manager.
   - **Web App (installable PWA):** Chrome-optimized progressive web app sharing the same React/TanStack Router/XState stack, targeting quick access without native installers.
   - **Electron Desktop (macOS):** Standalone and Mac App Store variants packaged via Hydraulic Conveyor distribution. Relies on the shared React view layer, TanStack Router navigation, and XState machines to stay aligned with CLI/TUI behavior.

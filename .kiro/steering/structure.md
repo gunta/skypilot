@@ -9,6 +9,7 @@ _Last updated: 2025-10-07_
 - `project.inlang/` – Paraglide configuration project; run `bunx paraglide-js compile --project ./project.inlang --outdir ./src/paraglide` after message changes.
 - `src/paraglide/` (generated) – Type-safe message accessors consumed throughout CLI/TUI.
 - `landing/` – Astro marketing site with bilingual content, Tailwind styling, interactive components, and GitHub Pages workflow integration.
+- `apps/web/` – Experimental React + TanStack Router + XState web console (also the basis for PWA and Electron shells) using Canva’s App UI Kit.
 - `Formula/` – Homebrew formula (`skypilot.rb`) maintained by release scripts.
 - `dist/` – Build artefacts emitted by `bun run build` (ignored in git).
 - Repository docs (`README.md`, `CHANGELOG.md`, `AGENTS.md`, `FUTURE_PLANS.md`, `LANDING_PAGE_SUMMARY.md`) capture onboarding, release history, guidelines, and future product explorations.

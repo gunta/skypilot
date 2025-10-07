@@ -45,7 +45,7 @@ _Last updated: 2025-10-07_
 ## Build & Tooling
 - **Compiler:** TypeScript 5.9 (`tsconfig.json`) with `moduleResolution: "bundler"` and `allowImportingTsExtensions` so emitted JS keeps `.js` specifiers.
 - **Task runner:** Bun scripts wrap common workflows (`bun run typecheck`, `bun run build`, `bun run src/cli/index.ts …`).
-- **Formatter/Linter:** Biome (`biome.jsonc`) for zero-config formatting and linting, integrated with Ultracite guardrails.
+- **Formatter/Linter:** Biome (`biome.jsonc`) for zero-config formatting and linting, integrated with Ultracite guardrails. The new web app reuses the same tooling via `bunx biome`.
 - **Bundler for messages:** Vite (Rolldown fork) compiles Paraglide bundles; overrides lock the dependency to `rolldown-vite`.
 - **Automation scripts:** Located in `scripts/` (release, changelog generation, Homebrew formula sync) and executed with `tsx`.
 
@@ -54,6 +54,7 @@ _Last updated: 2025-10-07_
 - Type checks run via `bun run typecheck`; builds produce ESM artifacts in `dist/`.
 - CLI can be executed locally with `bun run src/cli/index.ts …`; `bun run src/cli/index.ts tui` launches the Ink dashboard without compiling first.
 - Node.js runtime must be ≥ 18 (see `engines` field).
+- Web console: `apps/web/` hosts a standalone Vite project—run `bun install` inside the package followed by `bun run dev`.
 
 ## Common Commands
 - `bun run build` – compile TypeScript to `dist/`.
