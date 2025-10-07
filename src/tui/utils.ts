@@ -1,5 +1,20 @@
+import stringWidth from 'string-width';
+
 import type { SoraVideo } from '../api.js';
 import { translate } from './translate.js';
+
+const ZERO_WIDTH_SPACE = '\u200B';
+
+export const toInkTableFriendlyString = (value: string) => {
+  const displayWidth = stringWidth(value);
+  const codeUnitLength = value.length;
+
+  if (displayWidth <= codeUnitLength) {
+    return value;
+  }
+
+  return `${value}${ZERO_WIDTH_SPACE.repeat(displayWidth - codeUnitLength)}`;
+};
 
 export const getStatusLabel = (status: SoraVideo['status']) =>
   translate(`status.${status}` as const);

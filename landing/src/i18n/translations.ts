@@ -2,7 +2,8 @@ export const translations = {
   en: {
     // Hero Section
     'hero.title': 'Your Sora 2 Co-pilot',
-    'hero.subtitle': 'The most secure way to use OpenAI\'s video API. Free, open source, runs entirely on your machine with your own API key.',
+    'hero.subtitle': 'The most secure way to use OpenAI\'s video API. Runs entirely on your machine with your own API key.',
+    'hero.seoTagline': 'Free OSS Sora 2 TUI/CLI/GUI - BYOK (Bring Your Own Key)',
     'hero.badge1': 'No watermarks',
     'hero.badge2': 'BYOK (Bring Your Own Key)',
     'hero.badge3': '100% private',
@@ -13,6 +14,16 @@ export const translations = {
     'hero.cta.try': 'Try Now',
     'hero.cta.github': 'View on GitHub',
     'hero.sponsor': 'Sponsor this project',
+    'hero.interfaces.title': 'Available Interfaces',
+    'hero.interfaces.cli': 'CLI',
+    'hero.interfaces.cliDesc': 'Working Now',
+    'hero.interfaces.tui': 'TUI',
+    'hero.interfaces.tuiDesc': 'Working Now',
+    'hero.interfaces.webgui': 'Web GUI',
+    'hero.interfaces.webguiDesc': 'Coming Soon',
+    'hero.interfaces.app': 'Native App',
+    'hero.interfaces.appDesc': 'Coming Soon',
+    'hero.interfaces.supportCta': 'Support us on GitHub to accelerate development',
     
     // Terminal sample
     'terminal.init': 'Initializing Sora 2 client...',
@@ -208,14 +219,15 @@ export const translations = {
     'footer.npm': 'npm Package',
     'footer.license': 'License (MIT)',
     'footer.issues': 'Issues / Bug Reports',
-    'footer.disclaimer': 'SkyPilot is a tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI.',
+    'footer.disclaimer': 'SkyPilot is a tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI, for now.',
     'footer.credits': 'Built with Astro',
     'footer.contributors': 'Open source contributors welcome',
   },
   ja: {
     // Hero Section
     'hero.title': 'Sora 2 の最強パートナー',
-    'hero.subtitle': 'OpenAI 動画 API を最も安全に使う方法。無料・オープンソース・自分の API キーでローカル実行。',
+    'hero.subtitle': 'OpenAI 動画 API を最も安全に使う方法。自分のAPIキーで完全ローカル実行。',
+    'hero.seoTagline': '無料 OSS Sora 2 TUI/CLI/GUI - BYOK（自分のAPIキー利用）',
     'hero.badge1': 'ウォーターマークなし',
     'hero.badge2': 'BYOK（独自キー利用）',
     'hero.badge3': '100% プライベート',
@@ -226,6 +238,16 @@ export const translations = {
     'hero.cta.try': '今すぐ始める',
     'hero.cta.github': 'GitHub で見る',
     'hero.sponsor': 'スポンサーになる',
+    'hero.interfaces.title': '利用可能なインターフェース',
+    'hero.interfaces.cli': 'CLI',
+    'hero.interfaces.cliDesc': '利用可能',
+    'hero.interfaces.tui': 'TUI',
+    'hero.interfaces.tuiDesc': '利用可能',
+    'hero.interfaces.webgui': 'Web GUI',
+    'hero.interfaces.webguiDesc': '開発中',
+    'hero.interfaces.app': 'Native App',
+    'hero.interfaces.appDesc': '開発中',
+    'hero.interfaces.supportCta': 'GitHubでサポートして開発を加速',
     
     // Terminal sample
     'terminal.init': 'Sora 2 クライアントを初期化中...',
@@ -421,7 +443,7 @@ export const translations = {
     'footer.npm': 'npm パッケージ',
     'footer.license': 'ライセンス (MIT)',
     'footer.issues': '問題 / バグ報告',
-    'footer.disclaimer': 'SkyPilot は OpenAI の Sora 2 API のツールです。OpenAI によって承認、推奨、またはスポンサーされていません。',
+    'footer.disclaimer': 'SkyPilot は OpenAI の Sora 2 API のツールです。OpenAI によって承認、推奨、またはスポンサーされていません、今のところ。',
     'footer.credits': 'Astro で構築',
     'footer.contributors': 'オープンソース貢献者を歓迎',
   }

@@ -29,6 +29,20 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
 
   const currencyLabel = controller.currencyFormatter ? controller.currencyFormatter.currency : '…';
   const assetLabel = controller.translateVariantLabel(controller.downloadVariant);
+  const loadingMessage = translate('app.loading');
+  const activityMessage = controller.activity;
+  const shouldShowActivityPanel =
+    activityMessage !== null && !(controller.isLoading && activityMessage === loadingMessage);
+  const costLabel = useMemo(() => {
+    const estimate = controller.estimatedCost;
+    if (!estimate) {
+      return translate('app.costUnavailable');
+    }
+
+    return estimate.isConverted
+      ? translate('app.costEstimateWithUsd', { preferred: estimate.preferred, usd: estimate.usd })
+      : translate('app.costEstimate', { value: estimate.preferred });
+  }, [controller.estimatedCost, controller.activeLocale]);
 
   useInput((input, key) => {
     if (controller.deleteTarget) {
@@ -107,6 +121,11 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
       return;
     }
 
+    if (input === 'e') {
+      void controller.exportVideosToCsv();
+      return;
+    }
+
     if (input === 'x') {
       const target = selectedVideo;
       if (!target) {
@@ -159,11 +178,12 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
         resolution={controller.resolution}
         assetLabel={assetLabel}
         activeLocale={controller.activeLocale}
+        costLabel={costLabel}
       />
 
       {controller.currencyError ? <CurrencyAlert message={controller.currencyError} /> : null}
 
-      {controller.activity ? <ActivityPanel activity={controller.activity} /> : null}
+      {shouldShowActivityPanel ? <ActivityPanel activity={activityMessage!} /> : null}
 
       {controller.mode === 'prompt' ? (
         <PromptModal

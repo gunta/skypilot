@@ -68,6 +68,7 @@
     "ink-text-input": "^6.0.0",
     "openai": "^6.2.0",
     "react": "^19.2.0",
+    "string-width": "^8.1.0",
     "xstate": "^5.22.1"
   },
   "devDependencies": {

@@ -22,6 +22,7 @@ import {
   type AssetChoice,
   type DownloadedAssetsSummary,
 } from './assets.js';
+import { exportVideosToCsv } from './export/csv.js';
 import { createSoraManagerController } from './state/manager.js';
 
 await initializeI18n();
@@ -200,6 +201,55 @@ program
       process.exitCode = 1;
     }
   });
+
+program
+  .command('export')
+  .description(translate('cli.command.export.description'))
+  .addOption(new Option('-s, --status <status...>', translate('cli.option.status')).choices(VALID_STATUSES))
+  .option('-l, --limit <number>', translate('cli.option.limit'), parseInteger, 100)
+  .addOption(
+    new Option('--order <order>', translate('cli.option.order')).choices(['asc', 'desc']).default('desc'),
+  )
+  .option('-o, --output <path>', translate('cli.option.output'))
+  .action(
+    async ({
+      status,
+      limit,
+      order,
+      output,
+    }: {
+      status?: SoraVideo['status'][];
+      limit: number;
+      order: 'asc' | 'desc';
+      output?: string;
+    }) => {
+      await ensureApiKey();
+      const currencyFormatter = await ensureCurrencyFormatterForCli();
+
+      try {
+        const result = await manager.refresh({ limit, order });
+        const filtered = status?.length ? result.videos.filter((video) => status.includes(video.status)) : result.videos;
+
+        if (!filtered.length) {
+          console.log(chalk.dim(translate('cli.message.noVideos')));
+          return;
+        }
+
+        const exportPath = await exportVideosToCsv(
+          filtered,
+          manager.snapshot.context.costSummaries,
+          translate,
+          currencyFormatter,
+          output,
+        );
+
+        console.log(chalk.green(translate('cli.message.exportedCsv', { path: exportPath })));
+      } catch (error) {
+        console.error(chalk.red(translate('cli.message.exportFailed', { message: (error as Error).message })));
+        process.exitCode = 1;
+      }
+    },
+  );
 
 program
   .command('retrieve')

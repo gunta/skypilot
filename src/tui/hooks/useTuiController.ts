@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type 
 import { useSelector } from '@xstate/react';
 
 import type { SoraVideo } from '../../api.js';
+import { exportVideosToCsv } from '../../export/csv.js';
 import { buildCostSummary, calculateVideoCost, type CostSummary } from '../../pricing.js';
 import type { CurrencyFormatter } from '../../currency.js';
+import { formatUsd } from '../../currency.js';
 import { createSoraManagerController, type SoraManagerController } from '../../state/manager.js';
 import { downloadAssetsForChoice, type AssetChoice, type DownloadedAssetsSummary } from '../../assets.js';
 import { getActiveLocale, cycleLanguage } from '../../i18n.js';
@@ -11,6 +13,7 @@ import { translate, type MessageKey } from '../translate.js';
 import { ASSET_VARIANTS, DURATIONS, MODELS, RESOLUTIONS, cycleValue } from '../constants.js';
 import type { AssetVariant } from '../constants.js';
 import type { Mode, TrackedJob } from '../types.js';
+import { toInkTableFriendlyString } from '../utils.js';
 import { useThumbnailPreview } from './useThumbnailPreview.js';
 
 interface UseTuiControllerOptions {
@@ -58,6 +61,12 @@ export interface TuiController extends TranslationHelpers {
   trackedJobs: TrackedJob[];
   sortedTrackedJobs: TrackedJob[];
   trackedSummaries: Map<string, CostSummary | null>;
+  estimatedCost: {
+    preferred: string;
+    usd: string;
+    isConverted: boolean;
+  } | null;
+  exportVideosToCsv: () => Promise<void>;
   handleCreate: () => Promise<void>;
   handleRemix: () => Promise<void>;
   handleDownload: (video: SoraVideo | undefined) => Promise<void>;
@@ -261,15 +270,15 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
 
   const columnLabels = useMemo(
     () => ({
-      pointer: translate('tui.table.column.pointer'),
-      status: translate('tui.table.column.status'),
-      progress: translate('tui.table.column.progress'),
-      model: translate('tui.table.column.model'),
-      duration: translate('tui.table.column.duration'),
-      resolution: translate('tui.table.column.resolution'),
-      id: translate('tui.table.column.id'),
-      created: translate('tui.table.column.created'),
-      cost: translate('tui.table.column.cost'),
+      pointer: toInkTableFriendlyString(translate('tui.table.column.pointer')),
+      status: toInkTableFriendlyString(translate('tui.table.column.status')),
+      progress: toInkTableFriendlyString(translate('tui.table.column.progress')),
+      model: toInkTableFriendlyString(translate('tui.table.column.model')),
+      duration: toInkTableFriendlyString(translate('tui.table.column.duration')),
+      resolution: toInkTableFriendlyString(translate('tui.table.column.resolution')),
+      id: toInkTableFriendlyString(translate('tui.table.column.id')),
+      created: toInkTableFriendlyString(translate('tui.table.column.created')),
+      cost: toInkTableFriendlyString(translate('tui.table.column.cost')),
     }),
     [activeLocale],
   );
@@ -304,17 +313,17 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
       })();
 
       return {
-        [columnLabels.pointer]: index === selectedIndex ? '>' : '',
-        [columnLabels.status]: translate(`status.${video.status}` as MessageKey),
-        [columnLabels.progress]: `${video.progress.toFixed(0)}%`,
-        [columnLabels.model]: video.model,
-        [columnLabels.duration]: `${video.seconds}s`,
-        [columnLabels.resolution]: video.size,
-        [columnLabels.id]: video.id,
-        [columnLabels.created]: new Date(video.created_at * 1000).toLocaleString(),
-        [columnLabels.cost]: primaryEstimate
-          ? translate('app.rowCost', { value: primaryEstimate })
-          : translate('app.rowCostPending'),
+        [columnLabels.pointer]: toInkTableFriendlyString(index === selectedIndex ? '>' : ''),
+        [columnLabels.status]: toInkTableFriendlyString(translate(`status.${video.status}` as MessageKey)),
+        [columnLabels.progress]: toInkTableFriendlyString(`${video.progress.toFixed(0)}%`),
+        [columnLabels.model]: toInkTableFriendlyString(video.model),
+        [columnLabels.duration]: toInkTableFriendlyString(`${video.seconds}s`),
+        [columnLabels.resolution]: toInkTableFriendlyString(video.size),
+        [columnLabels.id]: toInkTableFriendlyString(video.id),
+        [columnLabels.created]: toInkTableFriendlyString(new Date(video.created_at * 1000).toLocaleString()),
+        [columnLabels.cost]: toInkTableFriendlyString(
+          primaryEstimate ? translate('app.rowCost', { value: primaryEstimate }) : translate('app.rowCostPending'),
+        ),
       } as Record<string, string>;
     });
   }, [columnLabels, costSummaries, currencyFormatter, selectedIndex, videos]);
@@ -337,10 +346,69 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
     return summaries;
   }, [currencyFormatter, trackedJobs]);
 
+  const estimatedCost = useMemo(() => {
+    const breakdown = calculateVideoCost({
+      model,
+      size: resolution,
+      seconds: duration,
+      status: 'queued',
+    } as Pick<SoraVideo, 'model' | 'size' | 'seconds' | 'status'>);
+
+    if (!breakdown) {
+      return null;
+    }
+
+    const usd = formatUsd(breakdown.estimatedUsd);
+
+    if (currencyFormatter) {
+      const summary = buildCostSummary(breakdown, currencyFormatter);
+      const isConverted = currencyFormatter.currency.toUpperCase() !== 'USD';
+      return {
+        preferred: summary.estimatedDisplay.preferred,
+        usd,
+        isConverted,
+      };
+    }
+
+    return {
+      preferred: usd,
+      usd,
+      isConverted: false,
+    };
+  }, [currencyFormatter, duration, model, resolution]);
+
   const translateVariantLabel = useCallback(
     (variant: AssetVariant) => translate(`asset.variant.${variant}` as MessageKey),
     [activeLocale],
   );
+
+  const exportCsv = useCallback(async () => {
+    setActivity(translate('activity.exporting'));
+
+    try {
+      let formatter = manager.actor.getSnapshot().context.currencyFormatter;
+      if (!formatter) {
+        try {
+          const result = await manager.loadCurrency();
+          formatter = result.formatter;
+        } catch (error) {
+          setCurrencyErrorOverride((error as Error).message);
+        }
+      }
+
+      const snapshot = manager.actor.getSnapshot();
+      const exportPath = await exportVideosToCsv(
+        snapshot.context.videos,
+        snapshot.context.costSummaries,
+        translate,
+        formatter ?? null,
+      );
+
+      setActivity(translate('activity.exportSuccess', { path: exportPath }));
+    } catch (error) {
+      setActivity(translate('activity.exportError', { message: (error as Error).message }));
+    }
+  }, [manager, setCurrencyErrorOverride]);
 
   const showDownloadPreview = useCallback(
     async (summary: DownloadedAssetsSummary) => {
@@ -731,6 +799,8 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
     trackedJobs,
     sortedTrackedJobs,
     trackedSummaries,
+    estimatedCost,
+    exportVideosToCsv: exportCsv,
     handleCreate,
     handleRemix,
     handleDownload,
