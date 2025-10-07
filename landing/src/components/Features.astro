@@ -126,75 +126,153 @@ const t = (key: any) => getTranslation(lang, key);
     </div>
   </div>
 
-  <!-- Advanced Features Section -->
-  <div class="mt-16">
-    <h3 class="text-3xl font-bold text-center mb-8">{t('features.advanced.title')}</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.remix')}</p>
+  <!-- Advanced Features Section - Professional Design -->
+  <div class="mt-24">
+    <div class="text-center mb-12">
+      <h3 class="text-3xl font-bold mb-3">{t('features.advanced.title')}</h3>
+      <p class="text-text-secondary max-w-2xl mx-auto">{t('features.advanced.subtitle')}</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Video Remix -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4M4 4h16a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.remix.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.remix.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.image')}</p>
+
+      <!-- Image to Video -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.image.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.image.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.models')}</p>
+
+      <!-- Model Flexibility -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-green-500/10 to-green-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.models.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.models.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.resolutions')}</p>
+
+      <!-- Multi-Resolution -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.resolutions.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.resolutions.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.durations')}</p>
+
+      <!-- Duration Control -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-yellow-500/10 to-yellow-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.durations.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.durations.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.batch')}</p>
+
+      <!-- Batch Processing -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-orange-500/10 to-orange-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.batch.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.batch.desc')}</p>
       </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.advanced.preview')}</p>
+
+      <!-- Cost Preview -->
+      <div class="group relative bg-gradient-to-br from-bg-card to-bg-secondary/50 rounded-xl p-6 border border-custom-border hover:border-accent-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+        <div class="mb-4 p-3 bg-gradient-to-br from-pink-500/10 to-pink-600/10 rounded-lg inline-block">
+          <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        </div>
+        <h4 class="font-semibold text-white mb-2">{t('features.advanced.preview.title')}</h4>
+        <p class="text-sm text-text-secondary leading-relaxed">{t('features.advanced.preview.desc')}</p>
       </div>
     </div>
   </div>
 
   <!-- Asset Management Section -->
-  <div class="mt-16">
-    <h3 class="text-3xl font-bold text-center mb-8">{t('features.assets.title')}</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.assets.download')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.assets.preview')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.assets.organize')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.assets.formats')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.assets.tracking')}</p>
-      </div>
+  <div class="mt-24">
+    <div class="text-center mb-12">
+      <h3 class="text-3xl font-bold mb-3">{t('features.assets.title')}</h3>
+      <p class="text-text-secondary max-w-2xl mx-auto">{t('features.assets.subtitle')}</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {[
+        { icon: 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10', color: 'blue', title: 'features.assets.download.title', desc: 'features.assets.download.desc' },
+        { icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', color: 'purple', title: 'features.assets.preview.title', desc: 'features.assets.preview.desc' },
+        { icon: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z', color: 'green', title: 'features.assets.organize.title', desc: 'features.assets.organize.desc' },
+        { icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', color: 'yellow', title: 'features.assets.formats.title', desc: 'features.assets.formats.desc' },
+        { icon: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01', color: 'cyan', title: 'features.assets.tracking.title', desc: 'features.assets.tracking.desc' },
+      ].map((feature, index) => (
+        <div class="relative group">
+          <div class="absolute inset-0 bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative bg-gradient-to-br from-bg-card to-bg-secondary/30 rounded-2xl p-8 border border-custom-border hover:border-accent-primary/30 transition-all duration-300">
+            <div class={`mb-6 p-4 bg-gradient-to-br from-${feature.color}-500/10 to-${feature.color}-600/10 rounded-xl inline-block`}>
+              <svg class={`w-8 h-8 text-${feature.color}-400`} fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d={feature.icon} />
+              </svg>
+            </div>
+            <h4 class="text-lg font-semibold text-white mb-3">{t(feature.title)}</h4>
+            <p class="text-sm text-text-secondary leading-relaxed">{t(feature.desc)}</p>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
 
   <!-- Export & Analytics Section -->
-  <div class="mt-16">
-    <h3 class="text-3xl font-bold text-center mb-8">{t('features.export.title')}</h3>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.export.csv')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.export.costs')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.export.metadata')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.export.reports')}</p>
-      </div>
-      <div class="glass-card rounded-lg p-4 hover-scale">
-        <p class="text-sm">{t('features.export.currency')}</p>
-      </div>
+  <div class="mt-24 mb-8">
+    <div class="text-center mb-12">
+      <h3 class="text-3xl font-bold mb-3">{t('features.export.title')}</h3>
+      <p class="text-text-secondary max-w-2xl mx-auto">{t('features.export.subtitle')}</p>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      {[
+        { icon: 'M9 17v1a3 3 0 003 3h0a3 3 0 003-3v-1m3-2V8a3 3 0 00-3-3h0M9 11h6M9 15h6M12 3v5', gradient: 'from-emerald-500 to-teal-600', title: 'features.export.csv.title', desc: 'features.export.csv.desc' },
+        { icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z', gradient: 'from-violet-500 to-purple-600', title: 'features.export.costs.title', desc: 'features.export.costs.desc' },
+        { icon: 'M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z', gradient: 'from-amber-500 to-orange-600', title: 'features.export.metadata.title', desc: 'features.export.metadata.desc' },
+        { icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', gradient: 'from-rose-500 to-pink-600', title: 'features.export.reports.title', desc: 'features.export.reports.desc' },
+        { icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064', gradient: 'from-sky-500 to-indigo-600', title: 'features.export.currency.title', desc: 'features.export.currency.desc' },
+      ].map((feature, index) => (
+        <div class="group relative">
+          <div class={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl blur-2xl opacity-10 group-hover:opacity-20 transition-opacity duration-500`}></div>
+          <div class="relative h-full bg-gradient-to-br from-bg-card/90 to-bg-secondary/50 backdrop-blur-sm rounded-2xl p-6 border border-custom-border hover:border-accent-primary/30 transition-all duration-300 hover:-translate-y-1">
+            <div class={`mb-4 w-12 h-12 bg-gradient-to-br ${feature.gradient} rounded-lg flex items-center justify-center`}>
+              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d={feature.icon} />
+              </svg>
+            </div>
+            <h4 class="text-base font-semibold text-white mb-2">{t(feature.title)}</h4>
+            <p class="text-xs text-text-secondary leading-relaxed">{t(feature.desc)}</p>
+          </div>
+        </div>
+      ))}
     </div>
   </div>
   
@@ -210,4 +288,3 @@ const t = (key: any) => getTranslation(lang, key);
     opacity={1} 
   />
 </section>
-
