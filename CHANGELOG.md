@@ -2,6 +2,36 @@
 
 _Changelog entries are generated with `npm run generate:changelog` using OpenAI GPT-5 for the SkyPilot project._
 
+## 0.4.0 - 2025-10-07
+
+## 0.4.0
+
+### New
+- Homebrew packaging
+  - Added a Homebrew formula (Formula/skypilot.rb) so SkyPilot can be installed via Homebrew.
+  - Added scripts/update-homebrew-formula.ts — a script to regenerate/update the Homebrew formula from the package (handles version/sha updates).
+
+### CLI / TUI
+- Improved API client usage in the CLI
+  - The CLI now uses the enhanced API client initialization from src/api.ts, reducing duplicated credential-loading and making startup more reliable.
+
+### Automation & Releases
+- Release tooling
+  - scripts/release.ts updated to integrate with the new Homebrew automation flow.
+  - CHANGELOG.md added and README updated with relevant Homebrew / release notes.
+
+### Internal / Developer
+- API client initialization
+  - Centralized and hardened client initialization in src/api.ts for more robust reuse across commands and fewer surprises when credentials or config are missing.
+- Minor packaging tweaks
+  - package.json adjusted and .npmignore removed.
+
+### Fixes
+- General bug fixes and polish to the release pipeline and CLI startup.
+
+Breaking Changes
+- None.
+
 ## 0.3.0 - 2025-10-07
 
 ## 0.3.0 — 2025-10-07
