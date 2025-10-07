@@ -9,10 +9,14 @@ const { lang } = Astro.props;
 
 const t = (key: any) => getTranslation(lang, key);
 
+const promptExample = lang === 'ja' 
+  ? '東京の夜景、ネオンが輝く渋谷交差点を上空から撮影したドローン映像'
+  : 'A serene lake at sunrise';
+
 const commands = [
   {
     comment: t('install.comment1'),
-    code: 'npx skypilot create --prompt "A serene lake at sunrise"',
+    code: `npx skypilot create --prompt "${promptExample}"`,
   },
   {
     comment: t('install.comment2'),

@@ -232,7 +232,7 @@ export const translations = {
     'terminal.loadKey': 'API キーを読み込み中...',
     'terminal.prepare': '動画生成の準備中...',
     'terminal.prompt': 'プロンプト:',
-    'terminal.samplePrompt': '夕暮れ時の未来都市を映すシネマティックなドローン撮影...',
+    'terminal.samplePrompt': '東京の夜景、ネオンが輝く渋谷交差点を上空から撮影したドローン映像',
     'terminal.cost': 'コスト:',
     'terminal.eta': '完了予定:',
     
