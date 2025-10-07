@@ -1,8 +1,8 @@
-# Sky Pilot Landing Page - Implementation Summary
+# SkyPilot Landing Page - Implementation Summary
 
 ## What We Built
 
-A complete, production-ready Astro landing page for Sky Pilot with bilingual support (English/Japanese), designed to go viral and convert visitors into users and contributors.
+A complete, production-ready Astro landing page for SkyPilot with bilingual support (English/Japanese), designed to go viral and convert visitors into users and contributors.
 
 ### Repository Structure
 
@@ -64,7 +64,7 @@ A complete, production-ready Astro landing page for Sky Pilot with bilingual sup
 - ✅ **Installation**: Code snippets with copy-to-clipboard
 - ✅ **Coming Soon**: GUI and Native app teasers with "Star to notify" CTA
 - ✅ **FAQ**: Seven common questions with accordion UI
-- ✅ **Final CTA**: Prominent copy button for `npx sky-pilot` + GitHub star/sponsor links
+- ✅ **Final CTA**: Prominent copy button for `npx skypilot` + GitHub star/sponsor links
 - ✅ **Footer**: Links, disclaimer, credits
 
 ### 3. Design System
@@ -131,7 +131,7 @@ The site will auto-deploy to `https://gunta.github.io/skypilot` when:
    - Place in `landing/public/demo/`
 
 3. **npm Package**: Ensure package is published
-   - Verify name is `sky-pilot`
+   - Verify name is `skypilot`
    - Package.json links to landing page
    - Keywords optimized for search
 
@@ -199,7 +199,7 @@ Follow the comprehensive checklist in `landing/LAUNCH.md`:
 
 - **Landing Page**: https://gunta.github.io/skypilot
 - **GitHub Repo**: https://github.com/gunta/skypilot
-- **npm Package**: https://www.npmjs.com/package/sky-pilot
+- **npm Package**: https://www.npmjs.com/package/skypilot
 - **GitHub Sponsors**: https://github.com/sponsors/gunta
 
 ## Design Philosophy
@@ -289,7 +289,7 @@ Track in analytics:
 
 ---
 
-**Ready to take Sky Pilot viral! 🚁🚀**
+**Ready to take SkyPilot viral! 🚁🚀**
 
 For questions or issues, refer to:
 - Development: `landing/SETUP.md`

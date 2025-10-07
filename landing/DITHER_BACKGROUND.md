@@ -28,7 +28,7 @@ Added a sophisticated dithered background effect inspired by ReactBits (https://
 
 4. **Gradient Overlay**
    - Radial gradient from cyan to purple
-   - Ties in with the Sky Pilot brand colors
+   - Ties in with the SkyPilot brand colors
    - Creates focal point in center of viewport
 
 5. **Dither Grid Lines**
@@ -69,7 +69,7 @@ All sections with backgrounds now have:
 
 1. **Professional Aesthetic**
    - Technical, developer-focused appearance
-   - Matches the terminal/CLI theme of Sky Pilot
+   - Matches the terminal/CLI theme of SkyPilot
    - Modern and sophisticated
 
 2. **Performance**
@@ -78,7 +78,7 @@ All sections with backgrounds now have:
    - Minimal JavaScript overhead
 
 3. **Brand Cohesion**
-   - Uses Sky Pilot's cyan (#00d4ff) and purple (#8b5cf6) colors
+   - Uses SkyPilot's cyan (#00d4ff) and purple (#8b5cf6) colors
    - Dark theme matches the terminal aesthetic
    - Subtle enough not to distract from content
 

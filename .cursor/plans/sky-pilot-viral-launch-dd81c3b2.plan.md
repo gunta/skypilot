@@ -1,9 +1,9 @@
 <!-- dd81c3b2-7c59-4a92-b5bc-3fbd1cbb2487 e2e783b2-4404-4d28-afcf-7b9c580efa2c -->
-# Sky Pilot Landing Page - Astro + GitHub Pages
+# SkyPilot Landing Page - Astro + GitHub Pages
 
 ## Overview
 
-Build a high-converting, viral-ready static landing page using Astro that positions Sky Pilot as the essential client-side open-source Sora 2 tool. Emphasis on the unique value proposition: **everything runs on your machine**, making it the most secure and cost-effective option available.
+Build a high-converting, viral-ready static landing page using Astro that positions SkyPilot as the essential client-side open-source Sora 2 tool. Emphasis on the unique value proposition: **everything runs on your machine**, making it the most secure and cost-effective option available.
 
 ## Technical Stack
 
@@ -55,16 +55,16 @@ Build a high-converting, viral-ready static landing page using Astro that positi
 - H1: "Your Sora 2 Co-pilot 🚁"
 - Subheading: "The most secure way to use OpenAI's video API. Free, open source, runs entirely on your machine."
 - Badge: "✓ No server costs • ✓ Your API key stays local • ✓ 100% private"
-- CTA: Two buttons - "Try Now" (copy `npx sky-pilot` command) + "View on GitHub"
+- CTA: Two buttons - "Try Now" (copy `npx skypilot` command) + "View on GitHub"
 
 **Visual**: 
-- Animated terminal showing `npx sky-pilot` command execution
+- Animated terminal showing `npx skypilot` command execution
 - Background gradient (dark with cyan/purple accents)
 - Subtle particle effects or abstract shapes
 - Optional: Embedded demo video thumbnail
 
 ### 2. Unique Value Proposition Section
-**Headline**: "Why Sky Pilot is Different"
+**Headline**: "Why SkyPilot is Different"
 
 **Three core benefits**:
 
@@ -90,7 +90,7 @@ Build a high-converting, viral-ready static landing page using Astro that positi
 - "Complex SDKs and manual API calls?"
 - "Proprietary tools you can't trust?"
 
-**Solution**: "Sky Pilot gives you..."
+**Solution**: "SkyPilot gives you..."
 - CLI for instant video generation
 - TUI dashboard for real-time monitoring
 - Built-in cost calculator before you spend
@@ -100,7 +100,7 @@ Build a high-converting, viral-ready static landing page using Astro that positi
 
 **Currently Available:**
 1. **"One Command, Infinite Videos"**
-   - `npx sky-pilot` - zero config, instant start
+   - `npx skypilot` - zero config, instant start
    - Full control over model, duration, resolution
 
 2. **"Beautiful Terminal Dashboard"**
@@ -122,9 +122,9 @@ Build a high-converting, viral-ready static landing page using Astro that positi
 
 **Live Terminal Recording**:
 - Embed asciinema recording or video showing:
-  1. Installation with `npx sky-pilot`
-  2. Creating a video with `sky-pilot create --prompt "..."`
-  3. Launching TUI with `sky-pilot tui`
+  1. Installation with `npx skypilot`
+  2. Creating a video with `skypilot create --prompt "..."`
+  3. Launching TUI with `skypilot tui`
   4. Downloading completed video
 
 **Screenshot Gallery**:
@@ -152,16 +152,16 @@ Build a high-converting, viral-ready static landing page using Astro that positi
 
 ```bash
 # Zero install - just run it once
-npx sky-pilot create --prompt "A serene lake at sunrise"
+npx skypilot create --prompt "A serene lake at sunrise"
 
 # Or install globally for faster access
-npm install -g sky-pilot
+npm install -g skypilot
 
 # Launch the beautiful TUI dashboard
-sky-pilot tui
+skypilot tui
 
 # Watch progress and download when ready
-sky-pilot download <video-id>
+skypilot download <video-id>
 ```
 
 **Copy**: "From zero to your first AI video in 30 seconds"

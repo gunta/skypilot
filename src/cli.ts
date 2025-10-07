@@ -182,7 +182,7 @@ const renderStatusLine = (video: SoraVideo, costSummary: CostSummary | null) => 
 export const program = new Command();
 
 program
-  .name('sky-pilot')
+  .name('skypilot')
   .description(translate('cli.programDescription'));
 
 program

@@ -13,7 +13,7 @@ I've added console logging to help debug the language switching. Here's what to 
 ### 2. Go to the Console Tab
 
 Look for messages starting with:
-- `[Sky Pilot]` - Server-side rendering logs
+- `[SkyPilot]` - Server-side rendering logs
 - `[Client]` - Client-side JavaScript logs
 
 ### 3. Test Sequence
@@ -32,7 +32,7 @@ Expected console output:
 [Client] Stored preference: null
 [Client] First visit, detected: en (or ja if your browser is Japanese)
 [Client] Redirecting to: http://localhost:4321/?lang=en
-[Sky Pilot] Language from URL param: en
+[SkyPilot] Language from URL param: en
 [Client] URL lang param: en
 [Client] Stored lang preference: en
 ```
@@ -46,7 +46,7 @@ Expected console output:
 [Client] URL lang param: ja
 [Client] Current URL: http://localhost:4321/?lang=ja
 [Client] Stored lang preference: ja
-[Sky Pilot] Language from URL param: ja
+[SkyPilot] Language from URL param: ja
 ```
 
 #### Test 3: Verify Page Content Changed
@@ -70,7 +70,7 @@ After clicking the language switcher, check:
 
 #### Issue: URL changes but content stays the same
 **Check:**
-1. Does the console show `[Sky Pilot] Language from URL param: ja`?
+1. Does the console show `[SkyPilot] Language from URL param: ja`?
 2. Are you seeing English or Japanese content?
 
 **Solutions:**

@@ -1,10 +1,10 @@
 # Changelog
 
-_Changelog entries are generated with `npm run generate:changelog` using OpenAI GPT-5 for the Sky Pilot project._
+_Changelog entries are generated with `npm run generate:changelog` using OpenAI GPT-5 for the SkyPilot project._
 
 ## 0.1.1 - 2025-10-06
 
-# Sky Pilot — changelog for v0.1.1 (2025-10-07)
+# SkyPilot — changelog for v0.1.1 (2025-10-07)
 
 Highlights
 - Documentation & website
@@ -22,7 +22,7 @@ Breaking Changes
 
 ## 0.1.0 - 2025-10-06
 
-# Sky Pilot — v0.1.0
+# SkyPilot — v0.1.0
 
 Summary: initial public release with the project scaffold and documentation/landing improvements.
 
@@ -41,4 +41,4 @@ Summary: initial public release with the project scaffold and documentation/land
 ## Breaking Changes
 - None identified.
 
-Notes: This release represents the initial seed of the Sky Pilot CLI/TUI project and documentation updates.
+Notes: This release represents the initial seed of the SkyPilot CLI/TUI project and documentation updates.

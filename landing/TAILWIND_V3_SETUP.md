@@ -16,7 +16,7 @@ Standard Tailwind v3 configuration with:
 - Custom color palette (cyan/purple theme)
 - Custom fonts (Inter, JetBrains Mono)
 - Custom animations (gradient, float)
-- Extended theme for Sky Pilot branding
+- Extended theme for SkyPilot branding
 
 ### 2. `src/styles/tailwind.css`
 Main CSS file with:

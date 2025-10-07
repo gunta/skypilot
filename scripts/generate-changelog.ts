@@ -61,7 +61,7 @@ const diffStat = gitRange
 
 const client = new OpenAI();
 
-const prompt = `You are a release note generator for the Sky Pilot project, an unofficial CLI and Ink TUI for OpenAI's Sora 2 video APIs.
+const prompt = `You are a release note generator for the SkyPilot project, an unofficial CLI and Ink TUI for OpenAI's Sora 2 video APIs.
 Summarize the following commits into a concise changelog entry with subsections when helpful.
 Focus on user-facing improvements, CLI/TUI changes, automation, and dependency updates. Avoid generic lines.
 If there are breaking changes, call them out explicitly under a "Breaking Changes" subsection.

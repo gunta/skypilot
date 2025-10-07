@@ -6,13 +6,13 @@ Create an OG image (1200x630px) for social media sharing with:
 
 - **Background**: Dark gradient (#0a0a0a to #1a1a1a)
 - **Logo**: 🚁 emoji or helicopter icon
-- **Text**: "Sky Pilot" in large, bold text with gradient (cyan to purple)
+- **Text**: "SkyPilot" in large, bold text with gradient (cyan to purple)
 - **Tagline**: "Your Sora 2 Co-pilot"
 - **Badges**: 
   - ✓ No server costs
   - ✓ 100% private
   - ✓ Open source
-- **Terminal snippet**: Show `npx sky-pilot` command
+- **Terminal snippet**: Show `npx skypilot` command
 - **Visual**: Include a mockup of the TUI dashboard or CLI in action
 
 ## Tools

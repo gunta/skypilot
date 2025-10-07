@@ -2,7 +2,7 @@
 
 ## Key Selling Points
 
-Successfully added two major selling points that differentiate Sky Pilot:
+Successfully added two major selling points that differentiate SkyPilot:
 
 ### 1. 🎯 No Watermarks
 **English**: "No watermarks, Ever"

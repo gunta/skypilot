@@ -1,6 +1,6 @@
 # GitHub Sponsors Setup
 
-Sky Pilot is funded through GitHub Sponsors! Your support helps maintain and improve this open-source project.
+SkyPilot is funded through GitHub Sponsors! Your support helps maintain and improve this open-source project.
 
 ## Sponsor Page
 
@@ -11,7 +11,7 @@ Sky Pilot is funded through GitHub Sponsors! Your support helps maintain and imp
 - 🇯🇵 Living in Japan
 - 💼 Working for a Japanese company
 - 🛠️ Creator of [OpenSTF](https://github.com/openstf/stf)
-- 🚀 Currently working on multiple open source projects including Sky Pilot
+- 🚀 Currently working on multiple open source projects including SkyPilot
 - ⏰ Your sponsorship allows me to justify working extra hours and add new features
 
 ## Sponsorship Tiers
@@ -67,7 +67,7 @@ Prefer a one-time contribution? You can also sponsor with a one-time amount on t
 
 ## Corporate Sponsorship
 
-For companies interested in supporting Sky Pilot:
+For companies interested in supporting SkyPilot:
 
 - 🏢 Larger sponsorship tiers available
 - 🤝 Custom support arrangements
@@ -78,7 +78,7 @@ Contact: Open a discussion on GitHub or email through sponsor page.
 
 ## Thank You! 🙏
 
-Every sponsorship, no matter the amount, is deeply appreciated and helps keep Sky Pilot free and open source for everyone.
+Every sponsorship, no matter the amount, is deeply appreciated and helps keep SkyPilot free and open source for everyone.
 
 Current goal: **10 monthly sponsors** 🎯
 
@@ -89,5 +89,5 @@ Current goal: **10 monthly sponsors** 🎯
 - 🐛 Report bugs and suggest features
 - 📖 Improve documentation
 - 💬 Help answer questions in Discussions
-- 🔄 Share Sky Pilot with others who might find it useful
+- 🔄 Share SkyPilot with others who might find it useful
 

@@ -6,8 +6,8 @@ import { homedir } from 'node:os';
 import { createClient } from '@libsql/client';
 import { drizzle } from 'drizzle-orm/libsql';
 
-const HOME_OVERRIDE = process.env.SKY_PILOT_HOME;
-const APP_DIR = HOME_OVERRIDE ? path.resolve(HOME_OVERRIDE) : path.join(homedir(), '.sky-pilot');
+const HOME_OVERRIDE = process.env.SKYPILOT_HOME;
+const APP_DIR = HOME_OVERRIDE ? path.resolve(HOME_OVERRIDE) : path.join(homedir(), '.skypilot');
 const DB_FILENAME = 'settings.db';
 const DB_PATH = path.join(APP_DIR, DB_FILENAME);
 

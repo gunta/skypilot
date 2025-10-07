@@ -1,6 +1,6 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "app.title": "🌈 Sky Pilot — Unofficial OpenAI Sora Dashboard",
+  "app.title": "🌈 SkyPilot — Unofficial OpenAI Sora Dashboard",
   "app.tagline": "Mission control for your Sora creations 💜",
   "app.disclaimer": "This project is not affiliated with or endorsed by OpenAI.",
   "app.instructions": "✨ Controls: arrows/j-k navigate • c create • x remix • d/enter download • a cycle asset • r refresh • l language • q quit",
@@ -45,7 +45,7 @@
   "asset.variant.thumbnail": "🖼️ Thumbnail (JPEG)",
   "asset.variant.spritesheet": "🧩 Spritesheet (PNG)",
   "asset.variant.all": "🎁 All assets",
-  "cli.programDescription": "Sky Pilot (unofficial) CLI and Ink TUI for OpenAI's Sora 2 video workflows",
+  "cli.programDescription": "SkyPilot (unofficial) CLI and Ink TUI for OpenAI's Sora 2 video workflows",
   "cli.command.list.description": "List video jobs",
   "cli.command.retrieve.description": "Retrieve a single video record",
   "cli.command.create.description": "Create a new video generation job",
@@ -125,7 +125,7 @@
   "cli.message.assetsSavedWithId": "Saved all assets for {id}:\n{paths}",
   "cli.message.remixQueued": "Queued remix {id} from {source}",
   "cli.message.remixCompleted": "Remix completed: {id}",
-  "cli.message.apiKeyMissing": "OPENAI_API_KEY is not set. Sky Pilot needs it to talk to OpenAI.",
+  "cli.message.apiKeyMissing": "OPENAI_API_KEY is not set. SkyPilot needs it to talk to OpenAI.",
   "cli.message.openingApiKeys": "Opening the official OpenAI API key page in your browser…",
   "cli.message.openBrowserFailed": "Could not open the browser automatically. Visit {url} (reason: {message}).",
   "cli.message.currencyError": "Currency error: {message}"

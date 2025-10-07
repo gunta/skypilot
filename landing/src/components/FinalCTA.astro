@@ -23,7 +23,7 @@ const t = (key: any) => getTranslation(lang, key);
     <div class="max-w-2xl mx-auto mb-8 code-block bg-code-bg/80 backdrop-blur-sm border-2 border-accent-primary/30">
       <div class="flex items-center justify-between">
         <code class="text-accent-primary font-mono text-lg flex-1 text-left">
-          $ npx sky-pilot
+          $ npx skypilot
         </code>
         <button
           id="final-copy-btn"
@@ -62,7 +62,7 @@ const t = (key: any) => getTranslation(lang, key);
     
     <div class="flex flex-wrap gap-4 justify-center text-sm">
       <a
-        href="https://www.npmjs.com/package/sky-pilot"
+        href="https://www.npmjs.com/package/skypilot"
         target="_blank"
         rel="noopener noreferrer"
         class="text-text-secondary hover:text-accent-primary transition-colors inline-flex items-center space-x-1"
@@ -102,7 +102,7 @@ const t = (key: any) => getTranslation(lang, key);
   if (finalCopyBtn) {
     finalCopyBtn.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText('npx sky-pilot');
+        await navigator.clipboard.writeText('npx skypilot');
         const originalText = finalCopyBtn.textContent;
         finalCopyBtn.textContent = '✓ Copied!';
         setTimeout(() => {

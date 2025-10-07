@@ -1,6 +1,6 @@
 # Landing Page Launch Checklist
 
-This comprehensive checklist ensures the Sky Pilot landing page is ready for viral launch.
+This comprehensive checklist ensures the SkyPilot landing page is ready for viral launch.
 
 ## Pre-Launch (Technical)
 
@@ -138,7 +138,7 @@ This comprehensive checklist ensures the Sky Pilot landing page is ready for vir
 - [ ] Tweet thread (5-7 tweets):
   1. Hook: "Sora 2 API dropped. So did we. 🚁"
   2. Problem statement
-  3. Solution (Sky Pilot features)
+  3. Solution (SkyPilot features)
   4. Demo GIF/video
   5. Key differentiator (privacy/cost/open source)
   6. Call to action (link + ask for RT/star)
@@ -155,7 +155,7 @@ This comprehensive checklist ensures the Sky Pilot landing page is ready for vir
 - [ ] Engage with comments authentically
 
 #### Hacker News
-- [ ] Submit to "Show HN" with title: "Show HN: Sky Pilot – Open-source CLI/TUI for Sora 2 video generation"
+- [ ] Submit to "Show HN" with title: "Show HN: SkyPilot – Open-source CLI/TUI for Sora 2 video generation"
 - [ ] Write thoughtful first comment explaining motivation
 - [ ] Monitor and respond to comments
 
@@ -218,8 +218,8 @@ This comprehensive checklist ensures the Sky Pilot landing page is ready for vir
 - [ ] Share user success stories
 
 ### Content Marketing
-- [ ] Write tutorial: "Getting Started with Sky Pilot"
-- [ ] Write comparison: "Sky Pilot vs Manual API Calls"
+- [ ] Write tutorial: "Getting Started with SkyPilot"
+- [ ] Write comparison: "SkyPilot vs Manual API Calls"
 - [ ] Create video tutorial series
 - [ ] Guest post on AI/dev blogs
 

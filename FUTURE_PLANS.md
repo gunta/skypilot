@@ -1,5 +1,5 @@
 Product Requirements Document (PRD)
-Product: Sky Pilot Composer
+Product: SkyPilot Composer
 Platforms: Mac (Electron) desktop app with React front end
 Audience: Creators from first-time users to cinematography professionals
 Version: v2.0

@@ -100,19 +100,19 @@ const t = (key: any) => {
         <div class="font-mono text-sm space-y-2">
           <div class="flex items-start">
             <span class="text-accent-primary mr-2">$</span>
-            <span class="text-text-primary">npx sky-pilot</span>
+            <span class="text-text-primary">npx skypilot</span>
           </div>
           <div class="text-text-secondary pl-4">
-            <div class="animate-pulse">Initializing Sky Pilot...</div>
+            <div class="animate-pulse">Initializing SkyPilot...</div>
           </div>
           <div class="text-success pl-4 mt-4">
-            ✓ Ready! Run 'sky-pilot --help' to get started
+            ✓ Ready! Run 'skypilot --help' to get started
           </div>
           
           <div class="mt-6 pt-6 border-t border-border-color">
             <div class="flex items-start">
               <span class="text-accent-primary mr-2">$</span>
-              <span class="text-text-primary">sky-pilot create --prompt "A serene lake"</span>
+              <span class="text-text-primary">skypilot create --prompt "A serene lake"</span>
             </div>
             <div class="text-text-secondary pl-4 mt-2">
               <div>Creating video with Sora 2...</div>
@@ -131,7 +131,7 @@ const t = (key: any) => {
   if (copyButton) {
     copyButton.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText('npx sky-pilot');
+        await navigator.clipboard.writeText('npx skypilot');
         const originalText = copyButton.textContent;
         copyButton.textContent = '✓ Copied!';
         setTimeout(() => {

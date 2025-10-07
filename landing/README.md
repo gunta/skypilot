@@ -1,6 +1,6 @@
-# Sky Pilot Landing Page
+# SkyPilot Landing Page
 
-This is the Astro-based landing page for Sky Pilot, deployed to GitHub Pages.
+This is the Astro-based landing page for SkyPilot, deployed to GitHub Pages.
 
 ## Development
 

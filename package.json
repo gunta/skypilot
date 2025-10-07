@@ -9,13 +9,13 @@
     "cli",
     "ink"
   ],
-  "homepage": "https://github.com/gunta/sky-pilot#readme",
+  "homepage": "https://github.com/gunta/skypilot#readme",
   "bugs": {
-    "url": "https://github.com/gunta/sky-pilot/issues"
+    "url": "https://github.com/gunta/skypilot/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gunta/sky-pilot.git"
+    "url": "git+https://github.com/gunta/skypilot.git"
   },
   "license": "MIT",
   "author": "gunta",
@@ -31,7 +31,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "sky-pilot": "dist/cli.js"
+    "skypilot": "dist/cli.js"
   },
   "files": [
     "dist",

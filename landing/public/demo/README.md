@@ -1,12 +1,12 @@
 # Demo Assets
 
-This directory should contain screenshots, GIFs, and videos demonstrating Sky Pilot's features.
+This directory should contain screenshots, GIFs, and videos demonstrating SkyPilot's features.
 
 ## Recommended Assets
 
 ### CLI Screenshots
-- `cli-create.png` - Screenshot of `sky-pilot create` command in action
-- `cli-list.png` - Screenshot of `sky-pilot list` output
+- `cli-create.png` - Screenshot of `skypilot create` command in action
+- `cli-list.png` - Screenshot of `skypilot list` output
 - `cli-download.png` - Screenshot of download progress
 
 ### TUI Screenshots
