@@ -20,9 +20,9 @@ router.update({
   }
 });
 
-const container = document.getElementById('root');
+const container = document.getElementById('root') as HTMLElement | null;
 
-if (!container) {
+if (container === null) {
   throw new Error('Root container #root not found.');
 }
 
