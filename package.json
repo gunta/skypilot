@@ -41,8 +41,9 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prebuild": "bun run compile:messages",
-    "compile:messages": "bunx paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
+    "prebuild": "bun run messages:build",
+    "messages:build": "vite build --config ./vite.paraglide.config.ts",
+    "messages:watch": "vite build --watch --config ./vite.paraglide.config.ts",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
     "generate:changelog": "tsx scripts/generate-changelog.ts",
@@ -84,9 +85,13 @@
     "semver": "^7.6.3",
     "tsx": "^4.19.2",
     "typescript": "^5.9.3",
-    "ultracite": "^5.6.1"
+    "ultracite": "^5.6.1",
+    "vite": "npm:rolldown-vite@latest"
   },
   "engines": {
     "node": ">=18"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@latest"
   }
 }
