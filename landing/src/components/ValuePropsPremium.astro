@@ -148,20 +148,20 @@ const t = (key: any) => getTranslation(lang, key);
     <ScrollReveal client:load delay={0.5}>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 p-8 glass-card rounded-3xl">
         <div class="text-center">
-          <div class="text-4xl font-black text-gradient-animate mb-2">100%</div>
-          <div class="text-sm text-text-muted uppercase tracking-wider">Client-Side</div>
+          <div class="text-4xl font-black text-gradient-animate mb-2">{t('stats.clientside.value')}</div>
+          <div class="text-sm text-text-muted uppercase tracking-wider">{t('stats.clientside.label')}</div>
         </div>
         <div class="text-center">
-          <div class="text-4xl font-black text-gradient-animate mb-2">$0</div>
-          <div class="text-sm text-text-muted uppercase tracking-wider">Markup</div>
+          <div class="text-4xl font-black text-gradient-animate mb-2">{t('stats.markup.value')}</div>
+          <div class="text-sm text-text-muted uppercase tracking-wider">{t('stats.markup.label')}</div>
         </div>
         <div class="text-center">
-          <div class="text-4xl font-black text-gradient-animate mb-2">MIT</div>
-          <div class="text-sm text-text-muted uppercase tracking-wider">Licensed</div>
+          <div class="text-4xl font-black text-gradient-animate mb-2">{t('stats.licensed.value')}</div>
+          <div class="text-sm text-text-muted uppercase tracking-wider">{t('stats.licensed.label')}</div>
         </div>
         <div class="text-center">
-          <div class="text-4xl font-black text-gradient-animate mb-2">150+</div>
-          <div class="text-sm text-text-muted uppercase tracking-wider">Currencies</div>
+          <div class="text-4xl font-black text-gradient-animate mb-2">{t('stats.currencies.value')}</div>
+          <div class="text-sm text-text-muted uppercase tracking-wider">{t('stats.currencies.label')}</div>
         </div>
       </div>
     </ScrollReveal>

@@ -35,10 +35,20 @@ export default function LanguageSwitcher({ initialLang }: Props) {
   return (
     <button
       onClick={toggleLanguage}
-      className="px-3 py-1.5 rounded-md text-sm font-medium bg-bg-card border border-custom-border text-text-secondary hover:text-accent-primary hover:border-accent-primary transition-all"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium bg-bg-card border border-custom-border text-text-secondary hover:text-accent-primary hover:border-accent-primary transition-all"
       aria-label="Switch language"
     >
-      {lang === 'en' ? '日本語' : 'English'}
+      {lang === 'en' ? (
+        <>
+          <span className="text-lg">🇯🇵</span>
+          <span>日本語</span>
+        </>
+      ) : (
+        <>
+          <span className="text-lg">🇺🇸</span>
+          <span>English</span>
+        </>
+      )}
     </button>
   );
 }

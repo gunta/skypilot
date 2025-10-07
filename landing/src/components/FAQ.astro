@@ -19,6 +19,7 @@ const faqs = [
   { q: t('faq.q7'), a: t('faq.a7') },
   { q: t('faq.q8'), a: t('faq.a8') },
   { q: t('faq.q9'), a: t('faq.a9') },
+  { q: t('faq.q10'), a: t('faq.a10') },
 ];
 ---
 
@@ -45,7 +46,7 @@ const faqs = [
             </svg>
           </summary>
           <div class="mt-4 pt-4 border-t border-custom-border text-text-secondary">
-            <p>{faq.a}</p>
+            <p set:html={faq.a}></p>
           </div>
         </details>
       ))}

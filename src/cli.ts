@@ -9,28 +9,20 @@ import chalk from 'chalk';
 import { spawn } from 'node:child_process';
 import { toFile } from 'openai/uploads';
 
-import { playSuccessSound } from './notify.js';
-
-import {
-  createVideo,
-  downloadVideoAsset,
-  downloadVideoAssets,
-  listVideos,
-  retrieveVideo,
-  waitForVideoCompletion,
-  type SoraVideo,
-  type VideoAssetVariant,
-  ALL_VIDEO_ASSET_VARIANTS,
-  remixVideo,
-  deleteVideo,
-  type DeleteVideoResponse,
-} from './api.js';
+import { retrieveVideo, type SoraVideo, type VideoAssetVariant } from './api.js';
 import { getCurrency, setCurrency } from './config/settings.js';
-import { getCurrencyFormatter, getExchangeRates } from './currency.js';
+import { getCurrencyFormatter, getExchangeRates, type CurrencyFormatter } from './currency.js';
 import { detectLocale } from './locale/detect.js';
 import { initializeI18n, changeLanguage, cycleLanguage, getActiveLocale, getSupportedLocales } from './i18n.js';
 import { m } from './paraglide/messages.js';
 import { buildCostSummary, calculateVideoCost, type CostSummary } from './pricing.js';
+import {
+  ASSET_CHOICES,
+  downloadAssetsForChoice,
+  type AssetChoice,
+  type DownloadedAssetsSummary,
+} from './assets.js';
+import { createSoraManagerController } from './state/manager.js';
 
 await initializeI18n();
 
@@ -38,6 +30,8 @@ const translate = <K extends keyof typeof m>(key: K, params?: Parameters<(typeof
   (m[key] as (args?: Record<string, unknown>) => string)(params ?? {});
 
 const API_KEY_URL = 'https://platform.openai.com/account/api-keys';
+
+const manager = createSoraManagerController();
 
 const openInBrowser = async (url: string) =>
   new Promise<void>((resolve, reject) => {
@@ -103,46 +97,12 @@ const ensureApiKey = async () => {
 };
 
 const VALID_STATUSES: SoraVideo['status'][] = ['queued', 'in_progress', 'completed', 'failed'];
-const ASSET_CHOICES = ['video_and_thumbnail', ...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
-
-type AssetChoice = (typeof ASSET_CHOICES)[number];
 
 const translateAssetVariant = (variant: AssetChoice | VideoAssetVariant) =>
   translate(`asset.variant.${variant}` as keyof typeof m);
 
-interface AssetDownloadResult {
-  variant: VideoAssetVariant;
-  path: string;
-}
-
-const downloadAssetsForChoice = async (
-  videoId: string,
-  asset: AssetChoice,
-  destination?: string,
-): Promise<AssetDownloadResult[]> => {
-  if (asset === 'all') {
-    const saved = await downloadVideoAssets(videoId, ALL_VIDEO_ASSET_VARIANTS, { destination });
-    return saved.map((path, index) => ({
-      variant: ALL_VIDEO_ASSET_VARIANTS[index]!,
-      path,
-    }));
-  }
-
-  if (asset === 'video_and_thumbnail') {
-    const variants: VideoAssetVariant[] = ['video', 'thumbnail'];
-    const saved = await downloadVideoAssets(videoId, variants, { destination });
-    return saved.map((path, index) => ({
-      variant: variants[index]!,
-      path,
-    }));
-  }
-
-  const savedPath = await downloadVideoAsset(videoId, { destination, variant: asset });
-  return [{ variant: asset, path: savedPath }];
-};
-
-const renderDownloadSummary = (downloads: AssetDownloadResult[]) =>
-  downloads
+const renderDownloadSummary = (summary: DownloadedAssetsSummary) =>
+  summary.entries
     .map(({ variant, path }) => `${translateAssetVariant(variant)} → ${path}`)
     .join('\n');
 
@@ -152,6 +112,21 @@ const parseInteger = (value: string) => {
     throw new Error('Value must be a positive integer');
   }
   return numeric;
+};
+
+const ensureCurrencyFormatterForCli = async (): Promise<CurrencyFormatter | null> => {
+  const existing = manager.snapshot.context.currencyFormatter;
+  if (existing) {
+    return existing;
+  }
+
+  try {
+    const result = await manager.loadCurrency();
+    return result.formatter;
+  } catch (error) {
+    console.error(chalk.yellow(translate('cli.message.currencyError', { message: (error as Error).message })));
+    return null;
+  }
 };
 
 const formatCostForLine = (costSummary: CostSummary | null) => {
@@ -204,20 +179,25 @@ program
   )
   .action(async ({ status, limit, order }: { status?: SoraVideo['status'][]; limit: number; order: 'asc' | 'desc' }) => {
     await ensureApiKey();
-    const formatter = await getCurrencyFormatter();
-    const videos = await listVideos({ limit, order });
-    const filtered = status?.length ? videos.filter((video) => status.includes(video.status)) : videos;
+    try {
+      const result = await manager.refresh({ limit, order });
+      const filtered = status?.length ? result.videos.filter((video) => status.includes(video.status)) : result.videos;
 
-    if (!filtered.length) {
-      console.log(chalk.dim(translate('cli.message.noVideos')));
-      return;
-    }
+      if (!filtered.length) {
+        console.log(chalk.dim(translate('cli.message.noVideos')));
+        return;
+      }
 
-    for (const video of filtered) {
-      const breakdown = calculateVideoCost(video);
-      const costSummary = breakdown ? buildCostSummary(breakdown, formatter) : null;
-      const line = renderStatusLine(video, costSummary);
-      console.log(line);
+      const summaries = manager.snapshot.context.costSummaries;
+
+      for (const video of filtered) {
+        const costSummary = summaries[video.id] ?? null;
+        const line = renderStatusLine(video, costSummary);
+        console.log(line);
+      }
+    } catch (error) {
+      console.error(chalk.red(translate('activity.error', { message: (error as Error).message })));
+      process.exitCode = 1;
     }
   });
 
@@ -234,9 +214,9 @@ program
       return;
     }
 
-    const formatter = await getCurrencyFormatter();
+    const formatter = await ensureCurrencyFormatterForCli();
     const breakdown = calculateVideoCost(video);
-    const costSummary = breakdown ? buildCostSummary(breakdown, formatter) : null;
+    const costSummary = breakdown && formatter ? buildCostSummary(breakdown, formatter) : null;
 
     console.log(renderStatusLine(video, costSummary));
     if (video.status === 'failed' && video.error) {
@@ -254,18 +234,27 @@ program
   .argument('<videoId>', translate('cli.argument.videoId'))
   .option('--json', translate('cli.option.json'), false)
   .action(async (videoId: string, options: { json?: boolean }) => {
+    await ensureApiKey();
     try {
-      await ensureApiKey();
-      const response: DeleteVideoResponse = await deleteVideo(videoId);
+      const result = await manager.delete({ videoId });
       if (options.json) {
-        console.log(JSON.stringify(response, null, 2));
+        console.log(
+          JSON.stringify(
+            {
+              id: result.responseId,
+              deleted: result.deleted,
+            },
+            null,
+            2,
+          ),
+        );
         return;
       }
 
-      if (response.deleted) {
-        console.log(chalk.green(translate('cli.message.deleteSuccess', { id: response.id })));
+      if (result.deleted) {
+        console.log(chalk.green(translate('cli.message.deleteSuccess', { id: result.responseId })));
       } else {
-        console.log(chalk.yellow(translate('cli.message.deleteNotConfirmed', { id: response.id })));
+        console.log(chalk.yellow(translate('cli.message.deleteNotConfirmed', { id: result.responseId })));
       }
     } catch (error) {
       console.error(
@@ -279,6 +268,7 @@ program
       process.exitCode = 1;
     }
   });
+
 
 program
   .command('create')
@@ -346,27 +336,40 @@ program
         inputReferenceUpload = await toFile(stream, path.basename(resolved));
       }
 
-      const payload = await createVideo({ prompt, model, seconds, size, input_reference: inputReferenceUpload });
-      const formatter = await getCurrencyFormatter();
-      const initialBreakdown = calculateVideoCost(payload);
-      const initialSummary = initialBreakdown ? buildCostSummary(initialBreakdown, formatter) : null;
+      const explicitDownload =
+        download !== undefined
+          ? {
+              choice: downloadAsset,
+              destination: typeof download === 'string' ? download : undefined,
+            }
+          : undefined;
 
-      if (json) {
-        console.log(JSON.stringify(payload, null, 2));
-      } else {
-        console.log(chalk.green(translate('cli.message.videoCreated', { id: payload.id })));
-        console.log(renderStatusLine(payload, initialSummary));
-        if (!initialSummary) {
-          console.log(translate('cli.message.costUnavailable'));
-        }
-      }
-
-      if (!watch) {
-        return;
-      }
+      const formatter = await ensureCurrencyFormatterForCli();
 
       let lastRendered = '';
-      const renderProgress = (video: SoraVideo) => {
+      let initialVideo: SoraVideo | null = null;
+
+      const onProgress = (video: SoraVideo) => {
+        if (!initialVideo) {
+          initialVideo = video;
+          if (json) {
+            console.log(JSON.stringify(video, null, 2));
+          } else {
+            const breakdown = calculateVideoCost(video);
+            const initialSummary = formatter && breakdown ? buildCostSummary(breakdown, formatter) : null;
+            console.log(chalk.green(translate('cli.message.videoCreated', { id: video.id })));
+            console.log(renderStatusLine(video, initialSummary));
+            if (!initialSummary) {
+              console.log(translate('cli.message.costUnavailable'));
+            }
+          }
+          return;
+        }
+
+        if (!watch) {
+          return;
+        }
+
         const line = translate('cli.message.progressLine', {
           status: formatStatus(video.status),
           progress: video.progress.toFixed(0).padStart(3),
@@ -377,12 +380,32 @@ program
         }
       };
 
-      const finalVideo = await waitForVideoCompletion(payload.id, {
-        pollIntervalMs: pollInterval,
-        onUpdate: renderProgress,
+      const creationResult = await manager.create({
+        prompt,
+        model,
+        seconds,
+        size,
+        watch,
+        pollInterval,
+        autoDownload,
+        playSound: sound,
+        download: explicitDownload,
+        inputReference: inputReferenceUpload,
+        onProgress,
       });
 
-      process.stdout.write('\n');
+      if (!watch) {
+        return;
+      }
+
+      if (lastRendered) {
+        process.stdout.write('\n');
+      }
+
+      const finalVideo = creationResult.final;
+      if (!finalVideo) {
+        return;
+      }
 
       if (finalVideo.status === 'failed') {
         const message = finalVideo.error?.message ?? translate('cli.message.unknownFailure');
@@ -392,8 +415,12 @@ program
 
       console.log(chalk.green(translate('cli.message.generationCompleted', { id: finalVideo.id })));
 
-      const finalBreakdown = calculateVideoCost(finalVideo);
-      const finalSummary = finalBreakdown ? buildCostSummary(finalBreakdown, formatter) : null;
+      let finalSummary = manager.snapshot.context.costSummaries[finalVideo.id] ?? null;
+      if (!finalSummary) {
+        const formatterFallback = await ensureCurrencyFormatterForCli();
+        const breakdown = calculateVideoCost(finalVideo);
+        finalSummary = formatterFallback && breakdown ? buildCostSummary(breakdown, formatterFallback) : null;
+      }
       if (finalSummary) {
         console.log(
           translate('cli.message.costSingle', {
@@ -405,45 +432,26 @@ program
         console.log(translate('cli.message.costUnavailable'));
       }
 
-      if (download !== undefined) {
-        const destination = typeof download === 'string' ? download : undefined;
-        const downloads = await downloadAssetsForChoice(finalVideo.id, downloadAsset, destination);
-        const summary = renderDownloadSummary(downloads);
-
-        if (downloads.length === 1) {
+      const downloadsSummary = creationResult.downloads;
+      if (downloadsSummary && downloadsSummary.entries.length) {
+        if (downloadsSummary.entries.length === 1) {
+          const entry = downloadsSummary.entries[0]!;
           console.log(
             chalk.green(
               translate('cli.message.assetSaved', {
-                path: downloads[0]!.path,
-                variant: translateAssetVariant(downloadAsset),
+                path: entry.path,
+                variant: translateAssetVariant(entry.variant),
               }),
             ),
           );
         } else {
-          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
+          const summaryText = renderDownloadSummary(downloadsSummary);
+          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summaryText })));
         }
-      } else if (autoDownload) {
-        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video_and_thumbnail', undefined);
-        if (downloads.length === 1) {
-          console.log(
-            chalk.green(
-              translate('cli.message.assetSaved', {
-                path: downloads[0]!.path,
-                variant: translateAssetVariant(downloads[0]!.variant),
-              }),
-            ),
-          );
-        } else {
-          const summary = renderDownloadSummary(downloads);
-          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
-        }
-      }
-
-      if (sound) {
-        await playSuccessSound(true);
       }
     },
   );
+
 
 program
   .command('remix')
@@ -487,34 +495,47 @@ program
         sound = true,
       } = options;
 
-      const remixJob = await remixVideo(videoId, { prompt });
-      const formatter = await getCurrencyFormatter();
-      const breakdown = calculateVideoCost(remixJob);
-      const summary = breakdown ? buildCostSummary(breakdown, formatter) : null;
+      const explicitDownload =
+        download !== undefined
+          ? {
+              choice: downloadAsset,
+              destination: typeof download === 'string' ? download : undefined,
+            }
+          : undefined;
 
-      if (json) {
-        console.log(JSON.stringify(remixJob, null, 2));
-      } else {
-        console.log(
-          chalk.green(
-            translate('cli.message.remixQueued', {
-              id: remixJob.id,
-              source: remixJob.remixed_from_video_id ?? videoId,
-            }),
-          ),
-        );
-        console.log(renderStatusLine(remixJob, summary));
-        if (!summary) {
-          console.log(translate('cli.message.costUnavailable'));
-        }
-      }
-
-      if (!watch) {
-        return;
-      }
+      const formatter = await ensureCurrencyFormatterForCli();
 
       let lastRendered = '';
-      const renderProgress = (video: SoraVideo) => {
+      let initialVideo: SoraVideo | null = null;
+
+      const onProgress = (video: SoraVideo) => {
+        if (!initialVideo) {
+          initialVideo = video;
+          if (json) {
+            console.log(JSON.stringify(video, null, 2));
+          } else {
+            const breakdown = calculateVideoCost(video);
+            const initialSummary = formatter && breakdown ? buildCostSummary(breakdown, formatter) : null;
+            console.log(
+              chalk.green(
+                translate('cli.message.remixQueued', {
+                  id: video.id,
+                  source: video.remixed_from_video_id ?? videoId,
+                }),
+              ),
+            );
+            console.log(renderStatusLine(video, initialSummary));
+            if (!initialSummary) {
+              console.log(translate('cli.message.costUnavailable'));
+            }
+          }
+          return;
+        }
+
+        if (!watch) {
+          return;
+        }
+
         const line = translate('cli.message.progressLine', {
           status: formatStatus(video.status),
           progress: video.progress.toFixed(0).padStart(3),
@@ -525,12 +546,29 @@ program
         }
       };
 
-      const finalVideo = await waitForVideoCompletion(remixJob.id, {
-        pollIntervalMs: pollInterval,
-        onUpdate: renderProgress,
+      const remixResult = await manager.remix({
+        videoId,
+        prompt,
+        watch,
+        pollInterval,
+        autoDownload,
+        playSound: sound,
+        download: explicitDownload,
+        onProgress,
       });
 
-      process.stdout.write('\n');
+      if (!watch) {
+        return;
+      }
+
+      if (lastRendered) {
+        process.stdout.write('\n');
+      }
+
+      const finalVideo = remixResult.final;
+      if (!finalVideo) {
+        return;
+      }
 
       if (finalVideo.status === 'failed') {
         const message = finalVideo.error?.message ?? translate('cli.message.unknownFailure');
@@ -540,8 +578,12 @@ program
 
       console.log(chalk.green(translate('cli.message.remixCompleted', { id: finalVideo.id })));
 
-      const finalBreakdown = calculateVideoCost(finalVideo);
-      const finalSummary = finalBreakdown ? buildCostSummary(finalBreakdown, formatter) : null;
+      let finalSummary = manager.snapshot.context.costSummaries[finalVideo.id] ?? null;
+      if (!finalSummary) {
+        const formatterFallback = await ensureCurrencyFormatterForCli();
+        const breakdown = calculateVideoCost(finalVideo);
+        finalSummary = formatterFallback && breakdown ? buildCostSummary(breakdown, formatterFallback) : null;
+      }
       if (finalSummary) {
         console.log(
           translate('cli.message.costSingle', {
@@ -553,45 +595,26 @@ program
         console.log(translate('cli.message.costUnavailable'));
       }
 
-      if (download !== undefined) {
-        const destination = typeof download === 'string' ? download : undefined;
-        const downloads = await downloadAssetsForChoice(finalVideo.id, downloadAsset, destination);
-        const downloadSummary = renderDownloadSummary(downloads);
-
-        if (downloads.length === 1) {
+      const downloadsSummary = remixResult.downloads;
+      if (downloadsSummary && downloadsSummary.entries.length) {
+        if (downloadsSummary.entries.length === 1) {
+          const entry = downloadsSummary.entries[0]!;
           console.log(
             chalk.green(
               translate('cli.message.assetSaved', {
-                path: downloads[0]!.path,
-                variant: translateAssetVariant(downloadAsset),
+                path: entry.path,
+                variant: translateAssetVariant(entry.variant),
               }),
             ),
           );
         } else {
-          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: downloadSummary })));
+          const summaryText = renderDownloadSummary(downloadsSummary);
+          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summaryText })));
         }
-      } else if (autoDownload) {
-        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video_and_thumbnail', undefined);
-        if (downloads.length === 1) {
-          console.log(
-            chalk.green(
-              translate('cli.message.assetSaved', {
-                path: downloads[0]!.path,
-                variant: translateAssetVariant(downloads[0]!.variant),
-              }),
-            ),
-          );
-        } else {
-          const summary = renderDownloadSummary(downloads);
-          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
-        }
-      }
-
-      if (sound) {
-        await playSuccessSound(true);
       }
     },
   );
+
 
 program
   .command('download')
@@ -605,31 +628,42 @@ program
   )
   .action(async (videoId: string, { output, asset }: { output?: string; asset: AssetChoice }) => {
     await ensureApiKey();
-    const downloads = await downloadAssetsForChoice(videoId, asset, output);
-    const summary = renderDownloadSummary(downloads);
+    try {
+      const result = await manager.download({
+        videoId,
+        choice: asset,
+        destination: output,
+      });
+      const downloads = result.downloads;
+      if (downloads.entries.length === 1) {
+        const entry = downloads.entries[0]!;
+        console.log(
+          chalk.green(
+            translate('cli.message.assetSavedWithId', {
+              id: videoId,
+              path: entry.path,
+              variant: translateAssetVariant(entry.variant),
+            }),
+          ),
+        );
+        return;
+      }
 
-    if (downloads.length === 1) {
+      const summary = renderDownloadSummary(downloads);
       console.log(
         chalk.green(
-          translate('cli.message.assetSavedWithId', {
+          translate('cli.message.assetsSavedWithId', {
             id: videoId,
-            path: downloads[0]!.path,
-            variant: translateAssetVariant(asset),
+            paths: summary,
           }),
         ),
       );
-      return;
+    } catch (error) {
+      console.error(chalk.red(translate('activity.error', { message: (error as Error).message })));
+      process.exitCode = 1;
     }
-
-    console.log(
-      chalk.green(
-        translate('cli.message.assetsSavedWithId', {
-          id: videoId,
-          paths: summary,
-        }),
-      ),
-    );
   });
+
 
 program
   .command('tui')

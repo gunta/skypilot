@@ -1,5 +1,5 @@
-import type { SoraVideo, VideoAssetVariant } from '../api.js';
-import { ALL_VIDEO_ASSET_VARIANTS } from '../api.js';
+import type { SoraVideo } from '../api.js';
+import { ASSET_CHOICES } from '../assets.js';
 
 export const PROGRESS_BAR_WIDTH = 20;
 
@@ -27,7 +27,7 @@ export const STATUS_COLORS: Record<SoraVideo['status'], string> = {
   failed: '#FF5252',
 };
 
-export const ASSET_VARIANTS = ['video_and_thumbnail', ...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
+export const ASSET_VARIANTS = ASSET_CHOICES;
 export type AssetVariant = (typeof ASSET_VARIANTS)[number];
 
 export const MAX_TRACKED_JOBS = 5;
@@ -39,6 +39,3 @@ export const cycleValue = <T,>(options: readonly T[], current: T): T => {
   const nextIndex = index === -1 ? 0 : (index + 1) % options.length;
   return options[nextIndex]!;
 };
-
-export const isAssetVariant = (value: VideoAssetVariant | AssetVariant): value is AssetVariant =>
-  (ASSET_VARIANTS as readonly unknown[]).includes(value);

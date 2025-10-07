@@ -1,6 +1,5 @@
 ---
 import { getTranslation, type Language } from '../i18n/translations';
-import GradualBlur from './GradualBlur';
 
 interface Props {
   lang: Language;
@@ -113,17 +112,5 @@ const t = (key: any) => getTranslation(lang, key);
       <span>{t('coming.cta')}</span>
     </a>
   </div>
-  
-  <GradualBlur 
-    client:load 
-    target="parent" 
-    position="bottom" 
-    height="8rem" 
-    strength={3} 
-    divCount={6} 
-    curve="bezier" 
-    exponential={true} 
-    opacity={1} 
-  />
 </section>
 
