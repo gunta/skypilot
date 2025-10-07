@@ -11,27 +11,11 @@ import FAQ from '../components/FAQ.astro';
 import FinalCTA from '../components/FinalCTA.astro';
 import Footer from '../components/Footer.astro';
 import Dither from '../components/Dither';
-import { detectLanguage, type Language } from '../i18n/translations';
+import type { Language } from '../i18n/translations';
 
-// For static GitHub Pages deployment, we default to English
-// The client-side script will handle language detection and switching
-
-// Get the language from URL parameter
-const urlSearchParams = new URLSearchParams(Astro.url.search);
-const langParam = urlSearchParams.get('lang') as Language | null;
-
-// Debug logging
-console.log('[index.astro] Full URL:', Astro.url.toString());
-console.log('[index.astro] URL search:', Astro.url.search);
-console.log('[index.astro] URL pathname:', Astro.url.pathname);
-console.log('[index.astro] Language param from URL:', langParam);
-console.log('[index.astro] All search params:', Array.from(urlSearchParams.entries()));
-
-// Use URL parameter if provided, otherwise default to English
-// Client-side script will handle auto-detection and redirect
-const lang: Language = (langParam === 'ja' || langParam === 'en') ? langParam : 'en';
-
-console.log('[index.astro] Final language used:', lang);
+// For static GitHub Pages deployment, render English at this route.
+// Client-side script will handle redirect to /ja/ when appropriate.
+const lang: Language = 'en';
 
 const title = lang === 'ja' 
   ? 'SkyPilot - 安全な Sora 2 CLI & ダッシュボード | オープンソース動画生成ツール'
@@ -69,34 +53,37 @@ const description = lang === 'ja'
   <FinalCTA lang={lang} />
   <Footer lang={lang} />
   
-  <!-- Language detection and switching for static GitHub Pages -->
+  <!-- Language detection and route-based switching for static GitHub Pages -->
   <script is:inline>
     (function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const langParam = urlParams.get('lang');
-      
-      if (langParam && (langParam === 'en' || langParam === 'ja')) {
-        // Valid language parameter exists - store it
-        localStorage.setItem('preferred-language', langParam);
-      } else {
-        // No language parameter in URL - check for stored preference or detect
-        const storedLang = localStorage.getItem('preferred-language');
-        
-        if (storedLang && (storedLang === 'en' || storedLang === 'ja')) {
-          // Use stored preference
-          const newUrl = new URL(window.location.href);
-          newUrl.searchParams.set('lang', storedLang);
-          window.location.replace(newUrl.toString());
-        } else {
-          // First visit - detect from browser
+      try {
+        const getBasePath = () => {
+          const segments = window.location.pathname.split('/').filter(Boolean);
+          return segments.length ? `/${segments[0]}/` : '/';
+        };
+        const base = getBasePath();
+        const stored = localStorage.getItem('preferred-language');
+        // Always store current route language as EN when on base route
+        localStorage.setItem('preferred-language', 'en');
+        if (stored === 'ja') {
+          // Respect existing preference and navigate to JA route
+          const target = base + 'ja/';
+          if (!window.location.pathname.endsWith('/ja/') && !window.location.pathname.includes('/ja/index.html')) {
+            window.location.replace(target);
+            return;
+          }
+        } else if (!stored) {
+          // First visit: detect and redirect to JA if browser language is Japanese
           const browserLang = navigator.language.toLowerCase();
           const detectedLang = browserLang.startsWith('ja') ? 'ja' : 'en';
           localStorage.setItem('preferred-language', detectedLang);
-          
-          const newUrl = new URL(window.location.href);
-          newUrl.searchParams.set('lang', detectedLang);
-          window.location.replace(newUrl.toString());
+          if (detectedLang === 'ja') {
+            window.location.replace(base + 'ja/');
+            return;
+          }
         }
+      } catch (e) {
+        // noop
       }
     })();
   </script>

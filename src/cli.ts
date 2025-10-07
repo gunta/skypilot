@@ -103,11 +103,11 @@ const ensureApiKey = async () => {
 };
 
 const VALID_STATUSES: SoraVideo['status'][] = ['queued', 'in_progress', 'completed', 'failed'];
-const ASSET_CHOICES = [...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
+const ASSET_CHOICES = ['video_and_thumbnail', ...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
 
 type AssetChoice = (typeof ASSET_CHOICES)[number];
 
-const translateAssetVariant = (variant: AssetChoice) =>
+const translateAssetVariant = (variant: AssetChoice | VideoAssetVariant) =>
   translate(`asset.variant.${variant}` as keyof typeof m);
 
 interface AssetDownloadResult {
@@ -124,6 +124,15 @@ const downloadAssetsForChoice = async (
     const saved = await downloadVideoAssets(videoId, ALL_VIDEO_ASSET_VARIANTS, { destination });
     return saved.map((path, index) => ({
       variant: ALL_VIDEO_ASSET_VARIANTS[index]!,
+      path,
+    }));
+  }
+
+  if (asset === 'video_and_thumbnail') {
+    const variants: VideoAssetVariant[] = ['video', 'thumbnail'];
+    const saved = await downloadVideoAssets(videoId, variants, { destination });
+    return saved.map((path, index) => ({
+      variant: variants[index]!,
       path,
     }));
   }
@@ -289,7 +298,7 @@ program
   .addOption(
     new Option('--download-asset <variant>', translate('cli.option.downloadAsset'))
       .choices([...ASSET_CHOICES])
-      .default('video'),
+      .default('video_and_thumbnail'),
   )
   .option('--no-auto-download', translate('cli.option.autoDownload'))
   .option('--no-sound', translate('cli.option.sound'))
@@ -414,15 +423,20 @@ program
           console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
         }
       } else if (autoDownload) {
-        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video', undefined);
-        console.log(
-          chalk.green(
-            translate('cli.message.assetSaved', {
-              path: downloads[0]!.path,
-              variant: translateAssetVariant('video'),
-            }),
-          ),
-        );
+        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video_and_thumbnail', undefined);
+        if (downloads.length === 1) {
+          console.log(
+            chalk.green(
+              translate('cli.message.assetSaved', {
+                path: downloads[0]!.path,
+                variant: translateAssetVariant(downloads[0]!.variant),
+              }),
+            ),
+          );
+        } else {
+          const summary = renderDownloadSummary(downloads);
+          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
+        }
       }
 
       if (sound) {
@@ -442,7 +456,7 @@ program
   .addOption(
     new Option('--download-asset <variant>', translate('cli.option.downloadAsset'))
       .choices([...ASSET_CHOICES])
-      .default('video'),
+      .default('video_and_thumbnail'),
   )
   .option('--no-auto-download', translate('cli.option.autoDownload'))
   .option('--no-sound', translate('cli.option.sound'))
@@ -557,15 +571,20 @@ program
           console.log(chalk.green(translate('cli.message.assetsSaved', { paths: downloadSummary })));
         }
       } else if (autoDownload) {
-        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video', undefined);
-        console.log(
-          chalk.green(
-            translate('cli.message.assetSaved', {
-              path: downloads[0]!.path,
-              variant: translateAssetVariant('video'),
-            }),
-          ),
-        );
+        const downloads = await downloadAssetsForChoice(finalVideo.id, 'video_and_thumbnail', undefined);
+        if (downloads.length === 1) {
+          console.log(
+            chalk.green(
+              translate('cli.message.assetSaved', {
+                path: downloads[0]!.path,
+                variant: translateAssetVariant(downloads[0]!.variant),
+              }),
+            ),
+          );
+        } else {
+          const summary = renderDownloadSummary(downloads);
+          console.log(chalk.green(translate('cli.message.assetsSaved', { paths: summary })));
+        }
       }
 
       if (sound) {
@@ -582,7 +601,7 @@ program
   .addOption(
     new Option('-a, --asset <variant>', translate('cli.option.asset'))
       .choices([...ASSET_CHOICES])
-      .default('video'),
+      .default('video_and_thumbnail'),
   )
   .action(async (videoId: string, { output, asset }: { output?: string; asset: AssetChoice }) => {
     await ensureApiKey();

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getTranslation, type Language } from '../i18n/translations';
 import ScrollReveal from './ScrollReveal';
+import * as flags from 'country-flag-icons/react/3x2';
 
 interface Props {
   lang: Language;
@@ -66,18 +67,93 @@ const exchangeRates: CurrencyRates = {
   KZT: 425
 };
 
+// OpenAI Sora 2 exact pricing per second
+type ModelResolution = {
+  model: 'sora-2' | 'sora-2-pro';
+  resolution: string;
+  pricePerSecond: number;
+  displayName: string;
+  icon: JSX.Element;
+  gradient: string;
+};
+
+const SORA_PRICING: ModelResolution[] = [
+  { 
+    model: 'sora-2', 
+    resolution: '1280x720', 
+    pricePerSecond: 0.10, 
+    displayName: 'Sora 2 - HD (1280×720)',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  { 
+    model: 'sora-2-pro', 
+    resolution: '1280x720', 
+    pricePerSecond: 0.30, 
+    displayName: 'Sora 2 Pro - HD (1280×720)',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+      </svg>
+    ),
+    gradient: 'from-purple-500 to-pink-500'
+  },
+  { 
+    model: 'sora-2-pro', 
+    resolution: '1792x1024', 
+    pricePerSecond: 0.50, 
+    displayName: 'Sora 2 Pro - WSXGA (1792×1024)',
+    icon: (
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+      </svg>
+    ),
+    gradient: 'from-amber-500 to-orange-500'
+  },
+];
+
+// Sora only supports 4, 8, and 12 second videos
+const ALLOWED_DURATIONS = [4, 8, 12];
+
 export default function CostCalculatorPremium({ lang }: Props) {
+  // Get currency from URL on mount
+  const getInitialCurrency = (): string => {
+    if (typeof window === 'undefined') return lang === 'ja' ? 'JPY' : 'USD';
+    const params = new URLSearchParams(window.location.search);
+    const urlCurrency = params.get('currency');
+    if (urlCurrency && exchangeRates[urlCurrency]) {
+      return urlCurrency;
+    }
+    return lang === 'ja' ? 'JPY' : 'USD';
+  };
+
   const [videoCount, setVideoCount] = useState(10);
-  const [duration, setDuration] = useState(5);
-  const [currency, setCurrency] = useState(lang === 'ja' ? 'JPY' : 'USD');
+  const [duration, setDuration] = useState(4); // Start with 4 seconds
+  const [selectedPricingIndex, setSelectedPricingIndex] = useState(0); // Default to sora-2 HD
+  const [currency, setCurrency] = useState(getInitialCurrency());
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showCustomDuration, setShowCustomDuration] = useState(false);
+  const [customDurationInput, setCustomDurationInput] = useState('');
+
+  // Update URL when currency changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    params.set('currency', currency);
+    const newUrl = `${window.location.pathname}?${params.toString()}`;
+    window.history.replaceState({}, '', newUrl);
+  }, [currency]);
   
   const t = (key: string) => getTranslation(lang, key);
   
-  // Sora 2 pricing (example rates)
-  const baseRatePerVideo = 0.50;
-  const durationMultiplier = duration / 5;
-  const totalCostUSD = videoCount * baseRatePerVideo * durationMultiplier;
+  // Calculate exact cost based on OpenAI pricing
+  const selectedPricing = SORA_PRICING[selectedPricingIndex];
+  const costPerVideo = selectedPricing.pricePerSecond * duration;
+  const totalCostUSD = videoCount * costPerVideo;
   const totalCostLocal = totalCostUSD * exchangeRates[currency];
   
   const formatCurrency = (amount: number, curr: string) => {
@@ -90,6 +166,104 @@ export default function CostCalculatorPremium({ lang }: Props) {
     return formatter.format(amount);
   };
   
+  // Map currency codes to country codes for flags
+  const currencyToCountry: { [key: string]: string } = {
+    USD: 'US', EUR: 'EU', GBP: 'GB', JPY: 'JP', CNY: 'CN', KRW: 'KR', INR: 'IN',
+    CAD: 'CA', AUD: 'AU', CHF: 'CH', SGD: 'SG', HKD: 'HK', NZD: 'NZ', SEK: 'SE',
+    NOK: 'NO', DKK: 'DK', RUB: 'RU', BRL: 'BR', MXN: 'MX', ZAR: 'ZA', AED: 'AE',
+    SAR: 'SA', THB: 'TH', MYR: 'MY', IDR: 'ID', PHP: 'PH', VND: 'VN', PLN: 'PL',
+    CZK: 'CZ', HUF: 'HU', RON: 'RO', BGN: 'BG', HRK: 'HR', TRY: 'TR', ISK: 'IS',
+    ILS: 'IL', CLP: 'CL', ARS: 'AR', COP: 'CO', PEN: 'PE', UYU: 'UY', TWD: 'TW',
+    PKR: 'PK', BDT: 'BD', LKR: 'LK', NGN: 'NG', EGP: 'EG', KES: 'KE', GHS: 'GH',
+    MAD: 'MA', TND: 'TN', UAH: 'UA', KZT: 'KZ'
+  };
+  
+  const getFlag = (currencyCode: string) => {
+    const countryCode = currencyToCountry[currencyCode];
+    if (!countryCode) return null;
+    const FlagComponent = (flags as any)[countryCode];
+    return FlagComponent ? <FlagComponent className="w-5 h-3.5 rounded-sm shadow-sm" /> : null;
+  };
+
+  // Parse custom duration input and round up to nearest 4 seconds
+  const parseCustomDuration = (input: string): number | null => {
+    const trimmed = input.trim().toLowerCase();
+    let totalSeconds = 0;
+    
+    // Try parsing "1:30:45" format (hours:minutes:seconds)
+    const colonMatch3 = trimmed.match(/^(\d+):(\d+):(\d+)$/);
+    if (colonMatch3) {
+      const hours = parseInt(colonMatch3[1]);
+      const minutes = parseInt(colonMatch3[2]);
+      const seconds = parseInt(colonMatch3[3]);
+      totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      return Math.ceil(totalSeconds / 4) * 4;
+    }
+    
+    // Try parsing "1:30" format (minutes:seconds or hours:minutes)
+    const colonMatch2 = trimmed.match(/^(\d+):(\d+)$/);
+    if (colonMatch2) {
+      const first = parseInt(colonMatch2[1]);
+      const second = parseInt(colonMatch2[2]);
+      // Assume minutes:seconds if first number is < 24, otherwise hours:minutes
+      if (first < 24) {
+        totalSeconds = first * 60 + second;
+      } else {
+        totalSeconds = first * 60 + second;
+      }
+      return Math.ceil(totalSeconds / 4) * 4;
+    }
+    
+    // Try parsing plain seconds
+    const secondsMatch = trimmed.match(/^(\d+)s?$/);
+    if (secondsMatch) {
+      totalSeconds = parseInt(secondsMatch[1]);
+      return Math.ceil(totalSeconds / 4) * 4;
+    }
+    
+    // Try parsing complex format: "1h30m24s" or "1h 30m 24s" or "1hour 30min 24sec"
+    const hours = trimmed.match(/(\d+)\s*h(?:our)?s?/);
+    const minutes = trimmed.match(/(\d+)\s*m(?:in)?(?:ute)?s?/);
+    const seconds = trimmed.match(/(\d+)\s*s(?:ec)?(?:ond)?s?/);
+    
+    if (hours || minutes || seconds) {
+      totalSeconds = 
+        (hours ? parseInt(hours[1]) * 3600 : 0) +
+        (minutes ? parseInt(minutes[1]) * 60 : 0) +
+        (seconds ? parseInt(seconds[1]) : 0);
+      return Math.ceil(totalSeconds / 4) * 4;
+    }
+    
+    return null;
+  };
+  
+  const formatDuration = (seconds: number): string => {
+    if (seconds < 60) return `${seconds}s`;
+    
+    const hours = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    
+    if (hours > 0) {
+      const parts = [`${hours}h`];
+      if (mins > 0) parts.push(`${mins}m`);
+      if (secs > 0) parts.push(`${secs}s`);
+      return parts.join(' ');
+    }
+    
+    return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
+  };
+  
+  const handleCustomDurationSubmit = () => {
+    const parsed = parseCustomDuration(customDurationInput);
+    if (parsed && parsed >= 4) {
+      setDuration(parsed);
+      setCustomDurationInput(formatDuration(parsed));
+    } else {
+      alert('Please enter a valid duration (e.g., 1:30, 45s, 1h30m, 1h30m24s). Minimum 4 seconds.');
+    }
+  };
+
   const popularCurrencies = ['USD', 'EUR', 'GBP', 'JPY', 'CNY'];
   const allCurrencies = Object.keys(exchangeRates).sort();
 
@@ -116,11 +290,140 @@ export default function CostCalculatorPremium({ lang }: Props) {
           <div className="grid lg:grid-cols-2 gap-10">
             {/* Left: Controls */}
             <div className="space-y-8">
+              {/* Model & Resolution Selector */}
+              <div>
+                <label className="flex items-center justify-between mb-4">
+                  <span className="text-lg font-semibold text-white">
+                    Model & Resolution
+                  </span>
+                  <span className="px-3 py-1 bg-accent-primary/20 rounded-lg text-xs font-semibold text-accent-primary">
+                    ${selectedPricing.pricePerSecond}/sec
+                  </span>
+                </label>
+                <div className="space-y-3">
+                  {SORA_PRICING.map((pricing, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedPricingIndex(index)}
+                      className={`
+                        w-full p-4 rounded-xl text-left transition-all relative overflow-hidden group
+                        ${selectedPricingIndex === index
+                          ? 'bg-gradient-to-r from-accent-primary/30 to-accent-secondary/30 border-2 border-accent-primary scale-[1.02] shadow-lg shadow-accent-primary/20'
+                          : 'glass-card hover:border-accent-primary/50 hover:scale-[1.01]'}
+                      `}
+                    >
+                      {/* Gradient background on hover */}
+                      <div className={`absolute inset-0 bg-gradient-to-r ${pricing.gradient} opacity-0 group-hover:opacity-10 transition-opacity`}></div>
+                      
+                      <div className="flex items-center gap-4 relative z-10">
+                        {/* Icon with gradient background */}
+                        <div className={`p-3 rounded-lg bg-gradient-to-br ${pricing.gradient} text-white flex-shrink-0 shadow-lg`}>
+                          {pricing.icon}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <div className="font-bold text-white mb-1 flex items-center gap-2">
+                            {pricing.displayName}
+                            {pricing.model === 'sora-2-pro' && (
+                              <span className="px-2 py-0.5 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs font-bold rounded-full">
+                                PRO
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xs text-text-muted">
+                            ${pricing.pricePerSecond.toFixed(2)} per second
+                          </div>
+                        </div>
+                        
+                        {selectedPricingIndex === index && (
+                          <svg className="w-6 h-6 text-accent-primary flex-shrink-0 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duration Selector (4, 8, 12 seconds + Custom) */}
+              <div>
+                <label className="flex items-center justify-between mb-4">
+                  <span className="text-lg font-semibold text-white">
+                    Duration
+                  </span>
+                  <span className="px-4 py-2 bg-gradient-to-r from-accent-secondary/20 to-accent-primary/20 rounded-xl font-bold text-xl text-white">
+                    {formatDuration(duration)}
+                  </span>
+                </label>
+                <div className="grid grid-cols-4 gap-3">
+                  {ALLOWED_DURATIONS.map((dur) => (
+                    <button
+                      key={dur}
+                      onClick={() => {
+                        setDuration(dur);
+                        setShowCustomDuration(false);
+                      }}
+                      className={`
+                        py-4 px-6 rounded-xl font-bold text-lg transition-all
+                        ${duration === dur && !showCustomDuration
+                          ? 'bg-gradient-to-r from-accent-secondary to-accent-primary text-white scale-105 shadow-lg'
+                          : 'glass-card hover:scale-105 hover:border-accent-primary/50'}
+                      `}
+                    >
+                      {dur}s
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => setShowCustomDuration(!showCustomDuration)}
+                    className={`
+                      py-4 px-6 rounded-xl font-bold text-lg transition-all
+                      ${showCustomDuration
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white scale-105 shadow-lg'
+                        : 'glass-card hover:scale-105 hover:border-accent-primary/50'}
+                    `}
+                  >
+                    Custom
+                  </button>
+                </div>
+                
+                {showCustomDuration && (
+                  <div className="mt-4 p-4 glass-card rounded-xl">
+                    <label className="text-sm text-text-muted mb-2 block">
+                      Enter duration (e.g., 1:30, 45s, 1h30m, 1h30m24s)
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={customDurationInput}
+                        onChange={(e) => setCustomDurationInput(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleCustomDurationSubmit()}
+                        placeholder="1h30m"
+                        className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-text-muted focus:border-accent-primary focus:outline-none"
+                      />
+                      <button
+                        onClick={handleCustomDurationSubmit}
+                        className="px-6 py-2 bg-gradient-to-r from-accent-primary to-accent-secondary text-white font-semibold rounded-lg hover:scale-105 transition-transform"
+                      >
+                        Set
+                      </button>
+                    </div>
+                    <p className="text-xs text-text-muted mt-2">
+                      Rounds up to nearest 4 seconds • No maximum limit
+                    </p>
+                  </div>
+                )}
+                
+                <p className="text-xs text-text-muted mt-2 text-center">
+                  Sora supports videos in 4-second increments
+                </p>
+              </div>
+
               {/* Video Count Slider */}
               <div>
                 <label className="flex items-center justify-between mb-4">
                   <span className="text-lg font-semibold text-white">
-                    {t('calculator.videos')}
+                    Number of Videos
                   </span>
                   <span className="px-4 py-2 bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 rounded-xl font-bold text-xl text-white">
                     {videoCount}
@@ -148,38 +451,6 @@ export default function CostCalculatorPremium({ lang }: Props) {
                 </div>
               </div>
 
-              {/* Duration Slider */}
-              <div>
-                <label className="flex items-center justify-between mb-4">
-                  <span className="text-lg font-semibold text-white">
-                    {t('calculator.duration')}
-                  </span>
-                  <span className="px-4 py-2 bg-gradient-to-r from-accent-secondary/20 to-accent-primary/20 rounded-xl font-bold text-xl text-white">
-                    {duration}s
-                  </span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="1"
-                    max="20"
-                    value={duration}
-                    onChange={(e) => setDuration(parseInt(e.target.value))}
-                    className="w-full h-3 bg-white/10 rounded-full appearance-none cursor-pointer slider-premium"
-                    style={{
-                      background: `linear-gradient(to right, #8b5cf6 0%, #00d4ff ${duration * 5}%, rgba(255,255,255,0.1) ${duration * 5}%)`,
-                    }}
-                  />
-                  <div className="flex justify-between mt-2 text-xs text-text-muted">
-                    <span>1s</span>
-                    <span>5s</span>
-                    <span>10s</span>
-                    <span>15s</span>
-                    <span>20s</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Currency Selector */}
               <div>
                 <label className="flex items-center justify-between mb-4">
@@ -201,32 +472,34 @@ export default function CostCalculatorPremium({ lang }: Props) {
                       key={curr}
                       onClick={() => setCurrency(curr)}
                       className={`
-                        px-3 py-2 rounded-xl text-sm font-semibold transition-all
+                        px-3 py-2 rounded-xl text-sm font-semibold transition-all flex flex-col items-center gap-1
                         ${currency === curr 
                           ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white scale-105 shadow-lg' 
                           : 'glass-card hover:scale-105 hover:border-accent-primary/50'}
                       `}
                     >
-                      {curr}
+                      {getFlag(curr)}
+                      <span className="text-xs">{curr}</span>
                     </button>
                   ))}
                 </div>
                 
                 {/* All Currencies (when expanded) */}
                 {showAdvanced && (
-                  <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 mt-4 p-4 bg-white/5 rounded-2xl">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 mt-4 p-4 bg-white/5 rounded-2xl max-h-64 overflow-y-auto">
                     {allCurrencies.filter(c => !popularCurrencies.includes(c)).map((curr) => (
                       <button
                         key={curr}
                         onClick={() => setCurrency(curr)}
                         className={`
-                          px-2 py-1 rounded-lg text-xs font-medium transition-all
+                          px-2 py-2 rounded-lg text-xs font-medium transition-all flex flex-col items-center gap-1
                           ${currency === curr 
-                            ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white' 
-                            : 'text-text-secondary hover:text-white hover:bg-white/10'}
+                            ? 'bg-gradient-to-r from-accent-primary to-accent-secondary text-white scale-105' 
+                            : 'text-text-secondary hover:text-white hover:bg-white/10 hover:scale-105'}
                         `}
                       >
-                        {curr}
+                        {getFlag(curr)}
+                        <span>{curr}</span>
                       </button>
                     ))}
                   </div>
@@ -253,29 +526,41 @@ export default function CostCalculatorPremium({ lang }: Props) {
                     </div>
                   )}
                   
-                  <div className="mt-8 grid grid-cols-2 gap-4 text-sm">
+                  <div className="mt-8 space-y-3 text-sm">
                     <div className="glass-card rounded-xl p-4">
-                      <div className="text-text-muted mb-1">Per Video</div>
-                      <div className="font-bold text-white">
-                        {formatCurrency(totalCostLocal / videoCount, currency)}
+                      <div className="flex justify-between items-center">
+                        <span className="text-text-muted">Per Video ({duration}s)</span>
+                        <span className="font-bold text-white">
+                          {formatCurrency(costPerVideo * exchangeRates[currency], currency)}
+                        </span>
                       </div>
                     </div>
                     <div className="glass-card rounded-xl p-4">
-                      <div className="text-text-muted mb-1">Per Second</div>
-                      <div className="font-bold text-white">
-                        {formatCurrency(totalCostLocal / (videoCount * duration), currency)}
+                      <div className="flex justify-between items-center">
+                        <span className="text-text-muted">Per Second</span>
+                        <span className="font-bold text-white">
+                          {formatCurrency(selectedPricing.pricePerSecond * exchangeRates[currency], currency)}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="glass-card rounded-xl p-4 bg-accent-primary/10">
+                      <div className="flex justify-between items-center">
+                        <span className="text-text-muted">Total Videos</span>
+                        <span className="font-bold text-accent-primary">
+                          {videoCount} × {duration}s = {videoCount * duration}s
+                        </span>
                       </div>
                     </div>
                   </div>
                   
-                  {/* Comparison */}
+                  {/* Direct API Pricing Note */}
                   <div className="mt-6 p-4 bg-success/10 border border-success/30 rounded-xl">
                     <div className="flex items-center justify-center gap-2 text-success">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <span className="text-sm font-semibold">
-                        {t('calculator.savings')}
+                        Direct OpenAI API pricing • No markup
                       </span>
                     </div>
                   </div>

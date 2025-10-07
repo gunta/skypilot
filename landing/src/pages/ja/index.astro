@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import HeroPremium from '../../components/HeroPremium.astro';
+import ValuePropsPremium from '../../components/ValuePropsPremium.astro';
+import Features from '../../components/Features.astro';
+import CostCalculatorPremium from '../../components/CostCalculatorPremium';
+import Installation from '../../components/Installation.astro';
+import ComingSoon from '../../components/ComingSoon.astro';
+import FAQ from '../../components/FAQ.astro';
+import FinalCTA from '../../components/FinalCTA.astro';
+import Footer from '../../components/Footer.astro';
+import Dither from '../../components/Dither';
+import type { Language } from '../../i18n/translations';
+
+// Japanese route - render Japanese content
+const lang: Language = 'ja';
+
+const title = 'SkyPilot - 安全な Sora 2 CLI & ダッシュボード | オープンソース動画生成ツール';
+const description = '無料でオープンソースの OpenAI Sora 2 動画 API 用 CLI と TUI。完全にあなたのマシン上で実行—サーバーコスト不要、最高のプライバシー。150 以上の通貨でコストを追跡。';
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <Navigation lang={lang} />
+  <HeroPremium lang={lang} />
+  <ValuePropsPremium lang={lang} />
+  <Features lang={lang} />
+  
+  <section class="section-container backdrop-premium">
+    <CostCalculatorPremium client:load lang={lang} />
+  </section>
+  
+  <Installation lang={lang} />
+  <ComingSoon lang={lang} />
+  <FAQ lang={lang} />
+  <FinalCTA lang={lang} />
+  <Footer lang={lang} />
+  
+  <!-- Store Japanese preference and handle navigation -->
+  <script is:inline>
+    (function() {
+      try {
+        localStorage.setItem('preferred-language', 'ja');
+      } catch (e) {
+        // noop
+      }
+    })();
+  </script>
+</BaseLayout>

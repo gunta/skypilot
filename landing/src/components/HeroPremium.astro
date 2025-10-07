@@ -106,9 +106,9 @@ const t = (key: any) => getTranslation(lang, key);
             </div>
             <div class="group relative px-5 py-3 glass-card rounded-full hover-scale cursor-default">
               <span class="flex items-center gap-2.5 text-sm font-bold">
-                <!-- Crown icon for Sora 2 Pro -->
+                <!-- Key icon for BYOK -->
                 <svg class="badge-icon w-4 h-4 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V2m0 4 4-1.5M12 6l-4-1.5M12 6v6m0 6v4m0-4 4 1.5M12 18l-4 1.5M20 10l-4.5 1.5M4 10l4.5 1.5M20 10l-2 8H6l-2-8m16 0-3-6M4 10l3-6m10 0L12 2m-5 2 5 2" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
                 <span class="text-transparent bg-gradient-to-r from-accent-secondary to-white bg-clip-text">
                   {t('hero.badge2')}
@@ -127,15 +127,26 @@ const t = (key: any) => getTranslation(lang, key);
                 </span>
               </span>
             </div>
+            <div class="group relative px-5 py-3 glass-card rounded-full hover-scale cursor-default">
+              <span class="flex items-center gap-2.5 text-sm font-bold">
+                <!-- Sparkles icon for Pro quality -->
+                <svg class="badge-icon w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span class="text-transparent bg-gradient-to-r from-yellow-400 to-white bg-clip-text">
+                  {t('hero.badge4')}
+                </span>
+              </span>
+            </div>
           </div>
         </ScrollReveal>
 
         <!-- Premium CTA Buttons -->
         <ScrollReveal client:load delay={0.5}>
           <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button
-              id="copy-npx"
-              class="group relative px-8 py-4 btn-premium glass-card rounded-2xl font-bold text-white hover-lift"
+            <a
+              href="#install"
+              class="group relative px-8 py-4 btn-premium glass-card rounded-2xl font-bold text-white hover-lift scroll-smooth"
             >
               <div class="absolute inset-0 bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-primary rounded-2xl opacity-80 group-hover:opacity-100 transition-opacity"></div>
               <span class="relative flex items-center justify-center gap-3">
@@ -144,7 +155,7 @@ const t = (key: any) => getTranslation(lang, key);
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </span>
-            </button>
+            </a>
             
             <a
               href="https://github.com/gunta/skypilot"
@@ -377,20 +388,17 @@ const t = (key: any) => getTranslation(lang, key);
 </style>
 
 <script>
-  // Copy NPX command
-  document.getElementById('copy-npx')?.addEventListener('click', () => {
-    navigator.clipboard.writeText('npx skypilot create');
-    const btn = document.getElementById('copy-npx');
-    if (btn) {
-      const originalText = btn.querySelector('span')?.textContent;
-      const textSpan = btn.querySelector('span span');
-      if (textSpan) {
-        textSpan.textContent = '✓ Copied!';
-        setTimeout(() => {
-          textSpan.textContent = originalText || 'Try Now';
-        }, 2000);
-      }
-    }
+  // Smooth scroll to install section
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href') || '');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
   });
   
   // Ensure video plays on page load

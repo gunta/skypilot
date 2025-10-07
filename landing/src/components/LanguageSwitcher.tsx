@@ -16,12 +16,19 @@ export default function LanguageSwitcher({ initialLang }: Props) {
       localStorage.setItem('preferred-language', newLang);
     }
     
-    // Trigger page reload with new language
+    // Navigate to the appropriate route
     if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('lang', newLang);
-      // Use replace to avoid back button issues
-      window.location.replace(url.toString());
+      const getBasePath = () => {
+        const segments = window.location.pathname.split('/').filter(Boolean);
+        return segments.length ? `/${segments[0]}/` : '/';
+      };
+      const base = getBasePath();
+      
+      if (newLang === 'ja') {
+        window.location.href = base + 'ja/';
+      } else {
+        window.location.href = base;
+      }
     }
   };
 
