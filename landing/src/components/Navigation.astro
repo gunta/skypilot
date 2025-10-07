@@ -9,12 +9,12 @@ interface Props {
 const { lang } = Astro.props;
 ---
 
-<nav class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/80 backdrop-blur-lg border-b border-border-color">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-bg-primary/80 backdrop-blur-lg border-b border-custom-border">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
       <div class="flex items-center space-x-3">
         <Logo client:load className="w-8 h-8" size={32} />
-        <span class="text-xl font-bold gradient-text">Sky Pilot</span>
+        <span class="text-xl font-bold gradient-text">SkyPilot</span>
       </div>
       
       <div class="flex items-center space-x-4">

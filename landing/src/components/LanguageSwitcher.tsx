@@ -28,7 +28,7 @@ export default function LanguageSwitcher({ initialLang }: Props) {
   return (
     <button
       onClick={toggleLanguage}
-      className="px-3 py-1.5 rounded-md text-sm font-medium bg-bg-card border border-border-color text-text-secondary hover:text-accent-primary hover:border-accent-primary transition-all"
+      className="px-3 py-1.5 rounded-md text-sm font-medium bg-bg-card border border-custom-border text-text-secondary hover:text-accent-primary hover:border-accent-primary transition-all"
       aria-label="Switch language"
     >
       {lang === 'en' ? '日本語' : 'English'}

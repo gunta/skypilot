@@ -61,6 +61,10 @@ Common workflows:
   ```bash
   skypilot download <video-id> --output ./videos/<video-id>.mp4
   ```
+- Delete a video from OpenAI storage:
+  ```bash
+  skypilot delete <video-id>
+  ```
 - Change the interface language (English or Japanese):
   ```bash
   skypilot language ja
@@ -86,7 +90,8 @@ Controls:
 
 - `↑`/`↓` or `j`/`k` — change selection.
 - `c` — create a video (enter prompt, press `enter`, `esc` to cancel).
-- `d` or `enter` — download the selected job to the current directory.
+- `enter` — download the selected job to the current directory.
+- `d` — delete the selected job (press `y` to confirm, `n` or `esc` to cancel).
 - `r` — refresh immediately (automatic refresh runs in the background).
 - `m` — cycle the Sora model.
 - `t` — cycle available durations (4s, 8s, 12s).

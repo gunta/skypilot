@@ -22,6 +22,8 @@ import {
   type VideoAssetVariant,
   ALL_VIDEO_ASSET_VARIANTS,
   remixVideo,
+  deleteVideo,
+  type DeleteVideoResponse,
 } from './api.js';
 import { getCurrency, setCurrency } from './config/settings.js';
 import { getCurrencyFormatter, getExchangeRates } from './currency.js';
@@ -234,6 +236,37 @@ program
 
     if (!costSummary) {
       console.log(translate('cli.message.costUnavailable'));
+    }
+  });
+
+program
+  .command('delete')
+  .description(translate('cli.command.delete.description'))
+  .argument('<videoId>', translate('cli.argument.videoId'))
+  .option('--json', translate('cli.option.json'), false)
+  .action(async (videoId: string, options: { json?: boolean }) => {
+    try {
+      const response: DeleteVideoResponse = await deleteVideo(videoId);
+      if (options.json) {
+        console.log(JSON.stringify(response, null, 2));
+        return;
+      }
+
+      if (response.deleted) {
+        console.log(chalk.green(translate('cli.message.deleteSuccess', { id: response.id })));
+      } else {
+        console.log(chalk.yellow(translate('cli.message.deleteNotConfirmed', { id: response.id })));
+      }
+    } catch (error) {
+      console.error(
+        chalk.red(
+          translate('cli.message.deleteFailed', {
+            id: videoId,
+            message: (error as Error).message,
+          }),
+        ),
+      );
+      process.exitCode = 1;
     }
   });
 

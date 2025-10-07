@@ -10,7 +10,7 @@ export default function Logo({ className = "w-8 h-8", size = 32 }: Props) {
       <source srcSet="/skypilot/skypilotlogo.png" type="image/png" />
       <img
         src="/skypilot/skypilotlogo.svg"
-        alt="Sky Pilot Logo"
+        alt="SkyPilot Logo"
         className={className}
         width={size}
         height={size}

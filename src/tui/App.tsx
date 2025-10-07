@@ -13,6 +13,7 @@ import {
   downloadVideoAssets,
   listVideos,
   remixVideo,
+  deleteVideo,
   waitForVideoCompletion,
   type SoraVideo,
   type VideoAssetVariant,
@@ -92,6 +93,7 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
   const [activeLocale, setActiveLocale] = useState(getActiveLocale());
   const [downloadVariant, setDownloadVariant] = useState<AssetVariant>('video');
   const [remixTarget, setRemixTarget] = useState<SoraVideo | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<SoraVideo | null>(null);
 
   const isMounted = useRef(true);
   const refreshInFlight = useRef(false);
@@ -318,6 +320,37 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
       }
     },
     [downloadVariant, translateVariantLabel],
+  );
+
+  const handleDelete = useCallback(
+    async (video: SoraVideo) => {
+      setActivity(translate('activity.deleteStart', { id: video.id }));
+
+      try {
+        const response = await deleteVideo(video.id);
+        if (!isMounted.current) {
+          return;
+        }
+
+        if (response.deleted) {
+          setActivity(translate('activity.deleteSuccess', { id: response.id }));
+          setTrackedVideo((current) => (current?.id === video.id ? null : current));
+          setVideos((current) => current.filter((item) => item.id !== video.id));
+          await refresh();
+        } else {
+          setActivity(translate('activity.deleteNotConfirmed', { id: response.id }));
+        }
+      } catch (err) {
+        if (!isMounted.current) {
+          return;
+        }
+
+        setActivity(translate('activity.deleteError', { message: (err as Error).message }));
+      } finally {
+        setDeleteTarget(null);
+      }
+    },
+    [refresh, translate],
   );
 
   const handleCreate = useCallback(async () => {
@@ -611,6 +644,19 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
   }, [autoDownload, currencyFormatter, playSound, pollInterval, refresh, remixPromptValue, remixTarget, translateVariantLabel]);
 
   useInput((input, key) => {
+    if (deleteTarget) {
+      if (key.escape || input === 'n') {
+        setActivity(translate('activity.deleteCancelled', { id: deleteTarget.id }));
+        setDeleteTarget(null);
+        return;
+      }
+
+      if (input === 'y') {
+        void handleDelete(deleteTarget);
+      }
+      return;
+    }
+
     if (mode === 'prompt') {
       if (key.escape) {
         setMode('list');
@@ -723,8 +769,21 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
       return;
     }
 
-    if (key.return || input === 'd') {
+    if (key.return) {
       void handleDownload(selectedVideo);
+      return;
+    }
+
+    if (input === 'd') {
+      const target = selectedVideo;
+      if (!target) {
+        setActivity(translate('activity.deleteNoSelection'));
+        return;
+      }
+
+      setDeleteTarget(target);
+      setActivity(translate('activity.deleteConfirm', { id: target.id }));
+      return;
     }
   });
 

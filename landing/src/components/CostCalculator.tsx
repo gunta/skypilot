@@ -64,7 +64,7 @@ export default function CostCalculator({ lang }: Props) {
               className={`p-3 rounded-lg border-2 transition-all ${
                 model === 'sora-2'
                   ? 'border-accent-primary bg-accent-primary/10 text-accent-primary'
-                  : 'border-border-color text-text-secondary hover:border-accent-primary/50'
+                  : 'border-custom-border text-text-secondary hover:border-accent-primary/50'
               }`}
             >
               Sora 2
@@ -74,7 +74,7 @@ export default function CostCalculator({ lang }: Props) {
               className={`p-3 rounded-lg border-2 transition-all ${
                 model === 'sora-2-pro'
                   ? 'border-accent-primary bg-accent-primary/10 text-accent-primary'
-                  : 'border-border-color text-text-secondary hover:border-accent-primary/50'
+                  : 'border-custom-border text-text-secondary hover:border-accent-primary/50'
               }`}
             >
               Sora 2 Pro
@@ -93,7 +93,7 @@ export default function CostCalculator({ lang }: Props) {
                 className={`p-3 rounded-lg border-2 transition-all ${
                   duration === d
                     ? 'border-accent-primary bg-accent-primary/10 text-accent-primary'
-                    : 'border-border-color text-text-secondary hover:border-accent-primary/50'
+                    : 'border-custom-border text-text-secondary hover:border-accent-primary/50'
                 }`}
               >
                 {d}s
@@ -113,7 +113,7 @@ export default function CostCalculator({ lang }: Props) {
                 className={`p-3 rounded-lg border-2 transition-all text-sm ${
                   resolution === r
                     ? 'border-accent-primary bg-accent-primary/10 text-accent-primary'
-                    : 'border-border-color text-text-secondary hover:border-accent-primary/50'
+                    : 'border-custom-border text-text-secondary hover:border-accent-primary/50'
                 }`}
               >
                 {r}
@@ -143,7 +143,7 @@ export default function CostCalculator({ lang }: Props) {
             <span className="text-text-secondary">{t('calc.perVideo')}</span>
             <span className="text-2xl font-bold">{formatPrice(cost.perVideo)}</span>
           </div>
-          <div className="flex justify-between items-center pt-4 border-t border-border-color">
+          <div className="flex justify-between items-center pt-4 border-t border-custom-border">
             <span className="text-lg font-semibold">{t('calc.total')}</span>
             <span className="text-3xl font-bold gradient-text">{formatPrice(cost.total)}</span>
           </div>

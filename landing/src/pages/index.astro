@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
-import Hero from '../components/Hero.astro';
-import ValueProps from '../components/ValueProps.astro';
+import HeroPremium from '../components/HeroPremium.astro';
+import ValuePropsPremium from '../components/ValuePropsPremium.astro';
 import Features from '../components/Features.astro';
-import CostCalculator from '../components/CostCalculator';
+import CostCalculatorPremium from '../components/CostCalculatorPremium';
 import Installation from '../components/Installation.astro';
 import ComingSoon from '../components/ComingSoon.astro';
 import FAQ from '../components/FAQ.astro';
@@ -43,24 +43,24 @@ const description = lang === 'ja'
 ---
 
 <BaseLayout title={title} description={description} lang={lang}>
-  <Dither 
+  <!-- <Dither 
     client:load 
-    waveColor={[0.5, 0.5, 0.5]}
+    waveColor={[0.7, 0.7, 0.7]}
     disableAnimation={false}
-    enableMouseInteraction={true}
+    enableMouseInteraction={false}
     mouseRadius={0.3}
-    colorNum={4}
+    colorNum={7}
     waveAmplitude={0.3}
     waveFrequency={3}
     waveSpeed={0.05}
-  />
+  /> -->
   <Navigation lang={lang} />
-  <Hero lang={lang} />
-  <ValueProps lang={lang} />
+  <HeroPremium lang={lang} />
+  <ValuePropsPremium lang={lang} />
   <Features lang={lang} />
   
-  <section class="section-container bg-bg-secondary/80 backdrop-blur-sm">
-    <CostCalculator client:load lang={lang} />
+  <section class="section-container backdrop-premium">
+    <CostCalculatorPremium client:load lang={lang} />
   </section>
   
   <Installation lang={lang} />

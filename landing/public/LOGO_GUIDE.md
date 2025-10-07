@@ -1,4 +1,4 @@
-# Sky Pilot Logo Integration Guide
+# SkyPilot Logo Integration Guide
 
 ## Logo Files Needed
 
@@ -32,7 +32,7 @@ landing/
 
 ### Recommended Design
 
-Since Sky Pilot represents:
+Since SkyPilot represents:
 - **AI Video Generation** (Sora 2)
 - **Terminal/CLI Tool** (Developer-focused)
 - **Privacy & Security** (Client-side)
@@ -79,7 +79,7 @@ The Logo component (`src/components/Logo.tsx`) uses:
   <source srcSet="/skypilot/skypilotlogo.webp" type="image/webp" />
   <img
     src="/skypilot/skypilotlogo.png"
-    alt="Sky Pilot Logo"
+    alt="SkyPilot Logo"
     className={className}
     width={size}
     height={size}
@@ -99,12 +99,12 @@ This provides:
 1. **Navigation** (Top of page)
    - Size: 32x32px
    - Always visible (fixed header)
-   - Next to "Sky Pilot" text
+   - Next to "SkyPilot" text
 
 2. **Footer** (Bottom of page)
    - Size: 32x32px
    - Part of branding section
-   - Next to "Sky Pilot" text
+   - Next to "SkyPilot" text
 
 3. **Favicon** (Browser tab)
    - Currently: Custom SVG sparkle design
@@ -242,7 +242,7 @@ Or keep using the current SVG sparkle design in `favicon.svg`.
 ---
 
 **Action Required**: 
-1. Create or obtain your Sky Pilot logo
+1. Create or obtain your SkyPilot logo
 2. Export as PNG (512x512px)
 3. Convert to WebP
 4. Place both files in `landing/public/`

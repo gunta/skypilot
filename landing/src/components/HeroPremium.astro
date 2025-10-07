@@ -1,0 +1,419 @@
+---
+import { getTranslation, type Language } from '../i18n/translations';
+import GradientText from './GradientText';
+import Logo from './Logo';
+import ScrollReveal from './ScrollReveal';
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = (key: any) => getTranslation(lang, key);
+---
+
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Full-screen background video -->
+  <div class="absolute inset-0 w-full h-full">
+    <video
+      autoplay
+      muted
+      loop
+      playsinline
+      class="absolute inset-0 w-full h-full object-cover"
+      poster="/skypilot/video_68e462d97d7c81909d17537d7572a894098e67c6d1a01f94-poster.jpg"
+    >
+      <source src="/skypilot/video_68e462d97d7c81909d17537d7572a894098e67c6d1a01f94.mp4" type="video/mp4" />
+    </video>
+    
+    <!-- Dark overlay for better text readability -->
+    <div class="absolute inset-0 bg-gradient-to-b from-bg-primary/40 via-bg-primary/30 to-bg-primary/45"></div>
+    
+    <!-- Additional gradient overlay for depth and vibrancy -->
+    <div class="absolute inset-0 bg-gradient-to-br from-accent-primary/10 via-transparent to-accent-secondary/10"></div>
+    
+    <!-- Vignette effect for focus -->
+    <div class="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-bg-primary/50"></div>
+  </div>
+  
+  <!-- Premium gradient mesh overlay (subtle) -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-0 -left-4 w-96 h-96 bg-accent-primary/5 rounded-full mix-blend-screen filter blur-3xl animate-float-slow"></div>
+    <div class="absolute top-0 -right-4 w-96 h-96 bg-accent-secondary/5 rounded-full mix-blend-screen filter blur-3xl animate-float-slow" style="animation-delay: 2s;"></div>
+    <div class="absolute -bottom-8 left-20 w-96 h-96 bg-success/5 rounded-full mix-blend-screen filter blur-3xl animate-float-slow" style="animation-delay: 4s;"></div>
+  </div>
+
+  <div class="section-container relative z-10">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Left column: Premium content -->
+      <div class="text-center lg:text-left">
+        <!-- Logo and Brand -->
+        <div class="mb-12 animate-fade-in-down">
+          <div class="flex items-center justify-center lg:justify-start space-x-6 group">
+            <!-- Ultra premium logo with effects -->
+            <div class="relative">
+              <div class="absolute -inset-4 bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-primary rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-all duration-700"></div>
+              <div class="relative">
+                <Logo client:load className="w-28 h-28 sm:w-36 sm:h-36 drop-shadow-2xl" size={144} />
+              </div>
+            </div>
+            
+            <!-- Premium animated text -->
+            <div>
+              <h1 class="text-6xl sm:text-7xl lg:text-8xl font-black tracking-tighter">
+                <GradientText 
+                  client:load
+                  colors={["#00d4ff", "#8b5cf6", "#ff00d4", "#00d4ff", "#8b5cf6"]}
+                  animationSpeed={4}
+                  showBorder={false}
+                >
+                  SkyPilot
+                </GradientText>
+              </h1>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tagline with premium styling -->
+        <ScrollReveal client:load delay={0.2}>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+            <span class="bg-gradient-to-r from-white via-white to-text-secondary bg-clip-text text-transparent">
+              {t('hero.title')}
+            </span>
+          </h2>
+        </ScrollReveal>
+
+        <ScrollReveal client:load delay={0.3}>
+          <p class="text-xl sm:text-2xl text-text-primary/80 max-w-2xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+            {t('hero.subtitle')}
+          </p>
+        </ScrollReveal>
+
+        <!-- Ultra Premium Feature Pills -->
+        <ScrollReveal client:load delay={0.4}>
+          <div class="flex flex-wrap gap-4 justify-center lg:justify-start mb-10">
+            <div class="group relative px-5 py-3 glass-card rounded-full hover-scale cursor-default">
+              <span class="flex items-center gap-2.5 text-sm font-bold">
+                <!-- Eye-off icon for No watermarks -->
+                <svg class="badge-icon w-4 h-4 text-accent-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2 12s3-7 10-7c.943 0 1.837.114 2.675.319m2.09.765C19.142 7.546 20.85 9.623 22 12c-1.5 3.5-5.5 7-10 7c-.943 0-1.837-.114-2.675-.319m-2.09-.765C4.858 16.454 3.15 14.377 2 12" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m2 2 20 20" />
+                </svg>
+                <span class="text-transparent bg-gradient-to-r from-accent-primary to-white bg-clip-text">
+                  {t('hero.badge1')}
+                </span>
+              </span>
+            </div>
+            <div class="group relative px-5 py-3 glass-card rounded-full hover-scale cursor-default">
+              <span class="flex items-center gap-2.5 text-sm font-bold">
+                <!-- Crown icon for Sora 2 Pro -->
+                <svg class="badge-icon w-4 h-4 text-accent-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V2m0 4 4-1.5M12 6l-4-1.5M12 6v6m0 6v4m0-4 4 1.5M12 18l-4 1.5M20 10l-4.5 1.5M4 10l4.5 1.5M20 10l-2 8H6l-2-8m16 0-3-6M4 10l3-6m10 0L12 2m-5 2 5 2" />
+                </svg>
+                <span class="text-transparent bg-gradient-to-r from-accent-secondary to-white bg-clip-text">
+                  {t('hero.badge2')}
+                </span>
+              </span>
+            </div>
+            <div class="group relative px-5 py-3 glass-card rounded-full hover-scale cursor-default">
+              <span class="flex items-center gap-2.5 text-sm font-bold">
+                <!-- Shield-check icon for 100% private -->
+                <svg class="badge-icon shield-icon w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l3.09 1.26a4 4 0 002.65 2.65L20 8v6.07a8 8 0 01-3.34 6.5L12 24l-4.66-3.43A8 8 0 014 14.07V8l2.26-2.09a4 4 0 002.65-2.65L12 2z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4" />
+                </svg>
+                <span class="text-transparent bg-gradient-to-r from-success to-white bg-clip-text">
+                  {t('hero.badge3')}
+                </span>
+              </span>
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <!-- Premium CTA Buttons -->
+        <ScrollReveal client:load delay={0.5}>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <button
+              id="copy-npx"
+              class="group relative px-8 py-4 btn-premium glass-card rounded-2xl font-bold text-white hover-lift"
+            >
+              <div class="absolute inset-0 bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-primary rounded-2xl opacity-80 group-hover:opacity-100 transition-opacity"></div>
+              <span class="relative flex items-center justify-center gap-3">
+                <span>{t('hero.cta.try')}</span>
+                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+            </button>
+            
+            <a
+              href="https://github.com/gunta/skypilot"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative px-8 py-4 glass-card rounded-2xl font-bold text-white border border-white/20 hover:border-white/40 hover-lift transition-all"
+            >
+              <span class="flex items-center justify-center gap-3">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                </svg>
+                <span>{t('hero.cta.github')}</span>
+                <span class="text-xs opacity-70">⭐ 2.3k</span>
+              </span>
+            </a>
+          </div>
+        </ScrollReveal>
+        
+        <!-- Sponsor Link -->
+        <ScrollReveal client:load delay={0.6}>
+          <div class="mt-8 flex justify-center lg:justify-start">
+            <a
+              href="https://github.com/sponsors/gunta"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-accent-primary transition-colors group"
+            >
+              <svg class="w-4 h-4 text-pink-400 group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
+              </svg>
+              <span>{t('hero.sponsor')}</span>
+            </a>
+          </div>
+        </ScrollReveal>
+      </div>
+      
+      <!-- Right column: Premium Terminal -->
+      <div class="relative animate-fade-in-up" style="animation-delay: 0.3s;">
+        <ScrollReveal client:load delay={0.5}>
+          <div class="terminal-glass rounded-2xl p-1 hover-lift relative overflow-hidden">
+            <!-- Glass effect background -->
+            <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-white/2 to-transparent"></div>
+            
+            <!-- Terminal Header -->
+            <div class="relative flex items-center gap-2 px-4 py-3 border-b border-white/10 bg-white/5 backdrop-blur-md">
+              <div class="flex gap-2">
+                <div class="w-3 h-3 bg-red-500/90 rounded-full shadow-lg shadow-red-500/50"></div>
+                <div class="w-3 h-3 bg-yellow-500/90 rounded-full shadow-lg shadow-yellow-500/50"></div>
+                <div class="w-3 h-3 bg-green-500/90 rounded-full shadow-lg shadow-green-500/50"></div>
+              </div>
+              <span class="ml-auto text-xs text-text-muted/70 font-mono tracking-wider">sky-pilot@terminal</span>
+            </div>
+            
+            <!-- Terminal Content -->
+            <div class="relative p-6 font-mono text-sm space-y-4">
+              <div class="space-y-2">
+                <span class="text-text-muted/90">$</span>
+                <span class="text-accent-primary ml-2 text-shadow-glow">npx skypilot create</span>
+              </div>
+              
+              <div class="space-y-1 text-text-primary/70">
+                <div class="flex items-center">
+                  <span class="text-green-400 drop-shadow-lg">✓</span>
+                  <span class="ml-2">Initializing Sora 2 client...</span>
+                </div>
+                <div class="flex items-center">
+                  <span class="text-green-400 drop-shadow-lg">✓</span>
+                  <span class="ml-2">Loading your API key...</span>
+                </div>
+                <div class="flex items-center">
+                  <span class="text-green-400 drop-shadow-lg animate-pulse">✓</span>
+                  <span class="ml-2">Preparing video generation...</span>
+                </div>
+              </div>
+              
+              <div class="pt-2">
+                <div class="text-text-muted/80 mb-2">Prompt:</div>
+                <div class="pl-2 text-accent-secondary text-shadow-glow">
+                  "A cinematic drone shot of a futuristic city at sunset..."
+                </div>
+              </div>
+              
+              <div class="pt-2">
+                <div class="flex items-center gap-2">
+                  <div class="flex-1 bg-white/5 backdrop-blur-sm rounded-full h-2 overflow-hidden border border-white/10">
+                    <div class="bg-gradient-to-r from-accent-primary via-accent-secondary to-accent-primary h-full rounded-full animate-shimmer shadow-lg shadow-accent-primary/50" style="width: 65%;"></div>
+                  </div>
+                  <span class="text-xs text-text-primary/60">65%</span>
+                </div>
+              </div>
+              
+              <div class="text-xs text-text-primary/70 pt-2 flex items-center gap-2">
+                <span>Cost: <span class="text-accent-primary font-bold text-shadow-glow">$0.50</span></span>
+                <span>•</span>
+                <span>ETA: <span class="text-accent-secondary font-bold text-shadow-glow">~45s</span></span>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+        
+        <!-- Floating decorative elements -->
+        <div class="absolute -top-8 -right-8 w-32 h-32 bg-gradient-to-br from-accent-primary/15 to-transparent rounded-full blur-3xl animate-float-slow"></div>
+        <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-gradient-to-tr from-accent-secondary/15 to-transparent rounded-full blur-3xl animate-float-slow" style="animation-delay: 2s;"></div>
+        
+        <!-- Additional glow behind terminal -->
+        <div class="absolute inset-0 -z-10">
+          <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-r from-accent-primary/5 via-accent-secondary/5 to-accent-primary/5 blur-3xl"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    <svg class="w-6 h-6 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+    </svg>
+  </div>
+</section>
+
+<style>
+  /* Ensure video covers full viewport */
+  video {
+    min-width: 100%;
+    min-height: 100vh;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+  }
+  
+  /* Smooth video loading */
+  @keyframes videoFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  video {
+    animation: videoFadeIn 1s ease-in;
+  }
+  
+  /* Radial gradient for vignette */
+  .bg-radial-gradient {
+    background: radial-gradient(ellipse at center, transparent 0%, transparent 40%, rgba(10, 10, 10, 0.5) 100%);
+  }
+  
+  /* Terminal glass effect */
+  .terminal-glass {
+    background: rgba(15, 15, 20, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 20px 50px -12px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .terminal-glass:hover {
+    background: rgba(15, 15, 20, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 25px 60px -12px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Glowing text effect */
+  .text-shadow-glow {
+    text-shadow: 
+      0 0 10px currentColor,
+      0 0 20px rgba(currentColor, 0.5),
+      0 0 30px rgba(currentColor, 0.3);
+  }
+  
+  /* Icon hover effects */
+  .badge-icon {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .group:hover .badge-icon {
+    transform: rotate(12deg) scale(1.15);
+    filter: drop-shadow(0 0 10px currentColor);
+  }
+  
+  /* Special animation for shield icon */
+  @keyframes shield-pulse {
+    0%, 100% { 
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% { 
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  }
+  
+  .shield-icon {
+    animation: shield-pulse 2s ease-in-out infinite;
+  }
+  
+  /* Mobile optimization for video */
+  @media (max-width: 768px) {
+    video {
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    .terminal-glass {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+  
+  /* Reduce motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    video {
+      display: none;
+    }
+    
+    /* Show static gradient background instead */
+    .video-fallback {
+      display: block;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+    }
+  }
+</style>
+
+<script>
+  // Copy NPX command
+  document.getElementById('copy-npx')?.addEventListener('click', () => {
+    navigator.clipboard.writeText('npx skypilot create');
+    const btn = document.getElementById('copy-npx');
+    if (btn) {
+      const originalText = btn.querySelector('span')?.textContent;
+      const textSpan = btn.querySelector('span span');
+      if (textSpan) {
+        textSpan.textContent = '✓ Copied!';
+        setTimeout(() => {
+          textSpan.textContent = originalText || 'Try Now';
+        }, 2000);
+      }
+    }
+  });
+  
+  // Ensure video plays on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('video');
+    if (video) {
+      // Play video with a promise to handle autoplay policies
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          // Autoplay was prevented, try muted play
+          video.muted = true;
+          video.play();
+        });
+      }
+      
+      // Optimize video playback
+      video.playbackRate = 1.0;
+      
+      // Handle video load for smooth experience
+      video.addEventListener('loadeddata', () => {
+        video.style.opacity = '1';
+      });
+    }
+  });
+</script>

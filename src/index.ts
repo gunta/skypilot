@@ -8,9 +8,16 @@ export {
   downloadVideoAssets,
   ALL_VIDEO_ASSET_VARIANTS,
   remixVideo,
+  deleteVideo,
 } from './api.js';
 
-export type { SoraVideo, SoraVideo as SkyPilotVideo, VideoAssetVariant, RemixVideoParams } from './api.js';
+export type {
+  SoraVideo,
+  SoraVideo as SkyPilotVideo,
+  VideoAssetVariant,
+  RemixVideoParams,
+  DeleteVideoResponse,
+} from './api.js';
 
 export { program as skyPilotProgram, runCli as runSkyPilotCli } from './cli.js';
 

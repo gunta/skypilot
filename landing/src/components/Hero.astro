@@ -1,6 +1,7 @@
 ---
 import { getTranslation, type Language } from '../i18n/translations';
 import GradientText from './GradientText';
+import Logo from './Logo';
 
 interface Props {
   lang: Language;
@@ -28,21 +29,17 @@ const t = (key: any) => {
       <!-- Left column: Text content -->
       <div class="text-center lg:text-left space-y-6">
         <!-- Large Logo and Brand Name -->
-        <div class="flex items-center justify-center lg:justify-start space-x-4 mb-6">
-          <img 
-            src="/skypilot/skypilotlogo.svg" 
-            alt="Sky Pilot Logo" 
-            class="w-20 h-20 sm:w-24 sm:h-24"
-          />
+        <div class="flex items-center justify-center lg:justify-start space-x-4 sm:space-x-6 mb-8">
+          <Logo client:load className="w-24 h-24 sm:w-32 sm:h-32" size={128} />
           <div class="text-left">
-            <h1 class="text-5xl sm:text-6xl">
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl">
               <GradientText 
                 client:load
                 colors={["#00d4ff", "#8b5cf6", "#00d4ff", "#8b5cf6", "#00d4ff"]}
                 animationSpeed={3}
                 showBorder={false}
               >
-                Sky Pilot
+                SkyPilot
               </GradientText>
             </h1>
           </div>
@@ -110,7 +107,7 @@ const t = (key: any) => {
       
       <!-- Right column: Terminal animation -->
       <div class="card bg-code-bg/50 backdrop-blur-sm">
-        <div class="flex items-center space-x-2 mb-4 pb-3 border-b border-border-color">
+        <div class="flex items-center space-x-2 mb-4 pb-3 border-b border-custom-border">
           <div class="flex space-x-2">
             <div class="w-3 h-3 rounded-full bg-red-500"></div>
             <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -131,7 +128,7 @@ const t = (key: any) => {
             ✓ Ready! Run 'skypilot --help' to get started
           </div>
           
-          <div class="mt-6 pt-6 border-t border-border-color">
+          <div class="mt-6 pt-6 border-t border-custom-border">
             <div class="flex items-start">
               <span class="text-accent-primary mr-2">$</span>
               <span class="text-text-primary">skypilot create --prompt "A serene lake"</span>

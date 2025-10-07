@@ -130,7 +130,7 @@ export const translations = {
     'footer.npm': 'npm Package',
     'footer.license': 'License (MIT)',
     'footer.issues': 'Issues / Bug Reports',
-    'footer.disclaimer': 'Sky Pilot is an unofficial tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI.',
+    'footer.disclaimer': 'SkyPilot is an unofficial tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI.',
     'footer.credits': 'Built with Astro',
     'footer.contributors': 'Open source contributors welcome',
   },
@@ -265,7 +265,7 @@ export const translations = {
     'footer.npm': 'npm パッケージ',
     'footer.license': 'ライセンス (MIT)',
     'footer.issues': '問題 / バグ報告',
-    'footer.disclaimer': 'Sky Pilot は OpenAI の Sora 2 API の非公式ツールです。OpenAI によって承認、推奨、またはスポンサーされていません。',
+    'footer.disclaimer': 'SkyPilot は OpenAI の Sora 2 API の非公式ツールです。OpenAI によって承認、推奨、またはスポンサーされていません。',
     'footer.credits': 'Astro で構築',
     'footer.contributors': 'オープンソース貢献者を歓迎',
   }

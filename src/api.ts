@@ -6,12 +6,13 @@ import { pipeline } from 'node:stream/promises';
 import type { ReadableStream } from 'node:stream/web';
 
 import OpenAI from 'openai';
-import type { Video, VideoCreateParams, VideoListParams } from 'openai/resources/videos';
+import type { Video, VideoCreateParams, VideoDeleteResponse, VideoListParams } from 'openai/resources/videos';
 
 const client = new OpenAI();
 
 export type SoraVideo = Video;
 export type VideoAssetVariant = 'video' | 'thumbnail' | 'spritesheet';
+export type DeleteVideoResponse = VideoDeleteResponse;
 
 export const ALL_VIDEO_ASSET_VARIANTS: readonly VideoAssetVariant[] = ['video', 'thumbnail', 'spritesheet'] as const;
 
@@ -155,6 +156,10 @@ export interface RemixVideoParams {
 
 export const remixVideo = async (videoId: string, params: RemixVideoParams): Promise<SoraVideo> => {
   return client.post(`/videos/${videoId}/remix`, { body: params });
+};
+
+export const deleteVideo = async (videoId: string): Promise<DeleteVideoResponse> => {
+  return client.videos.delete(videoId);
 };
 
 export interface DownloadVideoAssetsOptions extends DownloadVideoAssetOptions {}
