@@ -52,7 +52,7 @@ const sha256 = createHash('sha256').update(buffer).digest('hex');
 const formulaDir = path.join(projectRoot, 'Formula');
 mkdirSync(formulaDir, { recursive: true });
 
-const description = pkg.description ?? 'Unofficial CLI for OpenAI Sora.';
+const description = pkg.description ?? 'CLI for OpenAI Sora.';
 const homepage = pkg.homepage ?? 'https://github.com/gunta/skypilot';
 const license = pkg.license ?? 'MIT';
 

@@ -5,11 +5,11 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/gunta?style=social)](https://github.com/sponsors/gunta)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-SkyPilot is an unofficial CLI and TUI for OpenAI's Sora 2 video generation API. It helps you launch jobs, monitor progress, download outputs, and automate your release workflow with AI-authored changelog entries.
+SkyPilot is a CLI and TUI for OpenAI's Sora 2 video generation API. It helps you launch jobs, monitor progress, download outputs, and automate your release workflow with AI-authored changelog entries.
 
 **🌐 [Visit the landing page](https://gunta.github.io/skypilot)** | **❤️ [Support via GitHub Sponsors](https://github.com/sponsors/gunta)**
 
-> **Disclaimer:** SkyPilot is an unofficial GUI for OpenAI's video generation API. It is not affiliated with, endorsed by, or sponsored by OpenAI.
+> **Disclaimer:** SkyPilot is a GUI for OpenAI's video generation API. It is not affiliated with, endorsed by, or sponsored by OpenAI.
 
 ## Why SkyPilot?
 
@@ -102,7 +102,7 @@ Controls:
 - `l` — switch between available interface languages.
 - `q` or `esc` — quit the dashboard.
 
-The dashboard displays a banner reminding users that SkyPilot is an unofficial GUI for OpenAI's video generation API. It renders the job list in a sortable table, shows a status distribution chart, and surfaces estimated/actual costs in your preferred currency—localized to whichever language you select.
+The dashboard displays a banner reminding users that SkyPilot is a GUI for OpenAI's video generation API. It renders the job list in a sortable table, shows a status distribution chart, and surfaces estimated/actual costs in your preferred currency—localized to whichever language you select.
 
 ## Development
 

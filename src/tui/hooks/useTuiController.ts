@@ -9,7 +9,7 @@ import { formatUsd } from '../../currency.js';
 import { createSoraManagerController, type SoraManagerController } from '../../state/manager.js';
 import { downloadAssetsForChoice, type AssetChoice, type DownloadedAssetsSummary } from '../../assets.js';
 import { getActiveLocale, cycleLanguage } from '../../i18n.js';
-import { translate, type MessageKey } from '../translate.js';
+import { translate, type MessageKey } from '@/shared/translation.js';
 import { ASSET_VARIANTS, DURATIONS, MODELS, RESOLUTIONS, MODEL_RESOLUTIONS, cycleValue } from '../constants.js';
 import type { AssetVariant } from '../constants.js';
 import type { Mode, TrackedJob } from '../types.js';

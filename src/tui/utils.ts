@@ -1,7 +1,7 @@
 import stringWidth from 'string-width';
 
 import type { SoraVideo } from '../api.js';
-import { translate } from './translate.js';
+import { formatVideoStatus, formatVideoTimestamp } from '@/shared/video.js';
 
 const ZERO_WIDTH_SPACE = '\u200B';
 
@@ -16,9 +16,8 @@ export const toInkTableFriendlyString = (value: string) => {
   return `${value}${ZERO_WIDTH_SPACE.repeat(displayWidth - codeUnitLength)}`;
 };
 
-export const getStatusLabel = (status: SoraVideo['status']) =>
-  translate(`status.${status}` as const);
+export const getStatusLabel = (status: SoraVideo['status']) => formatVideoStatus(status);
 
 export const formatStatusLabel = (status: SoraVideo['status']) => getStatusLabel(status);
 
-export const formatTimestamp = (seconds: number) => new Date(seconds * 1000).toLocaleString();
+export const formatTimestamp = (seconds: number) => formatVideoTimestamp(seconds);

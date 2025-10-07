@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'ink';
 
-import { translate } from '../translate.js';
+import { translate } from '@/shared/translation.js';
 
 interface ThumbnailPreviewPanelProps {
   preview: string | null;

@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises';
 
 import { useCallback, useState } from 'react';
 
-import { translate } from '../translate.js';
+import { translate } from '@/shared/translation.js';
 import { wrapForTmux, supportsItermInlineImages, makeItermPayload } from '../terminal.js';
 
 interface ThumbnailPreviewState {

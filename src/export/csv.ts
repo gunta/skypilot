@@ -7,7 +7,7 @@ import { formatUsd } from '../currency.js';
 import type { CostSummary } from '../pricing.js';
 import { buildCostSummary, calculateVideoCost } from '../pricing.js';
 
-import type { TranslateFn } from '../tui/translate.js';
+import type { TranslateFn } from '@/shared/translation.js';
 
 const CSV_HEADERS = [
   'id',

@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react';
-import { Box, useApp, useInput } from 'ink';
+import React from 'react';
+import { Box, useApp } from 'ink';
 
 import { useTuiController } from './hooks/useTuiController.js';
+import { useAppDerivedState } from './hooks/useAppDerivedState.js';
+import { useAppInput } from './hooks/useAppInput.js';
 import { HeaderPanel } from './components/HeaderPanel.js';
 import { BrandBanner } from './components/BrandBanner.js';
 import { CurrencyAlert } from './components/CurrencyAlert.js';
@@ -11,7 +13,6 @@ import { RemixModal } from './components/RemixModal.js';
 import { StatusTableSection } from './components/StatusTableSection.js';
 import { TrackingPanel } from './components/TrackingPanel.js';
 import { ThumbnailPreviewPanel } from './components/ThumbnailPreviewPanel.js';
-import { translate } from './translate.js';
 
 export interface AppProps {
   pollInterval?: number;
@@ -22,153 +23,10 @@ export interface AppProps {
 const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, playSound = true }) => {
   const { exit } = useApp();
   const controller = useTuiController({ pollInterval, autoDownload, playSound });
+  const { selectedVideo, currencyLabel, assetLabel, activityMessage, shouldShowActivityPanel, costLabel } =
+    useAppDerivedState(controller);
 
-  const selectedVideo = useMemo(
-    () => controller.videos[controller.selectedIndex],
-    [controller.videos, controller.selectedIndex],
-  );
-
-  const currencyLabel = controller.currencyFormatter ? controller.currencyFormatter.currency : '…';
-  const assetLabel = controller.translateVariantLabel(controller.downloadVariant);
-  const loadingMessage = translate('app.loading');
-  const activityMessage = controller.activity;
-  const shouldShowActivityPanel =
-    activityMessage !== null && !(controller.isLoading && activityMessage === loadingMessage);
-  const costLabel = useMemo(() => {
-    const estimate = controller.estimatedCost;
-    if (!estimate) {
-      return translate('app.costUnavailable');
-    }
-
-    return estimate.isConverted
-      ? translate('app.costEstimateWithUsd', { preferred: estimate.preferred, usd: estimate.usd })
-      : translate('app.costEstimate', { value: estimate.preferred });
-  }, [controller.estimatedCost, controller.activeLocale]);
-
-  useInput((input, key) => {
-    if (controller.deleteTarget) {
-      if (key.escape || input === 'n') {
-        controller.setActivity(translate('activity.deleteCancelled', { id: controller.deleteTarget.id }));
-        controller.setDeleteTarget(null);
-        return;
-      }
-
-      if (input === 'y') {
-        void controller.handleDelete(controller.deleteTarget);
-      }
-      return;
-    }
-
-    if (controller.mode === 'prompt') {
-      if (key.escape) {
-        controller.setMode('list');
-        controller.setPromptValue('');
-      }
-      return;
-    }
-
-    if (controller.mode === 'remix') {
-      if (key.escape) {
-        controller.setMode('list');
-        controller.setRemixPromptValue('');
-        controller.setRemixTarget(null);
-      }
-      return;
-    }
-
-    if (key.escape || input === 'q') {
-      controller.abortAllTrackers();
-      exit();
-      return;
-    }
-
-    if (key.downArrow || input === 'j') {
-      controller.setSelectedIndex((index) => Math.min(index + 1, Math.max(controller.videos.length - 1, 0)));
-      return;
-    }
-
-    if (key.upArrow || input === 'k') {
-      controller.setSelectedIndex((index) => Math.max(index - 1, 0));
-      return;
-    }
-
-    if (input === 'r') {
-      void controller.refresh();
-      return;
-    }
-
-    if (input === 'c') {
-      controller.promptHelpers.enablePromptMode();
-      return;
-    }
-
-    if (input === 'm') {
-      controller.cycleModel();
-      return;
-    }
-
-    if (input === 's') {
-      controller.cycleResolution();
-      return;
-    }
-
-    if (input === 't') {
-      controller.cycleDuration();
-      return;
-    }
-
-    if (input === 'a') {
-      controller.cycleDownloadVariant();
-      return;
-    }
-
-    if (input === 'e') {
-      void controller.exportVideosToCsv();
-      return;
-    }
-
-    if (input === 'x') {
-      const target = selectedVideo;
-      if (!target) {
-        controller.setActivity(translate('activity.remixNoTarget'));
-        return;
-      }
-
-      if (target.status !== 'completed') {
-        controller.setActivity(
-          translate('activity.remixUnavailable', {
-            status: translate(`status.${target.status}` as const),
-          }),
-        );
-        return;
-      }
-
-      controller.promptHelpers.enableRemixMode(target);
-      return;
-    }
-
-    if (input === 'l') {
-      void controller.onLanguageCycle();
-      return;
-    }
-
-    if (key.return) {
-      void controller.handleDownload(selectedVideo);
-      return;
-    }
-
-    if (input === 'd') {
-      const target = selectedVideo;
-      if (!target) {
-        controller.setActivity(translate('activity.deleteNoSelection'));
-        return;
-      }
-
-      controller.setDeleteTarget(target);
-      controller.setActivity(translate('activity.deleteConfirm', { id: target.id }));
-      return;
-    }
-  });
+  useAppInput({ controller, selectedVideo, exit });
 
   return (
     <Box flexDirection="column" paddingX={1} paddingY={1} gap={1}>
@@ -186,7 +44,7 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
 
       {controller.currencyError ? <CurrencyAlert message={controller.currencyError} /> : null}
 
-      {shouldShowActivityPanel ? <ActivityPanel activity={activityMessage!} /> : null}
+      {shouldShowActivityPanel && activityMessage ? <ActivityPanel activity={activityMessage} /> : null}
 
       {controller.mode === 'prompt' ? (
         <PromptModal

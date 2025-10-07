@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
 
-import { translate } from '../translate.js';
+import { translate } from '@/shared/translation.js';
 
 interface RemixModalProps {
   value: string;

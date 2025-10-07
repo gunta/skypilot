@@ -25,13 +25,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./cli": "./dist/cli.js",
+    "./cli": "./dist/cli/index.js",
     "./tui/app": "./dist/tui/App.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "skypilot": "dist/cli.js"
+    "skypilot": "dist/cli/index.js"
   },
   "files": [
     "dist",
@@ -41,15 +41,17 @@
   ],
   "scripts": {
     "build": "tsc",
+    "prebuild": "bun run compile:messages",
+    "compile:messages": "bunx paraglide-js compile --project ./project.inlang --outdir ./src/paraglide",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
     "generate:changelog": "tsx scripts/generate-changelog.ts",
     "update:homebrew": "tsx scripts/update-homebrew-formula.ts",
     "release": "tsx scripts/release.ts",
     "prepublishOnly": "npm run build",
-    "cli": "bun run src/cli.ts",
-    "tui": "bun run src/cli.ts tui",
-    "list": "bun run src/cli.ts list"
+    "cli": "bun run src/cli/index.ts",
+    "tui": "bun run src/cli/index.ts tui",
+    "list": "bun run src/cli/index.ts list"
   },
   "dependencies": {
     "@inkjs/ui": "^2.0.0",
@@ -69,6 +71,7 @@
     "openai": "^6.2.0",
     "react": "^19.2.0",
     "string-width": "^8.1.0",
+    "update-notifier": "^7.3.1",
     "xstate": "^5.22.1"
   },
   "devDependencies": {

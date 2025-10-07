@@ -19,7 +19,7 @@ export type {
   DeleteVideoResponse,
 } from './api.js';
 
-export { program as skyPilotProgram, runCli as runSkyPilotCli } from './cli.js';
+export { program as skyPilotProgram, runCli as runSkyPilotCli } from './cli/index.js';
 
 export { default as SkyPilotApp } from './tui/App.js';
 export { calculateVideoCost, buildCostSummary, calculateAndSummarizeCost } from './pricing.js';

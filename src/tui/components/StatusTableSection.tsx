@@ -6,7 +6,7 @@ import chalk from 'chalk';
 
 import type { SoraVideo } from '../../api.js';
 import { STATUS_COLORS, STATUS_ORDER } from '../constants.js';
-import { translate } from '../translate.js';
+import { translate } from '@/shared/translation.js';
 
 interface StatusTableSectionProps {
   isLoading: boolean;

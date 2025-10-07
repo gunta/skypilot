@@ -4,7 +4,7 @@ import { Box, Text } from 'ink';
 import type { SoraVideo } from '../../api.js';
 import type { CurrencyFormatter } from '../../currency.js';
 import type { CostSummary } from '../../pricing.js';
-import { translate } from '../translate.js';
+import { translate } from '@/shared/translation.js';
 import { formatStatusLabel } from '../utils.js';
 
 interface TrackingPanelProps {
