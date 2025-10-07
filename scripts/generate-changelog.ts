@@ -29,12 +29,20 @@ const ensureEnv = (name: string) => {
   }
 };
 
+const log = (...args: unknown[]) => {
+  console.log('[changelog]', ...args);
+};
+
+log('Starting changelog generation.');
+
 ensureEnv('OPENAI_API_KEY');
+log('Environment OK.');
 
 const findLastTag = () => {
   try {
     const tag = execSync('git describe --tags --abbrev=0', { cwd: projectRoot, encoding: 'utf8' })
       .trim();
+    log('Latest tag detected:', tag);
     return tag;
   } catch (error) {
     return null;
@@ -45,19 +53,27 @@ const lastTag = values.range ? null : findLastTag();
 const gitRange = values.range ?? (lastTag ? `${lastTag}..HEAD` : '');
 const rangePrefix = gitRange ? `${gitRange} ` : '';
 
+log('Collecting commit log with range:', gitRange || 'HEAD');
+
 const commitLog = execSync(`git log ${rangePrefix}--pretty=format:%H%x09%an%x09%ad%x09%s --date=short`, {
   cwd: projectRoot,
   encoding: 'utf8',
 });
+
+const commitLines = commitLog.split('\n').filter(Boolean);
+log('Found commits:', commitLines.length);
 
 if (!commitLog.trim()) {
   console.log('No commits found to include in changelog.');
   process.exit(0);
 }
 
-const diffStat = gitRange
-  ? execSync(`git diff ${gitRange} --stat`, { cwd: projectRoot, encoding: 'utf8' })
-  : '';
+let diffStat = '';
+if (gitRange) {
+  log('Collecting diff stat.');
+  diffStat = execSync(`git diff ${gitRange} --stat`, { cwd: projectRoot, encoding: 'utf8' });
+  log('Diff stat length:', diffStat.length);
+}
 
 const client = new OpenAI();
 
@@ -73,21 +89,29 @@ ${commitLog}
 Diff summary:
 ${diffStat || 'No aggregated diff available.'}`;
 
-const response = await client.responses.create({
-  model: 'gpt-5-mini',
-  input: [
-    {
-      role: 'system',
-      content: 'You create succinct, well-structured changelog entries in Markdown.',
-    },
-    {
-      role: 'user',
-      content: prompt,
-    },
-  ]
-});
+log('Requesting changelog from OpenAI.');
 
-const changelogBody = response.output_text.trim();
+let changelogBody = '';
+try {
+  const response = await client.responses.create({
+    model: 'gpt-5-mini',
+    input: [
+      {
+        role: 'system',
+        content: 'You create succinct, well-structured changelog entries in Markdown.',
+      },
+      {
+        role: 'user',
+        content: prompt,
+      },
+    ],
+  });
+  changelogBody = response.output_text.trim();
+  log('Received changelog output. Characters:', changelogBody.length);
+} catch (error) {
+  log('OpenAI request failed:', (error as Error).message);
+  throw error;
+}
 
 const changelogPath = path.join(projectRoot, 'CHANGELOG.md');
 const today = new Date().toISOString().split('T')[0];
@@ -122,7 +146,8 @@ const remainderBlock = bannerMatch
   ? headerlessBase.slice(bannerMatch.length).trimStart()
   : headerlessBase;
 
+log('Writing changelog entry for version', targetVersion);
 const newContent = `# Changelog\n\n${bannerBlock}${entry}${remainderBlock}`.trimEnd() + '\n';
 writeFileSync(changelogPath, newContent);
 
-console.log(`Changelog updated for v${targetVersion}.`);
+log(`Changelog updated for v${targetVersion}.`);
