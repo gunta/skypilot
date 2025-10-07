@@ -86,8 +86,11 @@ run('npm run build');
 console.log('Generating changelog…');
 run(`npm run generate:changelog -- --version ${nextVersion}`);
 
+console.log('Updating Homebrew formula…');
+run(`bunx tsx scripts/update-homebrew-formula.ts --version ${nextVersion}`);
+
 if (!dryRun) {
-  const filesToStage = ['package.json', 'CHANGELOG.md', 'bun.lock']
+  const filesToStage = ['package.json', 'CHANGELOG.md', 'bun.lock', 'Formula/skypilot.rb']
     .filter((file) => existsSync(path.join(projectRoot, file)))
     .join(' ');
   if (filesToStage.length > 0) {

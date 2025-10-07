@@ -44,6 +44,7 @@
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
     "generate:changelog": "tsx scripts/generate-changelog.ts",
+    "update:homebrew": "tsx scripts/update-homebrew-formula.ts",
     "release": "tsx scripts/release.ts",
     "prepublishOnly": "npm run build",
     "cli": "bun run src/cli.ts",

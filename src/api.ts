@@ -8,7 +8,25 @@ import type { ReadableStream } from 'node:stream/web';
 import OpenAI from 'openai';
 import type { Video, VideoCreateParams, VideoDeleteResponse, VideoListParams } from 'openai/resources/videos';
 
-const client = new OpenAI();
+let client: OpenAI | null = null;
+
+const createClient = () => {
+  try {
+    return new OpenAI();
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('Missing credentials')) {
+      throw new Error('Missing OPENAI_API_KEY. Set it before using skypilot.');
+    }
+    throw error;
+  }
+};
+
+const getClient = () => {
+  if (!client) {
+    client = createClient();
+  }
+  return client;
+};
 
 export type SoraVideo = Video;
 export type VideoAssetVariant = 'video' | 'thumbnail' | 'spritesheet';
@@ -23,16 +41,16 @@ const VARIANT_DEFAULTS: Record<VideoAssetVariant, { extension: string; suffix?: 
 };
 
 export const createVideo = async (params: VideoCreateParams): Promise<SoraVideo> => {
-  return client.videos.create(params);
+  return getClient().videos.create(params);
 };
 
 export const retrieveVideo = async (videoId: string): Promise<SoraVideo> => {
-  return client.videos.retrieve(videoId);
+  return getClient().videos.retrieve(videoId);
 };
 
 export const listVideos = async (params: VideoListParams = {}): Promise<SoraVideo[]> => {
   const results: SoraVideo[] = [];
-  const page = client.videos.list(params);
+  const page = getClient().videos.list(params);
 
   for await (const video of page) {
     results.push(video);
@@ -112,7 +130,7 @@ export const downloadVideoAsset = async (
   videoId: string,
   { destination, mkdirp: shouldMkdir = true, variant = 'video' }: DownloadVideoAssetOptions = {},
 ): Promise<string> => {
-  const response = await client.videos.downloadContent(videoId, { variant });
+  const response = await getClient().videos.downloadContent(videoId, { variant });
 
   if (!response.ok || !response.body) {
     throw new Error(`Failed to download video ${videoId}: ${response.status} ${response.statusText}`);
@@ -155,11 +173,11 @@ export interface RemixVideoParams {
 }
 
 export const remixVideo = async (videoId: string, params: RemixVideoParams): Promise<SoraVideo> => {
-  return client.post(`/videos/${videoId}/remix`, { body: params });
+  return getClient().videos.remix(videoId, params);
 };
 
 export const deleteVideo = async (videoId: string): Promise<DeleteVideoResponse> => {
-  return client.videos.delete(videoId);
+  return getClient().videos.delete(videoId);
 };
 
 export interface DownloadVideoAssetsOptions extends DownloadVideoAssetOptions {}

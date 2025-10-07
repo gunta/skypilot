@@ -102,8 +102,6 @@ const ensureApiKey = async () => {
   process.exit(1);
 };
 
-await ensureApiKey();
-
 const VALID_STATUSES: SoraVideo['status'][] = ['queued', 'in_progress', 'completed', 'failed'];
 const ASSET_CHOICES = [...ALL_VIDEO_ASSET_VARIANTS, 'all'] as const;
 
@@ -196,6 +194,7 @@ program
     new Option('--order <order>', translate('cli.option.order')).choices(['asc', 'desc']).default('desc'),
   )
   .action(async ({ status, limit, order }: { status?: SoraVideo['status'][]; limit: number; order: 'asc' | 'desc' }) => {
+    await ensureApiKey();
     const formatter = await getCurrencyFormatter();
     const videos = await listVideos({ limit, order });
     const filtered = status?.length ? videos.filter((video) => status.includes(video.status)) : videos;
@@ -219,6 +218,7 @@ program
   .argument('<videoId>', translate('cli.argument.videoId'))
   .option('--json', translate('cli.option.json'), false)
   .action(async (videoId: string, options: { json?: boolean }) => {
+    await ensureApiKey();
     const video = await retrieveVideo(videoId);
     if (options.json) {
       console.log(JSON.stringify(video, null, 2));
@@ -246,6 +246,7 @@ program
   .option('--json', translate('cli.option.json'), false)
   .action(async (videoId: string, options: { json?: boolean }) => {
     try {
+      await ensureApiKey();
       const response: DeleteVideoResponse = await deleteVideo(videoId);
       if (options.json) {
         console.log(JSON.stringify(response, null, 2));
@@ -310,6 +311,7 @@ program
         sound?: boolean;
       },
     ) => {
+      await ensureApiKey();
       const {
         prompt,
         model,
@@ -459,6 +461,7 @@ program
         sound?: boolean;
       },
     ) => {
+      await ensureApiKey();
       const {
         prompt,
         watch,
@@ -582,6 +585,7 @@ program
       .default('video'),
   )
   .action(async (videoId: string, { output, asset }: { output?: string; asset: AssetChoice }) => {
+    await ensureApiKey();
     const downloads = await downloadAssetsForChoice(videoId, asset, output);
     const summary = renderDownloadSummary(downloads);
 
@@ -615,6 +619,7 @@ program
   .option('--no-auto-download', translate('cli.option.autoDownload'))
   .option('--no-sound', translate('cli.option.sound'))
   .action(async ({ interval, autoDownload = true, sound = true }: { interval: number; autoDownload?: boolean; sound?: boolean }) => {
+    await ensureApiKey();
     const { render } = await import('ink');
     const React = await import('react');
     const { default: App } = await import('./tui/App.js');

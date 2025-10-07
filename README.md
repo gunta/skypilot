@@ -23,6 +23,9 @@ SkyPilot is an unofficial CLI and TUI for OpenAI's Sora 2 video generation API. 
 ## Installation
 
 ```bash
+brew tap gunta/skypilot https://github.com/gunta/skypilot
+brew install gunta/skypilot/skypilot
+# or install from npm
 npm install -g skypilot
 # or use npx for one-off runs
 npx skypilot --help
@@ -116,6 +119,7 @@ The source TypeScript remains in `src/` and is compiled to `dist/` for publishin
 SkyPilot ships with AI-assisted release tooling:
 
 - `npm run generate:changelog` — produces a Markdown changelog entry for the next release by feeding recent commits into GPT‑5 via the OpenAI SDK.
+- `npm run update:homebrew` — refreshes the Homebrew formula under `Formula/skypilot.rb` using the latest published package tarball.
 - `npm run release -- --type patch` — bumps the version (or use `--version 1.2.3`), regenerates the changelog, builds the package, commits, tags, and optionally publishes if you add `--publish`.
 
 Example end-to-end release:
