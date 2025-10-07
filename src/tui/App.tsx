@@ -3,6 +3,7 @@ import { Box, useApp, useInput } from 'ink';
 
 import { useTuiController } from './hooks/useTuiController.js';
 import { HeaderPanel } from './components/HeaderPanel.js';
+import { BrandBanner } from './components/BrandBanner.js';
 import { CurrencyAlert } from './components/CurrencyAlert.js';
 import { ActivityPanel } from './components/ActivityPanel.js';
 import { PromptModal } from './components/PromptModal.js';
@@ -171,6 +172,8 @@ const App: React.FC<AppProps> = ({ pollInterval = 5000, autoDownload = true, pla
 
   return (
     <Box flexDirection="column" paddingX={1} paddingY={1} gap={1}>
+      <BrandBanner />
+
       <HeaderPanel
         currencyLabel={currencyLabel}
         model={controller.model}

@@ -1,6 +1,8 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "app.title": "🌈 SkyPilot — Unofficial OpenAI Sora Dashboard",
+  "app.bannerTitle": "SkyPilot",
+  "app.bannerSubtitle": "Unofficial OpenAI Sora mission control",
   "app.tagline": "Mission control for your Sora creations 💜",
   "app.disclaimer": "This project is not affiliated with or endorsed by OpenAI.",
   "app.instructions": "✨ Controls: arrows/j-k navigate • c create • x remix • enter download • d delete (y/n) • a cycle asset • e export CSV • r refresh • l language • q quit",
@@ -151,6 +153,7 @@
   "cli.message.deleteFailed": "Failed to delete {id}: {message}",
   "cli.message.exportedCsv": "Exported CSV to {path}",
   "cli.message.exportFailed": "Failed to export CSV: {message}",
+  "cli.message.resolutionUnsupported": "Resolution {size} is not available for model {model}. Available: {resolutions}",
   "cli.message.apiKeyMissing": "OPENAI_API_KEY is not set. SkyPilot needs it to talk to OpenAI.",
   "cli.message.openingApiKeys": "Opening the official OpenAI API key page in your browser…",
   "cli.message.openBrowserFailed": "Could not open the browser automatically. Visit {url} (reason: {message}).",

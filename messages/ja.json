@@ -1,6 +1,8 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "app.title": "🌈 SkyPilot — 非公式の OpenAI Sora ダッシュボード",
+  "app.bannerTitle": "SkyPilot",
+  "app.bannerSubtitle": "非公式の OpenAI Sora ミッションコントロール",
   "app.tagline": "Sora クリエイションのミッションコントロール 💜",
   "app.disclaimer": "このプロジェクトは OpenAI と提携・承認されていません。",
   "app.instructions": "✨ 操作: 矢印 / j-k 移動 • c 作成 • x リミックス • Enter ダウンロード • d 削除 (y/n) • a アセット切替 • e CSV エクスポート • r 更新 • l 言語 • q 終了",
@@ -147,6 +149,7 @@
   "cli.message.deleteFailed": "{id} の削除に失敗しました: {message}",
   "cli.message.exportedCsv": "CSV を {path} に書き出しました",
   "cli.message.exportFailed": "CSV の書き出しに失敗しました: {message}",
+  "cli.message.resolutionUnsupported": "モデル {model} では解像度 {size} は利用できません。利用可能: {resolutions}",
   "cli.message.apiKeyMissing": "OPENAI_API_KEY が設定されていません。SkyPilot が OpenAI と通信するために必要です。",
   "cli.message.openingApiKeys": "公式の OpenAI API キー管理ページをブラウザで開きます…",
   "cli.message.openBrowserFailed": "ブラウザを自動で開けませんでした。{url} にアクセスしてください（理由: {message}）。",

@@ -10,11 +10,12 @@ import { createSoraManagerController, type SoraManagerController } from '../../s
 import { downloadAssetsForChoice, type AssetChoice, type DownloadedAssetsSummary } from '../../assets.js';
 import { getActiveLocale, cycleLanguage } from '../../i18n.js';
 import { translate, type MessageKey } from '../translate.js';
-import { ASSET_VARIANTS, DURATIONS, MODELS, RESOLUTIONS, cycleValue } from '../constants.js';
+import { ASSET_VARIANTS, DURATIONS, MODELS, RESOLUTIONS, MODEL_RESOLUTIONS, cycleValue } from '../constants.js';
 import type { AssetVariant } from '../constants.js';
 import type { Mode, TrackedJob } from '../types.js';
 import { toInkTableFriendlyString } from '../utils.js';
 import { useThumbnailPreview } from './useThumbnailPreview.js';
+import { clampResolutionForModel, getNextResolutionForModel } from '../../modelCapabilities.js';
 
 interface UseTuiControllerOptions {
   pollInterval: number;
@@ -238,15 +239,29 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
   const resolution = defaults.size;
   const duration = defaults.seconds;
 
+  useEffect(() => {
+    const allowed = MODEL_RESOLUTIONS[model] ?? RESOLUTIONS;
+    if (!allowed.includes(resolution) && allowed.length) {
+      manager.setDefaults({ size: allowed[0]! });
+    }
+  }, [manager, model, resolution]);
+
   const setModel = useCallback<Dispatch<SetStateAction<SoraVideo['model']>>>((updater) => {
-    const current = manager.actor.getSnapshot().context.defaults.model;
-    const next = typeof updater === 'function' ? (updater as (prev: SoraVideo['model']) => SoraVideo['model'])(current) : updater;
-    manager.setDefaults({ model: next });
+    const snapshot = manager.actor.getSnapshot();
+    const current = snapshot.context.defaults.model;
+    const next =
+      typeof updater === 'function' ? (updater as (prev: SoraVideo['model']) => SoraVideo['model'])(current) : updater;
+
+    const nextResolution = clampResolutionForModel(next, snapshot.context.defaults.size);
+    manager.setDefaults({ model: next, size: nextResolution });
   }, [manager]);
 
   const setResolution = useCallback<Dispatch<SetStateAction<SoraVideo['size']>>>((updater) => {
-    const current = manager.actor.getSnapshot().context.defaults.size;
-    const next = typeof updater === 'function' ? (updater as (prev: SoraVideo['size']) => SoraVideo['size'])(current) : updater;
+    const snapshot = manager.actor.getSnapshot();
+    const current = snapshot.context.defaults.size;
+    const nextCandidate =
+      typeof updater === 'function' ? (updater as (prev: SoraVideo['size']) => SoraVideo['size'])(current) : updater;
+    const next = clampResolutionForModel(snapshot.context.defaults.model, nextCandidate);
     manager.setDefaults({ size: next });
   }, [manager]);
 
@@ -482,8 +497,10 @@ export const useTuiController = ({ pollInterval, autoDownload, playSound }: UseT
   }, [setModel]);
 
   const cycleResolution = useCallback(() => {
-    setResolution((current) => cycleValue(RESOLUTIONS, current));
-  }, [setResolution]);
+    const snapshot = manager.actor.getSnapshot();
+    const next = getNextResolutionForModel(snapshot.context.defaults.model, snapshot.context.defaults.size);
+    manager.setDefaults({ size: next });
+  }, [manager]);
 
   const cycleDuration = useCallback(() => {
     setDuration((current) => cycleValue(DURATIONS, current));

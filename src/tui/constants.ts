@@ -1,5 +1,6 @@
 import type { SoraVideo } from '../api.js';
 import { ASSET_CHOICES } from '../assets.js';
+import { MODEL_RESOLUTIONS, UNIQUE_RESOLUTIONS } from '../modelCapabilities.js';
 
 export const PROGRESS_BAR_WIDTH = 20;
 
@@ -10,12 +11,7 @@ export const makeProgressBar = (progress: number) => {
 };
 
 export const MODELS: readonly SoraVideo['model'][] = ['sora-2', 'sora-2-pro'];
-export const RESOLUTIONS: readonly SoraVideo['size'][] = [
-  '720x1280',
-  '1280x720',
-  '1024x1792',
-  '1792x1024',
-];
+export const RESOLUTIONS: readonly SoraVideo['size'][] = UNIQUE_RESOLUTIONS;
 export const DURATIONS: readonly SoraVideo['seconds'][] = ['4', '8', '12'];
 
 export const STATUS_ORDER: readonly SoraVideo['status'][] = ['completed', 'in_progress', 'queued', 'failed'];
@@ -29,6 +25,8 @@ export const STATUS_COLORS: Record<SoraVideo['status'], string> = {
 
 export const ASSET_VARIANTS = ASSET_CHOICES;
 export type AssetVariant = (typeof ASSET_VARIANTS)[number];
+
+export { MODEL_RESOLUTIONS };
 
 export const MAX_TRACKED_JOBS = 5;
 export const cycleValue = <T,>(options: readonly T[], current: T): T => {
