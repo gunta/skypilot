@@ -1,4 +1,4 @@
-import { REGION_TO_CURRENCY } from './regionCurrency';
+import { REGION_TO_CURRENCY } from './regionCurrency.js';
 
 export interface DetectedLocale {
   locale: string | null;

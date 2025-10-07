@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Hero Section
-    'hero.title': 'Your Sora 2 Co-pilot 🚁',
+    'hero.title': 'Your Sora 2 Co-pilot',
     'hero.subtitle': 'The most secure way to use OpenAI\'s video API. Free, open source, runs entirely on your machine.',
     'hero.badge1': 'No watermarks',
     'hero.badge2': 'Sora 2 Pro at cost',
@@ -85,7 +85,7 @@ export const translations = {
     'coming.native.desc2': 'Native file system integration',
     'coming.native.desc3': 'System tray monitoring',
     'coming.native.badge': 'Planned',
-    'coming.cta': '⭐ Star on GitHub to get notified',
+    'coming.cta': 'Star on GitHub to get notified',
     
     // Use Cases
     'usecases.title': 'Use Cases',
@@ -119,10 +119,10 @@ export const translations = {
     // Final CTA
     'cta.title': 'Ready to Take Flight?',
     'cta.subtitle': 'No signup. No credit card. Just your OpenAI API key.',
-    'cta.star': '⭐ Star on GitHub',
-    'cta.npm': '📦 View on npm',
-    'cta.docs': '📖 Read the Docs',
-    'cta.donate': '❤️ Support via GitHub Sponsors',
+    'cta.star': 'Star on GitHub',
+    'cta.npm': 'View on npm',
+    'cta.docs': 'Read the Docs',
+    'cta.donate': 'Support via GitHub Sponsors',
     
     // Footer
     'footer.docs': 'Documentation',
@@ -130,13 +130,13 @@ export const translations = {
     'footer.npm': 'npm Package',
     'footer.license': 'License (MIT)',
     'footer.issues': 'Issues / Bug Reports',
-    'footer.disclaimer': 'SkyPilot is an unofficial tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI.',
-    'footer.credits': 'Built with ❤️ and Astro',
+    'footer.disclaimer': 'Sky Pilot is an unofficial tool for OpenAI\'s Sora 2 API. Not affiliated with, endorsed by, or sponsored by OpenAI.',
+    'footer.credits': 'Built with Astro',
     'footer.contributors': 'Open source contributors welcome',
   },
   ja: {
     // Hero Section
-    'hero.title': 'あなたの Sora 2 副操縦士 🚁',
+    'hero.title': 'あなたの Sora 2 副操縦士',
     'hero.subtitle': 'OpenAI の動画 API を使用する最も安全な方法。無料、オープンソース、完全にあなたのマシン上で実行。',
     'hero.badge1': 'ウォーターマークなし',
     'hero.badge2': 'Sora 2 Pro も原価で',
@@ -220,7 +220,7 @@ export const translations = {
     'coming.native.desc2': 'ネイティブファイルシステム統合',
     'coming.native.desc3': 'システムトレイ監視',
     'coming.native.badge': '計画中',
-    'coming.cta': '⭐ GitHub でスターして通知を受け取る',
+    'coming.cta': 'GitHub でスターして通知を受け取る',
     
     // Use Cases
     'usecases.title': 'ユースケース',
@@ -254,10 +254,10 @@ export const translations = {
     // Final CTA
     'cta.title': 'テイクオフの準備はできましたか？',
     'cta.subtitle': 'サインアップ不要。クレジットカード不要。OpenAI API キーだけ。',
-    'cta.star': '⭐ GitHub でスター',
-    'cta.npm': '📦 npm で見る',
-    'cta.docs': '📖 ドキュメントを読む',
-    'cta.donate': '❤️ GitHub Sponsors でサポート',
+    'cta.star': 'GitHub でスター',
+    'cta.npm': 'npm で見る',
+    'cta.docs': 'ドキュメントを読む',
+    'cta.donate': 'GitHub Sponsors でサポート',
     
     // Footer
     'footer.docs': 'ドキュメント',
@@ -265,8 +265,8 @@ export const translations = {
     'footer.npm': 'npm パッケージ',
     'footer.license': 'ライセンス (MIT)',
     'footer.issues': '問題 / バグ報告',
-    'footer.disclaimer': 'SkyPilot は OpenAI の Sora 2 API の非公式ツールです。OpenAI によって承認、推奨、またはスポンサーされていません。',
-    'footer.credits': '❤️ と Astro で構築',
+    'footer.disclaimer': 'Sky Pilot は OpenAI の Sora 2 API の非公式ツールです。OpenAI によって承認、推奨、またはスポンサーされていません。',
+    'footer.credits': 'Astro で構築',
     'footer.contributors': 'オープンソース貢献者を歓迎',
   }
 } as const;

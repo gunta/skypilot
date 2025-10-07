@@ -1,5 +1,6 @@
 ---
 import { getTranslation, type Language } from '../i18n/translations';
+import GradualBlur from './GradualBlur';
 
 interface Props {
   lang: Language;
@@ -10,7 +11,7 @@ const { lang } = Astro.props;
 const t = (key: any) => getTranslation(lang, key);
 ---
 
-<section class="section-container">
+<section class="section-container relative">
   <div class="text-center mb-16">
     <span class="inline-block px-4 py-2 bg-accent-primary/10 text-accent-primary rounded-full text-sm font-semibold mb-4">
       {t('features.available')}
@@ -124,5 +125,17 @@ const t = (key: any) => getTranslation(lang, key);
       </div>
     </div>
   </div>
+  
+  <GradualBlur 
+    client:load 
+    target="parent" 
+    position="bottom" 
+    height="6rem" 
+    strength={2} 
+    divCount={5} 
+    curve="bezier" 
+    exponential={true} 
+    opacity={1} 
+  />
 </section>
 

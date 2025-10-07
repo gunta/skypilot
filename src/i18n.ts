@@ -1,5 +1,5 @@
-import { setLocale as runtimeSetLocale, getLocale as runtimeGetLocale, locales } from './paraglide/runtime';
-import { getLanguage as loadLanguage, setLanguage as persistLanguage, getDefaultLanguage } from './config/settings';
+import { setLocale as runtimeSetLocale, getLocale as runtimeGetLocale, locales } from './paraglide/runtime.js';
+import { getLanguage as loadLanguage, setLanguage as persistLanguage, getDefaultLanguage } from './config/settings.js';
 
 export type Locale = (typeof locales)[number];
 const supported = new Set<Locale>(locales as readonly Locale[]);

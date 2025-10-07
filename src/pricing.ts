@@ -1,6 +1,6 @@
-import type { SoraVideo } from './api';
-import { formatUsd, getCurrencyFormatter } from './currency';
-import type { CurrencyFormatter } from './currency';
+import type { SoraVideo } from './api.js';
+import { formatUsd, getCurrencyFormatter } from './currency.js';
+import type { CurrencyFormatter } from './currency.js';
 
 const PRICING_TABLE: Array<{
   model: SoraVideo['model'];

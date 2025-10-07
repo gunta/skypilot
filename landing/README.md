@@ -22,10 +22,26 @@ bun run preview
 
 - **Bilingual Support**: Automatic language detection (English/Japanese)
 - **Interactive Cost Calculator**: Real-time Sora 2 pricing estimates
+- **Professional Design**: Lucide icons, no emojis, modern aesthetic
+- **Dither Background**: Sophisticated animated background effect
 - **Responsive Design**: Optimized for mobile, tablet, and desktop
 - **Dark Mode**: Modern dark theme matching OpenAI/Vercel aesthetics
 - **SEO Optimized**: Meta tags, Open Graph, and Twitter cards
 - **Performance**: Lighthouse score 95+ target
+
+## Logo
+
+The site currently uses a temporary SVG logo (sparkle/star design). To add your custom logo:
+
+1. Create or generate your logo (see `public/CREATE_LOGO.md` for prompts)
+2. Export as PNG (512x512px, transparent background)
+3. Convert to WebP for better performance
+4. Place files in `public/`:
+   - `skypilotlogo.png`
+   - `skypilotlogo.webp`
+5. The Logo component will automatically use them
+
+See `public/LOGO_GUIDE.md` for detailed instructions.
 
 ## Structure
 

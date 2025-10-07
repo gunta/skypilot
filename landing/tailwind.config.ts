@@ -15,7 +15,7 @@ export default {
         'text-primary': '#ffffff',
         'text-secondary': '#a1a1aa',
         'text-muted': '#71717a',
-        'border-color': '#27272a',
+        'custom-border': '#27272a',
         'code-bg': '#18181b',
       },
       fontFamily: {
@@ -46,4 +46,3 @@ export default {
   },
   plugins: [],
 } satisfies Config;
-

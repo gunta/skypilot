@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
 
-import { db, ensureDatabase } from '../storage/db';
-import { settings } from '../storage/schema';
-import { detectPreferredCurrency, detectLocale } from '../locale/detect';
-import { locales as supportedLocales, baseLocale } from '../paraglide/runtime';
+import { db, ensureDatabase } from '../storage/db.js';
+import { settings } from '../storage/schema.js';
+import { detectPreferredCurrency, detectLocale } from '../locale/detect.js';
+import { locales as supportedLocales, baseLocale } from '../paraglide/runtime.js';
 
 const DEFAULT_CURRENCY = 'USD';
 type SupportedLocale = (typeof supportedLocales)[number];

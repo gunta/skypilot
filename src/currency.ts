@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm';
 
-import { getCurrency as getPreferredCurrency, getDefaultCurrency } from './config/settings';
-import { db, ensureDatabase } from './storage/db';
-import { exchangeRates } from './storage/schema';
+import { getCurrency as getPreferredCurrency, getDefaultCurrency } from './config/settings.js';
+import { db, ensureDatabase } from './storage/db.js';
+import { exchangeRates } from './storage/schema.js';
 
 const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 1 day
 

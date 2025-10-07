@@ -5,7 +5,7 @@ import TextInput from 'ink-text-input';
 import Table from 'ink-table';
 import chalk from 'chalk';
 
-import { playSuccessSound } from '../notify';
+import { playSuccessSound } from '../notify.js';
 
 import {
   createVideo,
@@ -17,11 +17,11 @@ import {
   type SoraVideo,
   type VideoAssetVariant,
   ALL_VIDEO_ASSET_VARIANTS,
-} from '../api';
-import { getCurrencyFormatter, type CurrencyFormatter } from '../currency';
-import { buildCostSummary, calculateVideoCost } from '../pricing';
-import { cycleLanguage, getActiveLocale } from '../i18n';
-import { m } from '../paraglide/messages';
+} from '../api.js';
+import { getCurrencyFormatter, type CurrencyFormatter } from '../currency.js';
+import { buildCostSummary, calculateVideoCost } from '../pricing.js';
+import { cycleLanguage, getActiveLocale } from '../i18n.js';
+import { m } from '../paraglide/messages.js';
 
 const translate = <K extends keyof typeof m>(key: K, params?: Parameters<(typeof m)[K]>[0]) =>
   (m[key] as (args?: Record<string, unknown>) => string)(params ?? {});

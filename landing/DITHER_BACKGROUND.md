@@ -1,10 +1,12 @@
 # Dither Background Implementation
 
+> **Note**: This document describes the old SVG-based implementation. The current version uses an advanced canvas-based dither effect. See **DITHER_V2.md** for the latest implementation.
+
 ## Overview
 
 Added a sophisticated dithered background effect inspired by ReactBits (https://reactbits.dev/backgrounds/dither) to enhance the landing page's visual appeal with a modern, technical aesthetic.
 
-## Component: DitherBackground
+## Component: Dither (v2)
 
 ### Location
 `src/components/DitherBackground.tsx`

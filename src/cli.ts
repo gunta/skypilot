@@ -9,7 +9,7 @@ import chalk from 'chalk';
 import { spawn } from 'node:child_process';
 import { toFile } from 'openai/uploads';
 
-import { playSuccessSound } from './notify';
+import { playSuccessSound } from './notify.js';
 
 import {
   createVideo,
@@ -22,13 +22,13 @@ import {
   type VideoAssetVariant,
   ALL_VIDEO_ASSET_VARIANTS,
   remixVideo,
-} from './api';
-import { getCurrency, setCurrency } from './config/settings';
-import { getCurrencyFormatter, getExchangeRates } from './currency';
-import { detectLocale } from './locale/detect';
-import { initializeI18n, changeLanguage, cycleLanguage, getActiveLocale, getSupportedLocales } from './i18n';
-import { m } from './paraglide/messages';
-import { buildCostSummary, calculateVideoCost, type CostSummary } from './pricing';
+} from './api.js';
+import { getCurrency, setCurrency } from './config/settings.js';
+import { getCurrencyFormatter, getExchangeRates } from './currency.js';
+import { detectLocale } from './locale/detect.js';
+import { initializeI18n, changeLanguage, cycleLanguage, getActiveLocale, getSupportedLocales } from './i18n.js';
+import { m } from './paraglide/messages.js';
+import { buildCostSummary, calculateVideoCost, type CostSummary } from './pricing.js';
 
 await initializeI18n();
 
