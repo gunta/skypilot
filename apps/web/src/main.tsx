@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { AppProviders } from './providers/AppProviders.js';
+import { AppProviders } from './providers/AppProviders';
 import { RouterProvider } from '@tanstack/react-router';
-import { router } from './router.js';
-import './styles/reset.css';
+import { ErrorBoundary } from 'react-error-boundary';
+import { router } from './router';
+import { ErrorBoundaryFallback } from './ui/ErrorFallback';
+import './styles/global.css';
 import { QueryClient } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
@@ -29,7 +31,12 @@ if (container === null) {
 ReactDOM.createRoot(container).render(
   <React.StrictMode>
     <AppProviders queryClient={queryClient}>
-      <RouterProvider router={router} />
+      <ErrorBoundary
+        FallbackComponent={ErrorBoundaryFallback}
+        resetKeys={[router.state.location.href]}
+      >
+        <RouterProvider router={router} />
+      </ErrorBoundary>
     </AppProviders>
   </React.StrictMode>,
 );

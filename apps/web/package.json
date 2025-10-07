@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bunx vite dev",
+    "dev": "bun vite dev",
     "build": "bunx vite build",
     "preview": "bunx vite preview",
     "typecheck": "tsc --noEmit",
-    "lint": "bunx biome lint src"
+    "lint": "bunx biome lint src",
+    "test": "bunx vitest"
   },
   "dependencies": {
-    "@canva/app-ui-kit": "^5.0.1",
     "@libsql/client": "^0.15.15",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-query-devtools": "^5.90.2",
@@ -19,17 +19,31 @@
     "@tanstack/react-router-devtools": "^1.132.47",
     "@xstate/react": "^6.0.0",
     "@xstate/store": "^3.9.3",
+    "@radix-ui/react-tooltip": "^1.0.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "mediabunny": "^1.23.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-error-boundary": "^4.1.2",
+    "react-rnd": "^10.4.0",
+    "tailwind-merge": "^2.5.3",
     "xstate": "^5.22.1"
   },
   "devDependencies": {
     "@tanstack/router-plugin": "^1.132.47",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.1",
     "@vitejs/plugin-react": "^5.0.4",
+    "autoprefixer": "^10.4.20",
+    "jsdom": "^27.0.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.9.3",
-    "vite": "^7.1.9"
+    "vite": "^7.1.9",
+    "vitest": "^3.2.4"
   }
 }

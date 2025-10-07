@@ -1,0 +1,21 @@
+{
+  "created_at": "2025-10-07T00:00:00+00:00",
+  "feature": "SkyPilot Web App",
+  "language": "en",
+  "approvals": {
+    "requirements": {
+      "generated": true,
+      "approved": true
+    },
+    "design": {
+      "generated": true,
+      "approved": true
+    },
+    "tasks": {
+      "generated": true,
+      "approved": true
+    }
+  },
+  "phase": "tasks-generated",
+  "updated_at": "2025-10-07T00:00:00+00:00"
+}

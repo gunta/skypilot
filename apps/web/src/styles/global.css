@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.card-shadow {
+  box-shadow: var(--card-shadow, 0 10px 30px -12px rgba(15, 23, 42, 0.35));
+}
