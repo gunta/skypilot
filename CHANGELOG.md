@@ -2,6 +2,28 @@
 
 _Changelog entries are generated with `npm run generate:changelog` using OpenAI GPT-5 for the SkyPilot project._
 
+## 0.5.3 - 2025-10-08
+
+# 0.5.3 — 2025-10-08
+
+Highlights
+- Refined CLI packaging and structure by updating package.json to better expose and organize the command-line entrypoint(s).
+- Improved packaging metadata to make installation and discovery of the SkyPilot CLI more reliable (helps global installs and package managers).
+
+CLI / TUI
+- CLI: package.json rearranged to improve how the CLI is packaged and invoked. Users should see more reliable command installation and discoverability after upgrading.
+- No user-facing TUI changes in this release.
+
+Automation / Developer notes
+- Changes are limited to package.json (5 insertions, 2 deletions) — mainly packaging/metadata improvements that aid releases and distribution.
+- Developers and CI that rely on the package layout or npm bin mapping should pick up the new structure automatically; workflows that cache package.json metadata may need a refresh.
+
+Upgrade notes
+- If you install SkyPilot globally (npm/yarn), reinstall the package (npm i -g sky pilot or your preferred method) to ensure the CLI entrypoint is updated.
+
+Breaking Changes
+- None identified.
+
 ## 0.5.2 - 2025-10-08
 
 # 0.5.2
