@@ -125,7 +125,7 @@ SkyPilot ships with AI-assisted release tooling:
 Example end-to-end release:
 
 ```bash
-npm run release -- --type minor --publish
+npm run release -- --type patch --publish
 # then push the commit and tag:
 git push && git push --tags
 ```
