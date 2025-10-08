@@ -2,6 +2,57 @@
 
 _Changelog entries are generated with `npm run generate:changelog` using OpenAI GPT-5 for the SkyPilot project._
 
+## 0.5.2 - 2025-10-08
+
+# 0.5.2
+
+Highlights
+- Major web app scaffolding: full new apps/web frontend (React + Vite) with UI primitives, routing, i18n, and tooltips; improved Home route layout and UX.
+- Big CLI + TUI refactor with many new commands and a new TUI controller/hook architecture.
+- Automation added for releases and Homebrew formula updates.
+
+CLI & TUI
+- Refactored CLI into modular commands (replacing the old monolithic src/cli.ts):
+  - Added commands: create, currency, delete, download, export, language, list, remix, retrieve, tui (+ supporting context & index).
+  - CSV export implemented (src/export/csv.ts).
+  - Improved CLI context and initialization flow.
+- TUI rewritten / reorganized:
+  - New controller and hooks (useTuiController, useAppInput, useAppDerivedState, useThumbnailPreview).
+  - New/updated components: RemixModal, PromptModal, ThumbnailPreviewPanel, StatusTableSection, TrackingPanel, ActivityPanel, BrandBanner, HeaderPanel.
+  - More robust app state machine and Sora state management (src/state/*, src/state/soraMachine.ts).
+- UX improvements in both CLI and TUI: better prompts, thumbnail preview support, currency alerts and status/tracking panels.
+
+Web app & UX
+- Integrated tooltips and enhanced HomeRoute layout.
+- Video export functionality added to the web UI.
+- New app structure and reusable UI components (button, card, tooltip, etc.).
+- i18n updates and installation prompt localization improvements (messages/en.json, messages/ja.json, apps/web/src/lib/i18n.ts).
+
+Automation & Release tooling
+- Added release automation and maintenance scripts:
+  - scripts/release.ts, scripts/generate-changelog.ts, scripts/update-homebrew-formula.ts.
+  - Homebrew update script and updated Formula/skypilot.rb.
+- README release instruction corrected: bump policy changed from minor → patch.
+
+Dependencies & packaging
+- Dependency and build script updates across the repo (package-lock.json, bun.lock, apps/web/bun.lock).
+- Project scripts updated to use bun (package.json / scripts) — builds and local scripts now expect bun where previously npm/yarn were used.
+- Vite/vitest configuration and frontend test setup added (apps/web/*, vitest config).
+
+Documentation & product
+- Extensive documentation/spec additions for the web app and product/structure/tech steering docs (.kiro/*).
+- Landing page updated with advanced features, asset management, and improved components.
+
+Breaking Changes
+- Developer toolchain: package scripts now use bun. You must have bun installed to run project scripts (build, dev, release) that previously assumed npm/yarn.
+- CLI refactor: the CLI has been reorganized into many command modules (new command surface). If you call the CLI programmatically or rely on internal layouts of the old src/cli.ts, you may need to update integrations and scripts that invoked internals or parsed old outputs.
+- Homebrew: formula updates and an automated formula updater were added — Homebrew users should run brew update and re-install if they rely on an older formula behavior.
+
+Notes / Migration
+- Install bun for local development and CI where scripts rely on it.
+- Review any tooling that invoked the old CLI internals; migrate to the exposed commands (create, list, remix, etc.).
+- If you depend on Homebrew packaging, re-run the updated formula or rely on scripts/update-homebrew-formula.ts to regenerate the formula.
+
 ## 0.4.0 - 2025-10-07
 
 ## 0.4.0
