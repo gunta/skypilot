@@ -1,7 +1,11 @@
-import { Link, Outlet } from '@tanstack/react-router';
+import { Link, Outlet, useRouterState } from '@tanstack/react-router';
 import { cn } from '../lib/utils';
 
 export const RootLayout = () => {
+  const isHomeActive = useRouterState({
+    select: (state) => state.location.pathname === '/'
+  });
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="border-b border-border bg-white/80 backdrop-blur">
@@ -15,9 +19,10 @@ export const RootLayout = () => {
           <nav className="flex items-center gap-3 text-sm text-muted-foreground">
             <Link
               to="/"
-              className={({ isActive }) =>
-                cn('rounded-md px-3 py-1 transition-colors hover:text-foreground', isActive && 'bg-secondary text-foreground')
-              }
+              className={cn(
+                'rounded-md px-3 py-1 transition-colors hover:text-foreground',
+                isHomeActive ? 'bg-secondary text-foreground shadow-sm' : 'text-muted-foreground'
+              )}
             >
               Home
             </Link>
