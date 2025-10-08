@@ -25,13 +25,16 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./cli": "./dist/cli/index.js",
+    "./cli": {
+      "types": "./dist/cli.d.ts",
+      "default": "./dist/cli.js"
+    },
     "./tui/app": "./dist/tui/App.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "skypilot": "dist/cli/index.js"
+    "skypilot": "dist/cli.js"
   },
   "files": [
     "dist",
